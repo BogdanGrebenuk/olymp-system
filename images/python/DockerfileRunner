@@ -1,0 +1,5 @@
+FROM python-base
+
+COPY ./code-compiled /code-compiled
+
+CMD ["python", "/code-compiled/main.pyc"]
