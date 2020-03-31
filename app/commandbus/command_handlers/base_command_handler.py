@@ -9,9 +9,15 @@ class CommandHandler:
 
     """
 
+    BUS_NAME = 'default'
+
     def __init__(self):
-        from commandbus import default_bus
+        from commandbus import get_bus
         # Import is here because of solving cyclic imports.
         # Command handlers may need bus instance but it can't be retrieved
         # in module-level due to resolving this command handlers while instantiating package
-        self.bus = default_bus
+        self.bus = get_bus(self.BUS_NAME)
+
+    @classmethod
+    def supports(cls, bus_tag):
+        return bus_tag == cls.BUS_NAME

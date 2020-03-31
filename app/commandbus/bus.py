@@ -4,11 +4,12 @@ from commandbus.exceptions import HandlerNotFoundException
 
 class Bus:
 
-    def __init__(self, *, resolver=None, command_map=None):
+    def __init__(self, tag, *, resolver=None, command_map=None):
+        self.tag = tag
         if command_map is None:
             command_map = {}
         if resolver is None:
-            resolver = DefaultResolver()
+            resolver = DefaultResolver(self.tag)
         resolver.resolve(command_map)
         self._command_map = command_map
 

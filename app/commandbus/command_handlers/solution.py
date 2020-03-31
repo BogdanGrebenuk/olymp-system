@@ -9,9 +9,10 @@ from commandbus.commands.solution import (
     PrepareSolutionDir,
     VerifySolution
 )
-from services.docker import LANGUAGE_INFO
-from services.docker.client import Client
 from services.codesaver import manager
+from services.docker import get_docker_manager
+# from utils.docker import LANGUAGE_INFO
+# from utils.docker.client import Client
 from utils.executor import cpu_bound
 from utils.filesystem import create_dir_chain
 
@@ -81,6 +82,31 @@ class VerifySolutionHandler(CommandHandler):
         solution = command.solution
         solution_id = solution['id']  # TODO: create entity!
         solution_dir = pathlib.Path(solution['path'])
+        language = solution['language']
+
+        docker_manager = get_docker_manager(language)
+
+        for input_, output in [('1', '1'), ('2', '4'), ('3', '9')]:  # TODO: take data from task
+            task = partial(
+                docker_manager.run_solution,
+
+                solution,
+                input_
+            )
+            answer = await cpu_bound(task)
+            if answer != output:
+                ...
+
+
+
+        # result = await docker_manager.verify(solution)
+
+        # docker_manager.build_compiler(solution)
+        # docker_manager.build_runner(solution)
+        #
+        # docker_manager.run_compiler()
+        # docker_manager.run_runner()
+
 
         docker_info = LANGUAGE_INFO[solution['language']]
         # TODO: remove dicts and introduce classes
@@ -97,7 +123,7 @@ class VerifySolutionHandler(CommandHandler):
             client.build(compiler_tag, compiler_dockerfile, solution['path'])
             client.run(
                 compiler_tag,
-                {compiled_dir_path: '/code-compiled'}
+                volumes={compiled_dir_path: '/code-compiled'}
             )
             client.build(runner_tag, runner_dockerfile, solution['path'])
             print(client.run(runner_tag))
