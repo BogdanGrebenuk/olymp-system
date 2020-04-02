@@ -1,4 +1,4 @@
-from services.docker import client
+from utils.docker import client
 
 
 class Client:
@@ -14,7 +14,7 @@ class Client:
             path=context
         )
 
-    def run(self, tag, volumes=None):
+    def run(self, tag, *, command='', volumes=None):
         if volumes is None:
             volumes = {}
         volumes = {
@@ -23,6 +23,7 @@ class Client:
         }
         return self._client.containers.run(
             tag,
+            command,
             auto_remove=True,
             volumes=volumes
         )

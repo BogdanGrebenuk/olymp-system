@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields, ValidationError
 
-from services.docker import LANGUAGE_INFO
+from utils.docker import LANGUAGE_INFO
 
 
 def validate_language(lang):

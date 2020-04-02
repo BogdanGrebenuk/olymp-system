@@ -1,17 +1,8 @@
-import docker
+from services.docker.python import PythonManager
 
 
-LANGUAGE_INFO = {
-    'python': {
-        'compiler': {
-            'tag': 'python-compiler',
-            'dockerfile': '/home/bohdan/projects/olymp-dev/images/python/DockerfileCompiler'
-        },
-        'runner': {
-            'tag': 'python-runner',
-            'dockerfile': '/home/bohdan/projects/olymp-dev/images/python/DockerfileRunner'
-        }
-    }
-}
-
-client = docker.from_env()
+def get_docker_manager(language):
+    if language == 'python':  # TODO: introduce some enum
+        return PythonManager()
+    ...
+    raise ValueError(f'there is no docker manager for {language}!')

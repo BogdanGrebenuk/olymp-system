@@ -94,8 +94,11 @@ class VerifySolutionHandler(CommandHandler):
                 input_
             )
             answer = await cpu_bound(task)
+            answer = answer.rstrip()
+            print(repr(answer), repr(output))
             if answer != output:
-                ...
+                return False
+        return True
 
 
 
@@ -108,29 +111,7 @@ class VerifySolutionHandler(CommandHandler):
         # docker_manager.run_runner()
 
 
-        docker_info = LANGUAGE_INFO[solution['language']]
-        # TODO: remove dicts and introduce classes
-        compiler_tag = f"{docker_info['compiler']['tag']}:{solution_id}"
-        compiler_dockerfile = docker_info['compiler']['dockerfile']
 
-        runner_tag = f"{docker_info['runner']['tag']}:{solution_id}"
-        runner_dockerfile = docker_info['runner']['dockerfile']
-
-        compiled_dir_path = str((solution_dir / 'code-compiled').resolve())
-
-        client = Client.from_env()
-        try:
-            client.build(compiler_tag, compiler_dockerfile, solution['path'])
-            client.run(
-                compiler_tag,
-                volumes={compiled_dir_path: '/code-compiled'}
-            )
-            client.build(runner_tag, runner_dockerfile, solution['path'])
-            print(client.run(runner_tag))
-            return True  # TODO: implement!
-        finally:
-            client.remove(compiler_tag)
-            client.remove(runner_tag)
 
 
 
