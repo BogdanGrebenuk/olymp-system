@@ -1,3 +1,12 @@
 app:
     host: localhost
     port: 8000
+
+database:
+    name: olymp
+    user: bohdan
+    password: able
+    host: localhost
+    port: 5432
+    admin_user: postgres
+    admin_password: able
