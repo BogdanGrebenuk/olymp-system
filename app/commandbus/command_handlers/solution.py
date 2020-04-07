@@ -10,9 +10,7 @@ from commandbus.commands.solution import (
     VerifySolution
 )
 from services.codesaver import manager
-from services.docker import get_docker_manager
-# from utils.docker import LANGUAGE_INFO
-# from utils.docker.client import Client
+from services.docker.manager import DockerManager
 from utils.executor import cpu_bound
 from utils.filesystem import create_dir_chain
 
@@ -80,38 +78,17 @@ class VerifySolutionHandler(CommandHandler):
 
     async def handle(self, command: VerifySolution):
         solution = command.solution
-        solution_id = solution['id']  # TODO: create entity!
-        solution_dir = pathlib.Path(solution['path'])
-        language = solution['language']
+        docker_manager = DockerManager.from_solution(solution)
 
-        docker_manager = get_docker_manager(language)
+        try:
+            await docker_manager.prepare()
+            for input_, output in [('1', '1'), ('2', '4'), ('3', '9')]:  # TODO: take data from task
 
-        for input_, output in [('1', '1'), ('2', '4'), ('3', '9')]:  # TODO: take data from task
-            task = partial(
-                docker_manager.run_solution,
-
-                solution,
-                input_
-            )
-            answer = await cpu_bound(task)
-            answer = answer.rstrip()
-            print(repr(answer), repr(output))
-            if answer != output:
-                return False
-        return True
-
-
-
-        # result = await docker_manager.verify(solution)
-
-        # docker_manager.build_compiler(solution)
-        # docker_manager.build_runner(solution)
-        #
-        # docker_manager.run_compiler()
-        # docker_manager.run_runner()
-
-
-
-
-
-
+                answer = await docker_manager.run(input_)
+                answer = answer.rstrip()
+                print(repr(answer), repr(output))
+                if answer != output:
+                    return False
+            return True
+        finally:
+            await docker_manager.close()

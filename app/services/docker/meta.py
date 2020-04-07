@@ -1,3 +1,10 @@
+def get_language_meta(language: str):
+    if language == 'python':
+        return PythonMeta
+    ...
+    raise ValueError(f"there is no meta data for {language}")
+
+
 class PythonMeta:
     COMPILER_TAG = 'python-compiler'
     # TODO: remove path to config?

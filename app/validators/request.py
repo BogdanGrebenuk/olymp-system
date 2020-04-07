@@ -1,10 +1,10 @@
 from marshmallow import Schema, fields, ValidationError
 
-from utils.docker import LANGUAGE_INFO
+from services.docker import get_supported_languages
 
 
 def validate_language(lang):
-    if lang not in LANGUAGE_INFO:
+    if lang not in get_supported_languages():
         raise ValidationError('unsupported language!')
 
 
