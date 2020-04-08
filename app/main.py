@@ -1,11 +1,10 @@
-import asyncio
-
 from aiohttp import web
 
 from db.utils import init_pg, close_pg
 from commandbus import get_bus
 from routes import setup_routes
 from settings import config
+
 
 if __name__ == '__main__':
     app = web.Application()

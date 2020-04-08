@@ -20,3 +20,4 @@ venv.bak/
 code
 
 app/alembic.ini
+config/app.yaml
