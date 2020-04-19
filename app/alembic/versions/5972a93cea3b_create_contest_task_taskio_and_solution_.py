@@ -19,15 +19,15 @@ depends_on = None
 def upgrade():
     op.create_table(
         'contest',
-        sa.Column('id', sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column('id', sa.Text, primary_key=True),
         sa.Column('name', sa.Text, nullable=False)
     )
     op.create_table(
         'task',
-        sa.Column('id', sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column('id', sa.Text, primary_key=True),
         sa.Column(
             'contest_id',
-            sa.Integer,
+            sa.Text,
             sa.ForeignKey('contest.id', onupdate="CASCADE", ondelete="CASCADE"),
             nullable=False
         ),
@@ -40,10 +40,10 @@ def upgrade():
 
     op.create_table(
         'task_io',
-        sa.Column('id', sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column('id', sa.Text, primary_key=True),
         sa.Column(
             'task_id',
-            sa.Integer,
+            sa.Text,
             sa.ForeignKey('task.id', onupdate="CASCADE", ondelete="CASCADE"),
             nullable=False
         ),
@@ -53,10 +53,10 @@ def upgrade():
 
     op.create_table(
         'solution',
-        sa.Column('id', sa.Integer, autoincrement=True, primary_key=True),
+        sa.Column('id', sa.Text, primary_key=True),
         sa.Column(
             'task_id',
-            sa.Integer,
+            sa.Text,
             sa.ForeignKey('task.id', onupdate="CASCADE", ondelete="CASCADE"),
             nullable=False
         ),

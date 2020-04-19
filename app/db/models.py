@@ -7,7 +7,7 @@ metadata = sa.MetaData()
 Contest = sa.Table(
     'contest',
     metadata,
-    sa.Column('id', sa.Integer, autoincrement=True, primary_key=True),
+    sa.Column('id', sa.Text, primary_key=True),
     sa.Column('name', sa.Text, nullable=False)
 )
 
@@ -15,10 +15,10 @@ Contest = sa.Table(
 Task = sa.Table(
     'task',
     metadata,
-    sa.Column('id', sa.Integer, autoincrement=True, primary_key=True),
+    sa.Column('id', sa.Text, primary_key=True),
     sa.Column(
         'contest_id',
-        sa.Integer,
+        sa.Text,
         sa.ForeignKey('Contest.id', onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False
     ),
@@ -33,10 +33,10 @@ Task = sa.Table(
 TaskIO = sa.Table(
     'task_io',
     metadata,
-    sa.Column('id', sa.Integer, autoincrement=True, primary_key=True),
+    sa.Column('id', sa.Text, primary_key=True),
     sa.Column(
         'task_id',
-        sa.Integer,
+        sa.Text,
         sa.ForeignKey('Task.id', onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False
     ),
@@ -48,10 +48,10 @@ TaskIO = sa.Table(
 Solution = sa.Table(
     'solution',
     metadata,
-    sa.Column('id', sa.Integer, autoincrement=True, primary_key=True),
+    sa.Column('id', sa.Text, primary_key=True),
     sa.Column(
         'task_id',
-        sa.Integer,
+        sa.Text,
         sa.ForeignKey('Task.id', onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False
     ),

@@ -1,3 +1,5 @@
+from docker.errors import APIError
+
 from services.docker.meta import get_language_meta
 from services.docker.workers import DefaultCompiler, DefaultRunner
 
@@ -31,5 +33,14 @@ class DockerManager:
         return await self.runner_manager.run(input_)
 
     async def close(self):
-        await self.compiler_manager.remove()
-        await self.runner_manager.remove()
+        errors = []
+        try:
+            await self.compiler_manager.remove()
+        except APIError as e:
+            errors.append(e)
+        try:
+            await self.runner_manager.remove()
+        except APIError as e:
+            errors.append(e)
+        if errors:
+            raise Exception(';'.join(map(str, errors)))  # TODO: implement exception

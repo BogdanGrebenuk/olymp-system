@@ -1,30 +1,31 @@
-from commandbus.resolver import DefaultResolver
-from commandbus.exceptions import HandlerNotFoundException
+from commandbus.middlewares import Resolver
+
+
+def _create_closure(middleware, execution_chain):
+    async def handle_command(command):
+        return await middleware(command, execution_chain)
+    return handle_command
+
+
+def _build_chain(middlewares):
+    execution_chain = lambda *args: None
+
+    for middleware in reversed(middlewares):
+        execution_chain = _create_closure(middleware, execution_chain)
+
+    return execution_chain
 
 
 class Bus:
 
-    def __init__(self, tag, *, resolver=None, command_map=None):
-        self.tag = tag
-        if command_map is None:
-            command_map = {}
-        if resolver is None:
-            resolver = DefaultResolver(self.tag)
-        resolver.resolve(command_map)
-        self._command_map = command_map
+    def __init__(self, middlewares):
+        self._middlewares = middlewares
+        self._chain = _build_chain(middlewares)
 
     async def execute(self, command):
-        command_class = command.__class__
-        handler = self._command_map.get(command_class)
-        if handler is None:
-            raise HandlerNotFoundException(
-                f'there is no handler for {command_class.__name__}!'
-            )
-        return await handler().handle(command)
+        return await self._chain(command)
 
+    @classmethod
+    def from_default(cls):
+        return Bus([Resolver()])
 
-if __name__ == '__main__':
-    import asyncio
-    from commandbus.commands.solution import VerifySolution
-    bus = Bus()
-    asyncio.run(bus.execute(VerifySolution('')))
