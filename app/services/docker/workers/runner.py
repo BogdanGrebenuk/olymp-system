@@ -1,5 +1,6 @@
 from functools import partial
 
+from db.entities.solution import Solution
 from utils.executor import cpu_bound
 from utils.docker.client import Client
 from utils.docker.tag import create_tag
@@ -8,7 +9,7 @@ from services.docker.workers.interface import RunnerABC
 
 class DefaultRunner(RunnerABC):
 
-    def __init__(self, solution, meta):
+    def __init__(self, solution: Solution, meta):
         self.solution = solution
         self.meta = meta
         self._runner_tag = None
@@ -19,8 +20,8 @@ class DefaultRunner(RunnerABC):
                 f"Compiler already manages image {self._runner_tag}"
             )
 
-        solution_id = self.solution['id']
-        solution_path = self.solution['path']
+        solution_id = self.solution.id
+        solution_path = self.solution.path
 
         self._runner_tag = create_tag(self.meta.RUNNER_TAG, solution_id)
 

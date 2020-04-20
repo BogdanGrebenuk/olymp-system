@@ -19,7 +19,7 @@ Task = sa.Table(
     sa.Column(
         'contest_id',
         sa.Text,
-        sa.ForeignKey('Contest.id', onupdate="CASCADE", ondelete="CASCADE"),
+        sa.ForeignKey('contest.id', onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False
     ),
     sa.Column(
@@ -37,7 +37,7 @@ TaskIO = sa.Table(
     sa.Column(
         'task_id',
         sa.Text,
-        sa.ForeignKey('Task.id', onupdate="CASCADE", ondelete="CASCADE"),
+        sa.ForeignKey('task.id', onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False
     ),
     sa.Column('input', sa.Text, nullable=False),
@@ -52,8 +52,10 @@ Solution = sa.Table(
     sa.Column(
         'task_id',
         sa.Text,
-        sa.ForeignKey('Task.id', onupdate="CASCADE", ondelete="CASCADE"),
+        sa.ForeignKey('task.id', onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False
     ),
-    sa.Column('path', sa.Text, nullable=False)
+    sa.Column('path', sa.Text, nullable=False),
+    sa.Column('language', sa.Text, nullable=False),
+    sa.Column('is_passed', sa.Boolean, nullable=False, default=False)
 )

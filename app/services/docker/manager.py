@@ -1,19 +1,20 @@
 from docker.errors import APIError
 
+from db.entities.solution import Solution
 from services.docker.meta import get_language_meta
 from services.docker.workers import DefaultCompiler, DefaultRunner
 
 
 class DockerManager:
 
-    def __init__(self, solution, compiler_manager, runner_manager):
+    def __init__(self, solution: Solution, compiler_manager, runner_manager):
         self.solution = solution
         self.compiler_manager = compiler_manager
         self.runner_manager = runner_manager
 
     @classmethod
     def from_solution(cls, solution):
-        meta = get_language_meta(solution['language'])  # TODO: implement entity
+        meta = get_language_meta(solution.language)
         compiler_manager = DefaultCompiler(solution, meta)
         runner_manager = DefaultRunner(solution, meta)
         return cls(solution, compiler_manager, runner_manager)

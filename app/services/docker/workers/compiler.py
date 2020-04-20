@@ -2,6 +2,7 @@ import pathlib
 
 from functools import partial
 
+from db.entities.solution import Solution
 from services.docker.workers.interface import CompilerABC
 from utils.docker.tag import create_tag
 from utils.executor import cpu_bound
@@ -9,7 +10,7 @@ from utils.executor import cpu_bound
 
 class DefaultCompiler(CompilerABC):
 
-    def __init__(self, solution, meta):
+    def __init__(self, solution: Solution, meta):
         self.solution = solution
         self.meta = meta
         self._compiler_tag = None
@@ -20,8 +21,8 @@ class DefaultCompiler(CompilerABC):
                 f"Compiler already manages image {self._compiler_tag}"
             )
 
-        solution_id = self.solution['id']
-        solution_path = self.solution['path']
+        solution_id = self.solution.id
+        solution_path = self.solution.path
 
         self._compiler_tag = create_tag(self.meta.COMPILER_TAG, solution_id)
 
@@ -39,7 +40,7 @@ class DefaultCompiler(CompilerABC):
         if self._compiler_tag is None:
             raise ValueError("Image isn't specified! Build an image!")
 
-        solution_path = self.solution['path']  # TODO: implement entity!
+        solution_path = self.solution.path
         compiled_dir_path = str(pathlib.Path(solution_path) / 'code-compiled')
 
         task = partial(

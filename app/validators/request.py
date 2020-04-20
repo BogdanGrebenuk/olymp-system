@@ -20,9 +20,7 @@ def validate_task_io(task_ios):
 
 
 class VerifyTaskBody(Schema):
-    user_id = fields.Integer(required=True)
-    contest_id = fields.Integer(required=True)
-    task_id = fields.Integer(required=True)
+    task_id = fields.String(required=True)
     language = fields.String(required=True, validate=validate_language)
     code = fields.String(required=True)
 

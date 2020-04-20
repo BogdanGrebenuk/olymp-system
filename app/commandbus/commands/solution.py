@@ -1,22 +1,26 @@
 from dataclasses import dataclass
 
+from aiopg.sa import Engine
+
 from commandbus.commands.base_command import Command
+from db.entities.contest import Contest
+from db.entities.solution import Solution
+from db.entities.task import Task
 
 
 @dataclass
 class CreateSolution(Command):
-    user_id: int
-    contest_id: int
-    task_id: int
+    engine: Engine
+    contest: Contest
+    task: Task
     language: str
     code: str
 
 
 @dataclass
 class PrepareSolutionDir(Command):
-    user_id: int
-    contest_id: int
-    task_id: int
+    contest_id: str
+    task_id: str
     solution_id: str
 
 
@@ -29,8 +33,6 @@ class SaveSolutionCode(Command):
 
 @dataclass
 class VerifySolution(Command):
-    solution: dict  # TODO: pass Solution entity class
-
-
-
-
+    engine: Engine
+    solution: Solution
+    task: Task
