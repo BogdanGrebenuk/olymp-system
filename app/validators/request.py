@@ -5,10 +5,10 @@ from marshmallow import (
     validate
 )
 
-from services.docker import get_supported_languages  # TODO: create `common` with info
+from common import get_supported_languages
 
 
-def validate_language(lang): # TODO: refactor get_supported_languages
+def validate_language(lang):
     if lang not in get_supported_languages():
         raise ValidationError('unsupported language!')
 
