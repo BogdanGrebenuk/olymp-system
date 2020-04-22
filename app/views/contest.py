@@ -19,7 +19,7 @@ async def create_contest(request):
 
 
 async def get_contests(request):
-    engine = request.app['engine']
+    engine = request.app['db']
     contests = await get_contests_procedure(engine)
     return web.json_response({
         'contests': [transform_contest(i) for i in contests]
