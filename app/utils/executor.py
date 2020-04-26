@@ -1,22 +1,21 @@
 import asyncio
-import concurrent.futures
+from concurrent.futures import (
+    ThreadPoolExecutor,
+    ProcessPoolExecutor
+)
 
 
-async def io_bound(task):
-    loop = asyncio.get_running_loop()
-    pool = concurrent.futures.ThreadPoolExecutor()
-    try:
-        result = await loop.run_in_executor(pool, task)
-        return result
-    finally:
-        pool.shutdown(wait=True)  # TODO: investigate exception when wait is set to False
+async def run(task, pool, *, loop=None):
+    if loop is None:
+        loop = asyncio.get_running_loop()
+    return await loop.run_in_executor(pool, task)
 
 
-async def cpu_bound(task):
-    loop = asyncio.get_running_loop()
-    pool = concurrent.futures.ProcessPoolExecutor()
-    try:
-        result = await loop.run_in_executor(pool, task)
-        return result
-    finally:
-        pool.shutdown(wait=True)
+async def init_pools(app):
+    app['thread_pool'] = ThreadPoolExecutor()
+    app['process_pool'] = ProcessPoolExecutor()
+
+
+async def close_pools(app):
+    app['thread_pool'].shutdown(wait=True)
+    app['process_pool'].shutdown(wait=True)

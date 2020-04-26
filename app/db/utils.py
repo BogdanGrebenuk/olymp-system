@@ -1,9 +1,7 @@
 import aiopg.sa
 
-from settings import config
 
-
-async def init_pg(app):
+async def init_pg(app, config):
     database_info = config['database']
     engine = await aiopg.sa.create_engine(
         database=database_info['name'],

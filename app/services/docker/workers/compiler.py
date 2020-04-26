@@ -1,18 +1,21 @@
 import pathlib
+from concurrent.futures import Executor
 
 from functools import partial
 
+import utils.executor as executor
 from db.entities.solution import Solution
+from services.docker.meta import DockerMeta
 from services.docker.workers.interface import CompilerABC
 from utils.docker.tag import create_tag
-from utils.executor import cpu_bound
 
 
 class DefaultCompiler(CompilerABC):
 
-    def __init__(self, solution: Solution, meta):
+    def __init__(self, solution: Solution, meta: DockerMeta, pool: Executor):
         self.solution = solution
         self.meta = meta
+        self.pool = pool
         self._compiler_tag = None
 
     async def build(self):
@@ -24,17 +27,17 @@ class DefaultCompiler(CompilerABC):
         solution_id = self.solution.id
         solution_path = self.solution.path
 
-        self._compiler_tag = create_tag(self.meta.COMPILER_TAG, solution_id)
+        self._compiler_tag = create_tag(self.meta.compiler_tag, solution_id)
 
         task = partial(
             self._build,
 
             self._compiler_tag,
-            self.meta.COMPILER_DOCKERFILE,
+            self.meta.compiler_dockerfile,
             solution_path
         )
 
-        return await cpu_bound(task)
+        return await executor.run(task, self.pool)
 
     async def run(self):
         if self._compiler_tag is None:
@@ -50,7 +53,7 @@ class DefaultCompiler(CompilerABC):
             volumes={compiled_dir_path: '/code-compiled'}
         )
 
-        return await cpu_bound(task)
+        return await executor.run(task, self.pool)
 
     async def remove(self):
         if self._compiler_tag is None:
@@ -60,4 +63,4 @@ class DefaultCompiler(CompilerABC):
 
             self._compiler_tag
         )
-        return await cpu_bound(task)
+        return await executor.run(task, self.pool)

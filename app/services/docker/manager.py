@@ -1,3 +1,5 @@
+from concurrent.futures import Executor
+
 from docker.errors import APIError
 
 from db.entities.solution import Solution
@@ -13,10 +15,10 @@ class DockerManager:
         self.runner_manager = runner_manager
 
     @classmethod
-    def from_solution(cls, solution):
-        meta = get_language_meta(solution.language)
-        compiler_manager = DefaultCompiler(solution, meta)
-        runner_manager = DefaultRunner(solution, meta)
+    def default(cls, solution: Solution, pool: Executor, docker_meta: dict):
+        meta = get_language_meta(solution.language, docker_meta)
+        compiler_manager = DefaultCompiler(solution, meta, pool)
+        runner_manager = DefaultRunner(solution, meta, pool)
         return cls(solution, compiler_manager, runner_manager)
 
     async def __aenter__(self):

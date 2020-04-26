@@ -2,6 +2,7 @@ import pathlib
 import uuid
 from functools import partial
 
+import utils.executor as executor
 from commandbus.command_handlers.base_command_handler import CommandHandler
 from commandbus.commands.solution import (
     CreateSolution,
@@ -9,13 +10,12 @@ from commandbus.commands.solution import (
     PrepareSolutionDir,
     VerifySolution
 )
+from common import CODE_DIR
 from db.entities.solution import Solution
 from db.procedures.solution import create_solution
 from db.procedures.task import get_task_ios
 from services.codesaver import manager
 from services.docker.manager import DockerManager
-from utils.executor import cpu_bound
-from utils.filesystem import create_dir_chain
 
 
 class CreateSolutionHandler(CommandHandler):
@@ -26,12 +26,15 @@ class CreateSolutionHandler(CommandHandler):
             PrepareSolutionDir(
                 command.contest.id,
                 command.task.id,
-                solution_id
+                solution_id,
+                command.pool
             )
         )
         solution_dir_path = str(solution_dir.resolve())
         await self.bus.execute(
-            SaveSolutionCode(solution_dir_path, command.language, command.code)
+            SaveSolutionCode(
+                solution_dir_path, command.language, command.code, command.pool
+            )
         )
         solution = Solution(
             solution_id, command.task.id, solution_dir_path, command.language
@@ -43,21 +46,19 @@ class CreateSolutionHandler(CommandHandler):
 class PrepareSolutionDirHandler(CommandHandler):
 
     async def handle(self, command: PrepareSolutionDir):
-        # TODO: how to get root dir of project?
-        code_dir = pathlib.Path(__file__).parent.parent.parent.parent / 'code'
+        code_dir = pathlib.Path(CODE_DIR)
         # TODO: introduce user folder
         contest_dir = code_dir / command.contest_id
         task_dir = contest_dir / command.task_id
         solution_dir = task_dir / command.solution_id
 
         task = partial(
-            create_dir_chain,
+            solution_dir.mkdir,
 
-            contest_dir,
-            task_dir,
-            solution_dir
+            parents=True,
+            exist_ok=True
         )
-        await cpu_bound(task)
+        await executor.run(task, command.pool)
         return solution_dir
 
 
@@ -71,14 +72,16 @@ class SaveSolutionCodeHandler(CommandHandler):
             pathlib.Path(command.solution_dir_path),
             command.code
         )
-        return await cpu_bound(task)
+        return await executor.run(task, command.pool)
 
 
 class VerifySolutionHandler(CommandHandler):
 
     async def handle(self, command: VerifySolution):
         solution = command.solution
-        docker_manager = DockerManager.from_solution(solution)
+        pool = command.pool
+        docker_meta = command.docker_meta
+        docker_manager = DockerManager.default(solution, pool, docker_meta)
         # TODO: introduce execution logic (for example parallel verification)
         try:
             await docker_manager.prepare()

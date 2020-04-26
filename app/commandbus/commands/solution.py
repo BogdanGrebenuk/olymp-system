@@ -1,3 +1,4 @@
+from concurrent.futures import Executor
 from dataclasses import dataclass
 
 from aiopg.sa import Engine
@@ -15,6 +16,7 @@ class CreateSolution(Command):
     task: Task
     language: str
     code: str
+    pool: Executor
 
 
 @dataclass
@@ -22,6 +24,7 @@ class PrepareSolutionDir(Command):
     contest_id: str
     task_id: str
     solution_id: str
+    pool: Executor
 
 
 @dataclass
@@ -29,6 +32,7 @@ class SaveSolutionCode(Command):
     solution_dir_path: str
     language: str
     code: str
+    pool: Executor
 
 
 @dataclass
@@ -36,3 +40,5 @@ class VerifySolution(Command):
     engine: Engine
     solution: Solution
     task: Task
+    pool: Executor
+    docker_meta: dict

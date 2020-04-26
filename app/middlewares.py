@@ -15,6 +15,7 @@ async def error_middleware(request, handler):
             },
             status=400)
     except Exception as e:
+        # TODO: logger!
         print(f'FATAL EXCEPTION:', e)
         return web.json_response(
             {'error': 'Something went wrong..'},

@@ -12,10 +12,7 @@ ADMIN_DB_URL = DSN.format(
     port=database_info['port']
 )
 
-admin_engine = create_engine(
-    ADMIN_DB_URL,
-    isolation_level='AUTOCOMMIT'
-)
+admin_engine = create_engine(ADMIN_DB_URL)
 
 
 def setup_db():

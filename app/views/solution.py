@@ -15,6 +15,7 @@ from utils.request import validate_body
 async def verify_task(request):
     bus = request.app['bus']
     engine = request.app['db']
+    pool = request.app['process_pool']
 
     body = request['body']
 
@@ -35,10 +36,14 @@ async def verify_task(request):
     contest = await get_contest(engine, task.contest_id)
 
     solution = await bus.execute(
-        CreateSolution(engine, contest, task, language, code)
+        CreateSolution(engine, contest, task, language, code, pool)
     )
 
-    is_passed = await bus.execute(VerifySolution(engine, solution, task))
+    is_passed = await bus.execute(
+        VerifySolution(
+            engine, solution, task, pool, request.app['config']['docker_meta']
+        )
+    )
     solution.is_passed = is_passed
 
     await update_solution(engine, solution)
