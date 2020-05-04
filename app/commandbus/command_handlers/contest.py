@@ -11,6 +11,6 @@ class CreateContestHandler(CommandHandler):
     async def handle(self, command: CreateContest):
         engine = command.engine
         contest_id = str(uuid.uuid4())
-        contest = Contest(contest_id, command.name)
+        contest = Contest(contest_id, command.name, command.description)
         await create_contest(engine, contest)
         return contest

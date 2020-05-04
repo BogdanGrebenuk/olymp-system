@@ -8,4 +8,5 @@ from commandbus.commands.base_command import Command
 @dataclass
 class CreateContest(Command):
     name: str
+    description: str
     engine: Engine

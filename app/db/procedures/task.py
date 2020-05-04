@@ -1,3 +1,4 @@
+from functools import partial
 from typing import List
 
 from db.common import create, get
@@ -9,15 +10,10 @@ from db.models import (
 )
 
 
-async def create_task(engine, task: TaskEntity):
-    return await create(engine, task, TaskModel)
+create_task = partial(create, model=TaskModel)
 
 
-async def get_task(engine, id) -> TaskEntity:
-    result = await get(engine, id, TaskModel)
-    if result is None:
-        return None
-    return TaskEntity(**result)
+get_task = partial(get, model=TaskModel, entity=TaskEntity)
 
 
 async def get_task_ios(engine, task: TaskEntity) -> List[TaskIOEntity]:

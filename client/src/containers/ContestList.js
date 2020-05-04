@@ -11,7 +11,7 @@ const onFetchContests = dispatch => () => {
 
 const mapStateToProps = state => {
     return {
-        contests: state.contests
+        contests: Object.values(state.contests)
     }
 };
 

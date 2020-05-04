@@ -5,3 +5,4 @@ import dataclasses
 class Contest:
     id: str
     name: str
+    description: str

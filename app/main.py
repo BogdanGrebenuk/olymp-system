@@ -1,5 +1,6 @@
 from functools import partial
 
+import aiohttp_cors
 from aiohttp import web
 
 from db.utils import init_pg, close_pg
@@ -14,6 +15,18 @@ if __name__ == '__main__':
     app = web.Application(middlewares=[error_middleware])
 
     setup_routes(app)
+
+    cors = aiohttp_cors.setup(app, defaults={
+        "*": aiohttp_cors.ResourceOptions(
+            allow_credentials=True,
+            expose_headers="*",
+            allow_headers="*",
+            allow_methods="*"
+        )
+    })
+
+    for route in app.router.routes():
+        cors.add(route)
 
     app['config'] = config
     app['bus'] = Bus.from_default()

@@ -3,7 +3,7 @@ import abc
 from utils.docker.client import Client
 
 
-class WorkerABC(abc.ABC):
+class Worker(abc.ABC):
 
     @staticmethod
     def _build(*args, **kwargs):
@@ -21,7 +21,7 @@ class WorkerABC(abc.ABC):
         client.remove(*args, **kwargs)
 
 
-class CompilerABC(WorkerABC):
+class Compiler(Worker):
 
     @abc.abstractmethod
     def build(self):
@@ -32,7 +32,7 @@ class CompilerABC(WorkerABC):
         ...
 
 
-class RunnerABC(WorkerABC):
+class Runner(Worker):
 
     @abc.abstractmethod
     def build(self):

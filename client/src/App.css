@@ -1,38 +1,101 @@
-.App {
+body {
+  padding-left: 25%;
+  padding-right: 25%;
+}
+
+.page {
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.flex-container-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-container-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.card-block {
+  background: #fff;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  box-shadow: 0 0 7px #dcdcdc;
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.card-block:hover {
+  border-bottom: 3px solid #38a5d7;
+  transition: all 0.4s ease 0s;
+  box-shadow: 0 0 30px #b6b6b6;
+}
+
+.card-content {
+  margin: 10px 35px 20px 35px;
+}
+
+.card-image-div {
+  align-items: center;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  height: 200px;
+  transition: all 1s;
+}
+
+.card-image-div:hover {
+  height: 300px;
+  transition: all 0.4s ease;
+}
+
+.card-image-div img {
+  flex-shrink: 0;
+  min-height: 100%;
+  min-width: 100%;
+}
+
+.card-button {
+  color: #494949 !important;
+  text-transform: uppercase;
+  background: #ffffff;
+  padding: 10px;
+  border: 0 solid #494949 !important;
+  display: inline-block;
+  transition: all 0.4s ease 0s;
+}
+
+.card-button:hover {
+color: #ffffff !important;
+background: #38a5d7;
+border-color: #38a5d7 !important;
+transition: all 0.4s ease 0s;
+}
+
+.card-title {
+  font-size: 22px;
+}
+
+.card-main-text {
+  font-size: 16px;
+  font-weight: lighter;
+}
+
+.page-description-header {
+  font-size: 28px;
+  margin-left: 5%;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.page-description-divider {
+  width: 90%;
+  margin: auto !important;
+  border: 0;
+  border-top: 1px solid #C8C8C8;
+  opacity: 0.6;
 }

@@ -1,17 +1,14 @@
+from functools import partial
+
 from db.common import create, get, update
 from db.entities.solution import Solution as SolutionEntity
 from db.models import Solution as SolutionModel
 
 
-async def create_solution(engine, solution: SolutionEntity):
-    return await create(engine, solution, SolutionModel)
+create_solution = partial(create, model=SolutionModel)
 
 
-async def get_solution(engine, id) -> SolutionEntity:
-    result = await get(engine, id, SolutionModel)
-    if result is None:
-        return None
-    return SolutionEntity(**result)
+get_solution = partial(get, model=SolutionModel, entity=SolutionEntity)
 
 
 async def update_solution(engine, solution: SolutionEntity):

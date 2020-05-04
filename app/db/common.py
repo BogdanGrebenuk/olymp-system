@@ -9,12 +9,14 @@ async def create(engine, entity, model):
         )
 
 
-async def get(engine, id, model):
+async def get(engine, id, entity, model):
     async with engine.acquire() as conn:
-        result = await conn.execute(
+        result = await (await conn.execute(
             model.select().where(model.c.id == id)
-        )
-        return await result.fetchone()
+        )).fetchone()
+        if result is None:
+            return None
+        return entity(**result)
 
 
 async def update(engine, entity, model):

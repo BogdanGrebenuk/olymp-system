@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import ContestItem from './ContestItem';
 
+import '../App.css';
+
 
 class ContestList extends Component {
 
@@ -12,7 +14,7 @@ class ContestList extends Component {
     render() {
         const { contests } = this.props;
         return (
-            <div>
+            <div className='flex-container-column'>
                 {
                     contests.map(
                         contest => <ContestItem key={contest.id} contest={contest}/>

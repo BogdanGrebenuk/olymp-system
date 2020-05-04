@@ -4,11 +4,11 @@ from functools import partial
 import utils.executor as executor
 from db.entities.solution import Solution
 from services.docker.meta import DockerMeta
-from services.docker.workers.interface import RunnerABC
+from services.docker.workers.interface import Runner
 from utils.docker.tag import create_tag
 
 
-class DefaultRunner(RunnerABC):
+class DefaultRunner(Runner):
 
     def __init__(self, solution: Solution, meta: DockerMeta, pool: Executor):
         self.solution = solution

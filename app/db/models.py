@@ -8,7 +8,8 @@ Contest = sa.Table(
     'contest',
     metadata,
     sa.Column('id', sa.Text, primary_key=True),
-    sa.Column('name', sa.Text, nullable=False)
+    sa.Column('name', sa.Text, nullable=False),
+    sa.Column('description', sa.Text, nullable=False)
 )
 
 

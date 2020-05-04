@@ -1,3 +1,4 @@
+from functools import partial
 from typing import List
 
 from db.common import create, get
@@ -9,15 +10,10 @@ from db.models import (
 )
 
 
-async def create_contest(engine, contest: ContestEntity):
-    return await create(engine, contest, ContestModel)
+create_contest = partial(create, model=ContestModel)
 
 
-async def get_contest(engine, id) -> ContestEntity:
-    result = await get(engine, id, ContestModel)
-    if result is None:
-        return None
-    return ContestEntity(**result)
+get_contest = partial(get, model=ContestModel, entity=ContestEntity)
 
 
 async def get_contests(engine) -> List[ContestEntity]:
