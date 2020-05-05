@@ -9,4 +9,12 @@ from commandbus.commands.base_command import Command
 class CreateContest(Command):
     name: str
     description: str
+    image: bytes
     engine: Engine
+
+
+@dataclass
+class SaveContestImage(Command):
+    img: bytes
+    img_path: str
+
