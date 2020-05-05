@@ -44,10 +44,10 @@ export function setContests(contests) {
     }
 }
 
-export function createContest(contestName, contestDescription) {
+export function createContest(contestName, contestDescription, imageData) {
     return {
         type: CREATE_CONTEST,
-        payload: { contestName, contestDescription }
+        payload: { contestName, contestDescription, imageData }
     }
 }
 

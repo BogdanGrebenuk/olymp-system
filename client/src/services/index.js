@@ -29,11 +29,22 @@ export function fetchContestsService() {
 }
 
 
-export function createContestService(contestName, contestDescription) {
+export function createContestService(contestName, contestDescription, imageData) {
+    const formData = new FormData();
+
+    formData.append('image', imageData);
+    formData.append('name', contestName);
+    formData.append('description', contestDescription);
+
+    console.log(formData);
+
     return axios.post(
-        POST_CONTESTS_URL,
-        { name: contestName, description: contestDescription }
-        );
+        POST_CONTESTS_URL, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+    );
 }
 
 

@@ -5,6 +5,7 @@ from aiohttp import web
 
 from db.utils import init_pg, close_pg
 from commandbus import Bus
+from common import PUBLIC_DIR
 from middlewares import error_middleware
 from routes import setup_routes
 from settings import config
@@ -15,6 +16,7 @@ if __name__ == '__main__':
     app = web.Application(middlewares=[error_middleware])
 
     setup_routes(app)
+    app.add_routes([web.static('/public', PUBLIC_DIR)])
 
     cors = aiohttp_cors.setup(app, defaults={
         "*": aiohttp_cors.ResourceOptions(

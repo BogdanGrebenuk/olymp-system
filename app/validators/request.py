@@ -28,6 +28,7 @@ class VerifyTaskBody(Schema):
 class CreateContestBody(Schema):
     name = fields.String(required=True, validate=validate.Length(min=1))
     description = fields.String(required=True, validate=validate.Length(min=1))
+    image = fields.Field()
 
 
 class CreateTaskBody(Schema):
