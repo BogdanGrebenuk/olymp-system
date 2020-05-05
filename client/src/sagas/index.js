@@ -29,7 +29,8 @@ function* createContest(action) {
     yield call(
         createContestService,
         action.payload.contestName,
-        action.payload.contestDescription
+        action.payload.contestDescription,
+        action.payload.imageData
     );
 }
 

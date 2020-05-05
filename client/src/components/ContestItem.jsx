@@ -18,10 +18,11 @@ class ContestItem extends Component {
 
     render() {
         const { contest } = this.props;
+        const tempImage = "https://cdn2.cppinvestments.com/wp-content/uploads/2020/01/512x512_Logo.png";
         return (
             <div className='card-block' onClick={this.onContestSelected.bind(this)}>
                 <div className='card-image-div'>
-                    <img className='card-image' src="https://cdn2.cppinvestments.com/wp-content/uploads/2020/01/512x512_Logo.png"/>
+                    <img className='card-image' src={'http://localhost:8000/'.concat(contest.image_path)}/>
                 </div>
 
                 <div className='card-content'>

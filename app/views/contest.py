@@ -8,10 +8,10 @@ from db.procedures.contest import (
 
 from transformers import transform_contest
 from validators.request import CreateContestBody
-from utils.request import validate_body
+from utils.request import (validate_body, BodyType)
 
 
-@validate_body(schema=CreateContestBody)
+@validate_body(schema=CreateContestBody, body_type=BodyType.FORM_DATA)
 async def create_contest(request):
     bus = request.app['bus']
     engine = request.app['db']
@@ -19,8 +19,12 @@ async def create_contest(request):
 
     name = body['name']
     description = body['description']
+    image = body['image']
 
-    contest = await bus.execute(CreateContest(name, description, engine))
+    if image == 'null':  # TODO: investigate how to properly check it
+        image = None
+
+    contest = await bus.execute(CreateContest(name, description, image, engine))
     return web.json_response({'contest_id': contest.id})  # TODO: hide bare web.json_response
 
 

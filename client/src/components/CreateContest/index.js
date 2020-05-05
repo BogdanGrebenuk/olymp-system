@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ImageUploader from "react-images-upload";
 
 import './styles.css';
 import PageDescriptionHeader from "../PageDescriptionHeader";
@@ -10,6 +11,7 @@ class CreateContest extends Component {
         super(props);
         this.contestNameInput = React.createRef();
         this.contestDescription = React.createRef()
+        this.selectedImage = null;
     }
 
     createContestButtonClicked() {
@@ -21,7 +23,15 @@ class CreateContest extends Component {
         if (contestDescription.length === 0) {
             return alert('Contest description can\'t be empty!');
         }
-        this.props.onCreateContest(contestName, contestDescription);
+
+        // const imageData = new FormData();
+        // imageData.append('file', this.selectedImage);
+
+        this.props.onCreateContest(contestName, contestDescription, this.selectedImage);
+    }
+
+    onDrop(pictureFile, pictureDataURL) {
+        this.selectedImage = pictureFile[0];
     }
 
     render() {
@@ -37,6 +47,14 @@ class CreateContest extends Component {
                         <label> Description <span className="required">*</span></label>
                         <textarea ref={this.contestDescription} className="field-long field-textarea"/>
                     </li>
+                    <ImageUploader
+                        withIcon={true}
+                        buttonText="Choose image"
+                        onChange={this.onDrop.bind(this)}
+                        imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+                        maxFileSize={5242880}
+                        singleImage={true}
+                      />
                     <li>
                         <button className='submit-button' onClick={this.createContestButtonClicked.bind(this)}> Create</button>
                     </li>
