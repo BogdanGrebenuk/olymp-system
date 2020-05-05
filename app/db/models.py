@@ -61,3 +61,15 @@ Solution = sa.Table(
     sa.Column('language', sa.Text, nullable=False),
     sa.Column('is_passed', sa.Boolean, nullable=False, default=False)
 )
+
+
+User = sa.Table(
+    'user',
+    metadata,
+    sa.Column('id', sa.Text, primary_key=True),
+    sa.Column('firstname', sa.Text, nullable=False),
+    sa.Column('lastname', sa.Text, nullable=False),
+    sa.Column('patronymic', sa.Text, nullable=False),
+    sa.Column('salt', sa.Text, nullable=False),
+    sa.Column('password', sa.Text, nullable=False)
+)
