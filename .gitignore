@@ -17,7 +17,8 @@ venv.bak/
 
 .idea
 
-code
+code/*
+public/*
 
 app/alembic.ini
 config/app.yaml
