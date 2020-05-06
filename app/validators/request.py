@@ -39,6 +39,7 @@ class CreateTaskBody(Schema):
         fields.List(fields.String),
         validate=validate_task_io
     )
+    name = fields.String(required=True, validate=validate.Length(min=1))
     description = fields.String(required=True)
     max_cpu_time = fields.Integer(
         required=True,

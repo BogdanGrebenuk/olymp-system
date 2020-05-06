@@ -22,6 +22,7 @@ async def create_task(request):
 
     contest_id = body['contest_id']
     input_output = [tuple(i) for i in body['input_output']]
+    name = body['name']
     description = body['description']
     max_cpu_time = body['max_cpu_time']
     max_memory = body['max_memory']
@@ -41,6 +42,7 @@ async def create_task(request):
             engine,
             contest,
             input_output,
+            name,
             description,
             max_cpu_time,
             max_memory

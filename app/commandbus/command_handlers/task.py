@@ -17,6 +17,7 @@ class CreateTaskHandler(CommandHandler):
         task = Task(
             task_id,
             command.contest.id,
+            command.name,
             command.description,
             command.max_cpu_time,
             command.max_memory
