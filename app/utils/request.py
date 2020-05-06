@@ -9,12 +9,6 @@ class BodyType(enum.Enum):
     JSON = 'JSON'
 
 
-class UserRole(enum.Enum):
-    PARTICIPANT = 'participant'
-    TRAINER = 'trainer'
-    ORGANIZER = 'organizer'
-
-
 async def get_body(request, body_type):
     if body_type == BodyType.JSON:
         return await request.json()
