@@ -1,11 +1,20 @@
 import dataclasses
 
+import bcrypt
+
 
 @dataclasses.dataclass
 class User:
     id: str
-    firstname: str
-    lastname:str
+    first_name: str
+    last_name: str
     patronymic: str
-    salt: str
+    email: str
     password: str
+    role_id: str
+
+    def check_password(self, password: str):
+        return bcrypt.checkpw(
+            password.encode(encoding='utf-8'),
+            self.password.encode(encoding='utf-8')
+        )

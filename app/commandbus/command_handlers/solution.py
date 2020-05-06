@@ -47,7 +47,6 @@ class PrepareSolutionDirHandler(CommandHandler):
 
     async def handle(self, command: PrepareSolutionDir):
         code_dir = CODE_DIR
-        # TODO: introduce user folder
         contest_dir = code_dir / command.contest_id
         task_dir = contest_dir / command.task_id
         solution_dir = task_dir / command.solution_id

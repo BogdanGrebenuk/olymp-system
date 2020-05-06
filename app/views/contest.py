@@ -7,9 +7,15 @@ from db.procedures.contest import (
 )
 from transformers import transform_contest
 from validators.request import CreateContestBody
-from utils.request import (validate_body, BodyType)
+from utils.request import (
+    validate_body,
+    BodyType,
+    check_permission,
+    UserRole
+)
 
 
+@check_permission(roles=[UserRole.ORGANIZER])
 @validate_body(schema=CreateContestBody, body_type=BodyType.FORM_DATA)
 async def create_contest(request):
     bus = request.app['bus']

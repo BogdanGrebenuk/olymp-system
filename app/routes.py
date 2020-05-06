@@ -1,13 +1,17 @@
-from views.solution import verify_task
 from views.contest import (
     create_contest,
     get_contests,
     get_contest
 )
+from views.solution import verify_task
 from views.task import (
     create_task,
     get_tasks,
     get_task
+)
+from views.user import (
+    authenticate_user,
+    register_user
 )
 
 
@@ -21,3 +25,7 @@ def setup_routes(app):
     app.router.add_post('/api/tasks', create_task)
 
     app.router.add_post('/api/solutions', verify_task)
+
+    app.router.add_post('/user', register_user)
+
+    app.router.add_post('/login', authenticate_user)
