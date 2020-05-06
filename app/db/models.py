@@ -63,6 +63,14 @@ Solution = sa.Table(
 )
 
 
+Role = sa.Table(
+    'role',
+    metadata,
+    sa.Column('id', sa.Text, primary_key=True),
+    sa.Column('role', sa.Text, nullable=False)
+)
+
+
 User = sa.Table(
     'user',
     metadata,
@@ -71,5 +79,11 @@ User = sa.Table(
     sa.Column('lastname', sa.Text, nullable=False),
     sa.Column('patronymic', sa.Text, nullable=False),
     sa.Column('salt', sa.Text, nullable=False),
-    sa.Column('password', sa.Text, nullable=False)
+    sa.Column('password', sa.Text, nullable=False),
+    sa.Column(
+        'role_id',
+        sa.Text,
+        sa.ForeignKey('role.id', onupdate="CASCADE", ondelete="CASCADE"),
+        nullable=False
+    )
 )
