@@ -12,6 +12,8 @@ class CreateContestHandler(CommandHandler):
     async def handle(self, command: CreateContest):
         engine = command.engine
         image = command.image
+        start_date = command.start_date
+        end_date = command.end_date
 
         if image is None:  # TODO: remove it to another handler/function
             image_path = None
@@ -27,7 +29,9 @@ class CreateContestHandler(CommandHandler):
             contest_id,
             command.name,
             command.description,
-            image_path
+            image_path,
+            start_date,
+            end_date
         )
         await create_contest(engine, contest)
         return contest

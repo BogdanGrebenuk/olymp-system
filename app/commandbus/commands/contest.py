@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 from os import PathLike
 from typing import Union
 
@@ -14,6 +15,9 @@ class CreateContest(Command):
     description: str
     image: Union[FileField, None]
     engine: Engine
+    start_date: datetime
+    end_date: datetime
+
 
 
 @dataclass
