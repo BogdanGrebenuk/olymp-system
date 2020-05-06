@@ -1,18 +1,17 @@
 from aiohttp import web
 
+from common import UserRole
 from commandbus.commands.contest import CreateContest
 from db.procedures.contest import (
     get_contests as get_contests_procedure,
     get_contest as get_contest_procedure
 )
-
 from transformers import transform_contest
 from validators.request import CreateContestBody
 from utils.request import (
     validate_body,
     BodyType,
-    check_permission,
-    UserRole
+    check_permission
 )
 
 

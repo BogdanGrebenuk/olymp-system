@@ -12,7 +12,8 @@ import {
     CREATE_CONTEST,
     GET_TASKS,
     CREATE_TASK,
-    SUBMIT_SOLUTION
+    SUBMIT_SOLUTION,
+    REGISTER_USER
 } from "../actions";
 
 import {
@@ -21,7 +22,8 @@ import {
     createContestService,
     fetchTasksService,
     createTaskService,
-    submitSolutionService
+    submitSolutionService,
+    registerUserService
 } from '../services';
 
 
@@ -82,6 +84,15 @@ function* submitSolution(action) {
 }
 
 
+function* registerUser(action) {
+    const response = yield call(
+        registerUserService,
+        action.payload.userData
+    );
+    console.log(response);
+}
+
+
 function* watchFetchContest() {
     yield takeEvery(GET_CONTEST, fetchContest);
 }
@@ -112,6 +123,11 @@ function* watchSubmitSolution() {
 }
 
 
+function* watchRegisterUser(){
+    yield takeEvery(REGISTER_USER, registerUser);
+}
+
+
 export default function* rootSaga() {
     yield all([
         watchFetchContest(),
@@ -119,6 +135,7 @@ export default function* rootSaga() {
         watchCreateContest(),
         watchFetchTasks(),
         watchCreateTask(),
-        watchSubmitSolution()
+        watchSubmitSolution(),
+        watchRegisterUser()
     ]);
 }
