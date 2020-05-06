@@ -29,6 +29,8 @@ class CreateContestBody(Schema):
     name = fields.String(required=True, validate=validate.Length(min=1))
     description = fields.String(required=True, validate=validate.Length(min=1))
     image = fields.Field()
+    start_date = fields.DateTime(required=True)
+    end_date = fields.DateTime(required=True)
 
 
 class CreateTaskBody(Schema):

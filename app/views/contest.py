@@ -5,6 +5,7 @@ from db.procedures.contest import (
     get_contests as get_contests_procedure,
     get_contest as get_contest_procedure
 )
+from marshmallow import ValidationError
 
 from transformers import transform_contest
 from validators.request import CreateContestBody
@@ -20,11 +21,16 @@ async def create_contest(request):
     name = body['name']
     description = body['description']
     image = body['image']
+    start_date = body['start_date']
+    end_date = body['end_date']
 
     if image == 'null':  # TODO: investigate how to properly check it
         image = None
 
-    contest = await bus.execute(CreateContest(name, description, image, engine))
+    if start_date > end_date:
+        raise ValidationError('start_date is greater then end_date!')
+
+    contest = await bus.execute(CreateContest(name, description, image, engine, start_date, end_date))
     return web.json_response({'contest_id': contest.id})  # TODO: hide bare web.json_response
 
 
