@@ -24,7 +24,7 @@ class RegisterUserHandler(CommandHandler):
             command.patronymic,
             command.email,
             hashed_password,
-            command.role.id
+            command.role
         )
         await create_user(engine, user)
         return user

@@ -16,6 +16,10 @@ class RegistrationPage extends Component {
         const password = this.passwordInput.current.value.trim();
         const role = this.roleInput.current.value.trim();
 
+        if ([email, password, role].some(el => el.length === 0)) {
+            return alert('fill all the fields!')
+        }
+
         const userData = {
             firstName: 'Вася',
             lastName: 'Пупкин',

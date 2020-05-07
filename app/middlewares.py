@@ -6,7 +6,6 @@ from marshmallow import ValidationError
 import utils.executor as executor
 from utils.token import decode_token
 from db.procedures.user import (
-    get_role,
     get_user
 )
 
@@ -43,7 +42,7 @@ async def user_injector(request, handler):
         return web.json_response({
             'error': 'this action requires a token!',
             'payload': {}
-        })
+        }, status=400)
 
     try:
         _, token = token_header.split()
@@ -51,7 +50,7 @@ async def user_injector(request, handler):
         return web.json_response({
             'error': 'invalid token header',
             'payload': {}
-        })
+        }, status=400)
 
     pool = request.app['process_pool']
     engine = request.app['db']
@@ -71,10 +70,7 @@ async def user_injector(request, handler):
         return web.json_response({
             'error': f'token contains invalid information',
             'payload': {}
-        })
-
-    role = await get_role(engine, user)
+        }, status=400)
 
     request['user'] = user
-    request['role'] = role
     return await handler(request)
