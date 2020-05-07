@@ -1,9 +1,9 @@
 from setuptools import setup
 
 setup(
-    name="init_venv",
-    version="1.0",
-    description="Install necessary for olymp-system modules.",
+    name="olymp-system",
+    version="0.1",
+    description="system for conducting olympiads",
     install_requires=[
         'aiohttp',
         'aiohttp_cors',
