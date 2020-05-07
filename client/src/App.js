@@ -10,6 +10,7 @@ import CreateContest from "./containers/CreateContest";
 import ContestPage from "./containers/ContestPage"
 import CreateTaskContainer from "./containers/CreateTask";
 import TaskPageContainer from "./containers/TaskView";
+import AuthenticationPageContainer from "./containers/AuthenticationPage";
 import RegistrationPageContainer from "./containers/ResgistrationPage";
 
 import mainReducer from "./reducers";
@@ -32,6 +33,7 @@ class App extends Component {
             <Provider store={store}>
                 <BrowserRouter>
                     <Route path={'/register'} component={RegistrationPageContainer}/>
+                    <Route path={'/authenticate'} component={AuthenticationPageContainer}/>
                     <Route exact path='/contests' component={ContestsPage}/>
                     <Route exact path='/contests/new' component={CreateContest}/>
                     <Route exact path='/contests/view/:contestId' component={ContestPage}/>

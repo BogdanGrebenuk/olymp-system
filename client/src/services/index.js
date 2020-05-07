@@ -13,12 +13,13 @@ const BASE_URL = 'http://localhost:8000/'
 const API_URL = BASE_URL.concat('api/');
 
 const GET_CONTESTS_URL = API_URL.concat('contests');
-const GET_CONTEST_URL = API_URL.concat('contests/{}')
+const GET_CONTEST_URL = API_URL.concat('contests/{}');
 const POST_CONTESTS_URL = API_URL.concat('contests');
-const GET_TASKS_URL = API_URL.concat('contests/{}/tasks')
-const POST_TASKS_URL = API_URL.concat('tasks')
-const POST_SOLUTION = API_URL.concat('solutions')
-const REGISTER_USER_URL = BASE_URL.concat('user')
+const GET_TASKS_URL = API_URL.concat('contests/{}/tasks');
+const POST_TASKS_URL = API_URL.concat('tasks');
+const POST_SOLUTION = API_URL.concat('solutions');
+const REGISTER_USER_URL = BASE_URL.concat('user');
+const AUTHENTICATE_USER_URL = BASE_URL.concat('login');
 
 
 export function fetchContestService(contestId) {
@@ -85,11 +86,18 @@ export function submitSolutionService(taskId, code, language) {
 
 export function registerUserService(userData) {
     return axios.post(REGISTER_USER_URL, {
-       'first_name': userData.firstName,
-       'last_name': userData.lastName,
-       'patronymic': userData.patronymic,
-       'email': userData.email,
-       'password': userData.password,
-       'role': userData.role
+       first_name: userData.firstName,
+       last_name: userData.lastName,
+       patronymic: userData.patronymic,
+       email: userData.email,
+       password: userData.password,
+       role: userData.role
     });
+}
+
+export function authenticateUserService(userData) {
+    return axios.post(AUTHENTICATE_USER_URL, {
+        email: userData.email,
+        password: userData.password
+    })
 }

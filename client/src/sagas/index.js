@@ -13,7 +13,8 @@ import {
     GET_TASKS,
     CREATE_TASK,
     SUBMIT_SOLUTION,
-    REGISTER_USER
+    REGISTER_USER,
+    AUTHENTICATE_USER
 } from "../actions";
 
 import {
@@ -23,7 +24,8 @@ import {
     fetchTasksService,
     createTaskService,
     submitSolutionService,
-    registerUserService
+    registerUserService,
+    authenticateUserService
 } from '../services';
 
 
@@ -89,7 +91,25 @@ function* registerUser(action) {
         registerUserService,
         action.payload.userData
     );
-    console.log(response);
+    if (response.status === 200) {
+        window.location.href = '/authenticate'; // TODO: investigate how to do it correct
+    }
+}
+
+
+function* authenticateUser(action) {
+   const response = yield call(
+        authenticateUserService,
+
+        action.payload.userData
+    );
+
+   if (response.status === 200) {
+       const { data } = response;
+       const { token } = data;
+       localStorage.setItem('token', token);
+       window.location.href = '/contests';
+   }
 }
 
 
@@ -128,6 +148,11 @@ function* watchRegisterUser(){
 }
 
 
+function* watchAuthenticateUser() {
+    yield takeEvery(AUTHENTICATE_USER, authenticateUser);
+}
+
+
 export default function* rootSaga() {
     yield all([
         watchFetchContest(),
@@ -136,6 +161,7 @@ export default function* rootSaga() {
         watchFetchTasks(),
         watchCreateTask(),
         watchSubmitSolution(),
-        watchRegisterUser()
+        watchRegisterUser(),
+        watchAuthenticateUser()
     ]);
 }

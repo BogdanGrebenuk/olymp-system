@@ -4,7 +4,6 @@ from aiohttp import web
 
 import utils.executor as executor
 from commandbus.commands.user import RegisterUser
-from db.procedures.role import get_role_by_role
 from db.procedures.user import get_user_by_email
 from utils.request import validate_body
 from utils.token import create_token
@@ -26,16 +25,7 @@ async def register_user(request):
     last_name = body['last_name']
     patronymic = body['patronymic']
     password = body['password']
-    role_description = body['role']
-
-    role = await get_role_by_role(engine, role_description)
-    if role is None:
-        return web.json_response({
-            'error': f'There is no role "{role_description}"',
-            'payload': {
-                'role': role_description
-            }
-        })
+    role = body['role']
 
     user = await bus.execute(
         RegisterUser(

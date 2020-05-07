@@ -5,7 +5,10 @@ from marshmallow import (
     validate
 )
 
-from common import get_supported_languages
+from common import (
+    get_supported_languages,
+    get_roles
+)
 
 
 def validate_language(lang):
@@ -17,6 +20,11 @@ def validate_task_io(task_ios):
     for io in task_ios:
         if len(io) != 2:
             raise ValidationError('io incorrect specified!')
+
+
+def validate_role(role):
+    if role not in get_roles():
+        raise ValidationError('there is not such role!')
 
 
 class VerifyTaskBody(Schema):
@@ -56,7 +64,7 @@ class RegisterUserBody(Schema):
     patronymic = fields.String(required=True, validate=validate.Length(min=1))
     email = fields.Email(required=True)
     password = fields.String(required=True, validate=validate.Length(min=1))
-    role = fields.String(required=True)
+    role = fields.String(required=True, validate=validate_role)
 
 
 class AuthenticateUserBody(Schema):
