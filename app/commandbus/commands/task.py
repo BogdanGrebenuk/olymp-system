@@ -12,6 +12,7 @@ class CreateTask(Command):
     engine: Engine
     contest: Contest
     input_output: List[Tuple[str, str]]
+    name: str
     description: str
     max_cpu_time: int
     max_memory: int

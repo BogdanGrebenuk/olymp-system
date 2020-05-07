@@ -26,6 +26,7 @@ Task = sa.Table(
         sa.ForeignKey('contest.id', onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False
     ),
+    sa.Column('name', sa.Text, nullable=False),
     sa.Column(
         'description', sa.Text, nullable=False
     ),
