@@ -17,8 +17,12 @@ venv.bak/
 
 .idea
 
-code/*
-public/*
+code
+public
+build
+dist
+init_venv.egg-info
+
 
 app/alembic.ini
 config/app.yaml
