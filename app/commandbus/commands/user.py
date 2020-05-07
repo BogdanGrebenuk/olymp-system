@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from aiopg.sa import Engine
 
 from commandbus.commands.base_command import Command
-from db.entities.role import Role
 
 
 @dataclass
@@ -13,5 +12,5 @@ class RegisterUser(Command):
     first_name: str
     last_name: str
     patronymic: str
-    role: Role
+    role: str
     engine: Engine

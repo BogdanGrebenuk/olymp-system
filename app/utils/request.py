@@ -40,8 +40,8 @@ def check_permission(function=None, *, roles):
 
     @wraps(function)
     async def wrapper(request):
-        role = request['role']
-        if role.role not in roles:
+        role = request['user'].role
+        if role not in roles:
             return web.json_response(
                 {
                     'error': "you don't have permissions for this resource!",
