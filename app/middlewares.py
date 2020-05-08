@@ -1,5 +1,10 @@
+import logging.config
+
 from aiohttp import web
 from marshmallow import ValidationError
+
+
+logger = logging.getLogger(__name__)
 
 
 @web.middleware
@@ -21,3 +26,10 @@ async def error_middleware(request, handler):
             {'error': 'Something went wrong..'},
             status=500
         )
+
+
+@web.middleware
+async def request_logger(request, handler):
+    logger.info(f"{request.method} {request.rel_url}")
+    response = await handler(request)
+    return response
