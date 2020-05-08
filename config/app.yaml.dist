@@ -37,8 +37,9 @@ loggers:
             stream: ext://sys.stdout
         file:
             class: logging.FileHandler
-            level: info
+            level: INFO
             formatter: simple
+            filename: var/logs/dev.log
     loggers:
         middlewares:
             level: INFO

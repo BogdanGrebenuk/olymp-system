@@ -11,6 +11,7 @@ from middlewares import error_middleware, request_logger
 from routes import setup_routes
 from settings import config
 from utils.executor import init_pools, close_pools
+from utils.logger import init_logging
 
 
 if __name__ == '__main__':
@@ -43,5 +44,5 @@ if __name__ == '__main__':
     host = config['app']['host']
     port = config['app']['port']
 
-    logging.config.dictConfig(config["loggers"])
+    init_logging(config["loggers"])
     web.run_app(app, host=host, port=port)
