@@ -13,6 +13,9 @@ export const RESET_TASK_IOS = 'RESET_TASK_IOS';
 
 export const SUBMIT_SOLUTION = 'SUBMIT_SOLUTION';
 
+export const REGISTER_USER = 'REGISTER_USER';
+export const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
+
 
 export function getContest(contestId) {
     return {
@@ -92,5 +95,19 @@ export function submitSolution(taskId, code, language) {
         payload: {
             taskId, code, language
         }
+    }
+}
+
+export function registerUser(userData) {
+    return {
+        type: REGISTER_USER,
+        payload: { userData }
+    }
+}
+
+export function authenticateUser(userData) {
+    return {
+        type: AUTHENTICATE_USER,
+        payload: { userData }
     }
 }

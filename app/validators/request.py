@@ -10,6 +10,7 @@ from marshmallow import (
 
 from common import (
     get_supported_languages,
+    get_roles,
     MAX_NUMBER_OF_PARTICIPANTS,
     DEFAULT_NUMBER_OF_PARTICIPANTS
 )
@@ -46,6 +47,11 @@ class ImageField(fields.Field):
         if value == 'null':
             return None
         return value
+
+
+def validate_role(role):
+    if role not in get_roles():
+        raise ValidationError('there is not such role!')
 
 
 class VerifyTaskBody(Schema):
@@ -90,3 +96,17 @@ class CreateTaskBody(Schema):
         required=True,
         validate=validate.Range(min=1)
     )
+
+
+class RegisterUserBody(Schema):
+    first_name = fields.String(required=True, validate=validate.Length(min=1))
+    last_name = fields.String(required=True, validate=validate.Length(min=1))
+    patronymic = fields.String(required=True, validate=validate.Length(min=1))
+    email = fields.Email(required=True)
+    password = fields.String(required=True, validate=validate.Length(min=1))
+    role = fields.String(required=True, validate=validate_role)
+
+
+class AuthenticateUserBody(Schema):
+    email = fields.Email(required=True)
+    password = fields.String(required=True, validate=validate.Length(min=1))

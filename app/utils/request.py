@@ -1,6 +1,8 @@
 import enum
 from functools import wraps
 
+from aiohttp import web
+
 
 class BodyType(enum.Enum):
     FORM_DATA = 'FormData'
@@ -28,5 +30,24 @@ def validate_body(function=None, *, schema, body_type=BodyType.JSON):
         raw_body = await get_body(request, body_type)
         body = schema().load(raw_body)
         request['body'] = body
+        return await function(request)
+    return wrapper
+
+
+def check_permission(function=None, *, roles):
+    if function is None:
+        return lambda func: check_permission(func, roles=roles)
+
+    @wraps(function)
+    async def wrapper(request):
+        role = request['user'].role
+        if role not in roles:
+            return web.json_response(
+                {
+                    'error': "you don't have permissions for this resource!",
+                    'payload': {}
+                },
+                status=403
+            )
         return await function(request)
     return wrapper

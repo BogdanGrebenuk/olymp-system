@@ -10,13 +10,15 @@ import CreateContest from "./containers/CreateContest";
 import ContestPage from "./containers/ContestPage"
 import CreateTaskContainer from "./containers/CreateTask";
 import TaskPageContainer from "./containers/TaskView";
+import AuthenticationPageContainer from "./containers/AuthenticationPage";
+import RegistrationPageContainer from "./containers/ResgistrationPage";
 
 import mainReducer from "./reducers";
 import rootSaga from "./sagas";
 
 
 const sagaMiddleware = createSagaMiddleware();
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
     mainReducer,
     composeEnhancers(applyMiddleware(sagaMiddleware))
@@ -30,6 +32,8 @@ class App extends Component {
         return (
             <Provider store={store}>
                 <BrowserRouter>
+                    <Route path={'/register'} component={RegistrationPageContainer}/>
+                    <Route path={'/authenticate'} component={AuthenticationPageContainer}/>
                     <Route exact path='/contests' component={ContestsPage}/>
                     <Route exact path='/contests/new' component={CreateContest}/>
                     <Route exact path='/contests/view/:contestId' component={ContestPage}/>

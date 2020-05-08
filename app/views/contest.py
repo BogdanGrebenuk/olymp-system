@@ -1,5 +1,6 @@
 from aiohttp import web
 
+from common import UserRole
 from commandbus.commands.contest import CreateContest
 from db.procedures.contest import (
     get_contests as get_contests_procedure,
@@ -7,9 +8,14 @@ from db.procedures.contest import (
 )
 from transformers import transform_contest
 from validators.request import CreateContestBody
-from utils.request import (validate_body, BodyType)
+from utils.request import (
+    validate_body,
+    BodyType,
+    check_permission
+)
 
 
+@check_permission(roles=[UserRole.ORGANIZER])
 @validate_body(schema=CreateContestBody, body_type=BodyType.FORM_DATA)
 async def create_contest(request):
     bus = request.app['bus']
