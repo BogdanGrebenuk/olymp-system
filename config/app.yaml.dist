@@ -23,3 +23,27 @@ docker_meta:
         runner_tag: ...
         runner_dockerfile: ...
         runner_command: ...
+
+loggers:
+    version: 1
+    formatters:
+        simple:
+            format: '%(levelname)s:%(name)s: %(message)s :%(asctime)s'
+    handlers:
+        console:
+            class: logging.StreamHandler
+            level: INFO
+            formatter: simple
+            stream: ext://sys.stdout
+        file:
+            class: logging.FileHandler
+            level: info
+            formatter: simple
+    loggers:
+        middlewares:
+            level: INFO
+            handlers: [console]
+            propagate: no
+    root:
+        level: DEBUG
+        handlers: [console]
