@@ -25,7 +25,7 @@ def get_supported_languages():
 
 
 def get_roles():
-    return [i.value() for i in UserRole]
+    return [i.value for i in UserRole]
 
 
 if __name__ == '__main__':

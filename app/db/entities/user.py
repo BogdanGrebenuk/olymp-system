@@ -11,7 +11,7 @@ class User:
     patronymic: str
     email: str
     password: str
-    role_id: str
+    role: str
 
     def check_password(self, password: str):
         return bcrypt.checkpw(

@@ -27,7 +27,7 @@ async def error_handler(request, handler):
             },
             status=400)
     except Exception as e:
-        logger.error(f"Unexpected exception: {e}")
+        logger.exception(f"Unexpected exception")
         return web.json_response(
             {'error': 'Something went wrong..'},
             status=500

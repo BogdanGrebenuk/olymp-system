@@ -16,6 +16,11 @@ from common import (
 )
 
 
+def validate_role(role):
+    if role not in get_roles():
+        raise ValidationError('there is not such role!')
+
+
 def validate_language(lang):
     if lang not in get_supported_languages():
         raise ValidationError('unsupported language!')
@@ -47,11 +52,6 @@ class ImageField(fields.Field):
         if value == 'null':
             return None
         return value
-
-
-def validate_role(role):
-    if role not in get_roles():
-        raise ValidationError('there is not such role!')
 
 
 class VerifyTaskBody(Schema):
