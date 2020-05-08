@@ -13,15 +13,14 @@ from commandbus.commands.base_command import Command
 class CreateContest(Command):
     name: str
     description: str
+    max_participants: int
     image: Union[FileField, None]
     engine: Engine
     start_date: datetime
     end_date: datetime
 
 
-
 @dataclass
 class SaveContestImage(Command):
     image_bytes: bytes
     image_path: PathLike
-

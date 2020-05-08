@@ -7,6 +7,7 @@ class Contest:
     id: str
     name: str
     description: str
+    max_participants: int
     image_path: str
     start_date: datetime
     end_date: datetime

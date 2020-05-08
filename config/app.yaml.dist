@@ -28,7 +28,7 @@ loggers:
     version: 1
     formatters:
         simple:
-            format: '%(levelname)s:%(name)s: %(message)s :%(asctime)s'
+            format: '%(levelname)s:%(name)s: %(message)s %(asctime)s'
     handlers:
         console:
             class: logging.StreamHandler
