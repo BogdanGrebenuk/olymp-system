@@ -6,6 +6,9 @@ ROOT_DIR = pathlib.Path(__file__).parent.parent
 CODE_DIR = pathlib.Path(ROOT_DIR) / 'code'
 PUBLIC_DIR = pathlib.Path(ROOT_DIR) / 'public'
 
+DEFAULT_NUMBER_OF_PARTICIPANTS = 3
+MAX_NUMBER_OF_PARTICIPANTS = 10
+
 
 class Language(Enum):
     Python = 'python'

@@ -29,6 +29,7 @@ class CreateContestHandler(CommandHandler):
             contest_id,
             command.name,
             command.description,
+            command.max_participants,
             image_path,
             start_date,
             end_date

@@ -13,6 +13,7 @@ setup(
         'pyyaml',
         'docker',
         'pyjwt',
-        'bcrypt'
+        'bcrypt',
+        'sqlalchemy'
     ]
 )
