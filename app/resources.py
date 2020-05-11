@@ -160,23 +160,3 @@ def setup_routes(app, resources):
             resource.url,
             resource.handler
         )
-    # app.router.add_post('/users', register_user)
-    #
-    # app.router.add_post('/login', authenticate_user)
-    #
-    # app.router.add_get('/api/contests', get_contests)
-    # app.router.add_get('/api/contests/{contest_id}', get_contest)
-    # app.router.add_post('/api/contests', create_contest)
-    #
-    # app.router.add_get('/api/contests/{contest_id}/tasks', get_tasks)
-    # app.router.add_get('/api/contests/{contest_id}/tasks/{task_id}', get_task)
-    # app.router.add_post('/api/tasks', create_task)
-    #
-    # app.router.add_post('/api/solutions', verify_task)
-    #
-    # app.router.add_post('/api/teams', create_team)
-    #
-    # app.router.add_post('/api/invites', create_member)
-    # app.router.add_delete('/api/invites/{invite_id}', delete_member)
-    # app.router.add_put('/api/invites/{invite_id}/accept', accept_invite)
-    # app.router.add_put('/api/invites/{invite_id}/decline', decline_accept)
