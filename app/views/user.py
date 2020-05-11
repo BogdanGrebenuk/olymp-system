@@ -4,16 +4,10 @@ from aiohttp import web
 
 import utils.executor as executor
 from commandbus.commands.user import RegisterUser
-from db.procedures.user import get_user_by_email
-from utils.request import validate_body
+from db import user_mapper
 from utils.token import create_token
-from validators.request import (
-    AuthenticateUserBody,
-    RegisterUserBody
-)
 
 
-@validate_body(schema=RegisterUserBody)
 async def register_user(request):
     body = request['body']
 
@@ -36,7 +30,6 @@ async def register_user(request):
     return web.json_response({'user_id': user.id})
 
 
-@validate_body(schema=AuthenticateUserBody)
 async def authenticate_user(request):
     body = request['body']
     engine = request.app['db']
@@ -45,7 +38,7 @@ async def authenticate_user(request):
     email = body['email']
     password = body['password']
 
-    user = await get_user_by_email(engine, email)
+    user = await user_mapper.get_user_by_email(engine, email)
     if user is None:
         return web.json_response(
             {

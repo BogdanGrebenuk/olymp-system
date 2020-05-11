@@ -9,9 +9,11 @@ from common import PUBLIC_DIR
 from middlewares import (
     error_handler,
     user_injector,
-    request_logger
+    request_logger,
+    request_validator,
+    permission_checker
 )
-from routes import setup_routes
+from resources import setup_routes, resources
 from settings import config
 from utils.executor import init_pools, close_pools
 from utils.logger import init_logging
@@ -20,13 +22,15 @@ from utils.logger import init_logging
 if __name__ == '__main__':
     app = web.Application(
         middlewares=[
-            request_logger,
             error_handler,
-            user_injector
+            request_logger,
+            user_injector,
+            permission_checker,
+            request_validator
         ]
     )
 
-    setup_routes(app)
+    setup_routes(app, resources)
     app.add_routes([web.static('/public', PUBLIC_DIR)])
 
     cors = aiohttp_cors.setup(app, defaults={
