@@ -11,9 +11,11 @@ from commandbus.commands.solution import (
     VerifySolution
 )
 from common import CODE_DIR
+from db import (
+    solution_mapper,
+    task_mapper
+)
 from db.entities.solution import Solution
-from db.procedures.solution import create_solution
-from db.procedures.task import get_task_ios
 from services.codesaver import manager
 from services.docker.manager import DockerManager
 
@@ -39,7 +41,7 @@ class CreateSolutionHandler(CommandHandler):
         solution = Solution(
             solution_id, command.task.id, solution_dir_path, command.language
         )
-        await create_solution(command.engine, solution)
+        await solution_mapper.create(command.engine, solution)
         return solution
 
 
@@ -84,7 +86,7 @@ class VerifySolutionHandler(CommandHandler):
         # TODO: introduce execution logic (for example parallel verification)
         try:
             await docker_manager.prepare()
-            task_ios = await get_task_ios(command.engine, command.task)
+            task_ios = await task_mapper.get_task_ios(command.engine, command.task)
             for task_io in task_ios:
                 answer = await docker_manager.run(task_io.input)
                 answer = answer.rstrip()

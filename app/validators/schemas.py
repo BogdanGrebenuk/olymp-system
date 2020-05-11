@@ -10,20 +10,10 @@ from marshmallow import (
 
 from common import (
     get_supported_languages,
-    get_roles,
     MAX_NUMBER_OF_PARTICIPANTS,
     DEFAULT_NUMBER_OF_PARTICIPANTS
 )
-
-
-def validate_role(role):
-    if role not in get_roles():
-        raise ValidationError('there is not such role!')
-
-
-def validate_language(lang):
-    if lang not in get_supported_languages():
-        raise ValidationError('unsupported language!')
+from core.user_role import get_roles
 
 
 def validate_task_io(task_ios):
@@ -37,6 +27,14 @@ class MaxParticipantsField(fields.Field):
     def _deserialize(self, value: typing.Any, attr: str, obj: typing.Any, **kwargs):
         if value == 'null':
             return DEFAULT_NUMBER_OF_PARTICIPANTS
+        return int(value)
+
+
+class MaxTeamsField(fields.Field):
+
+    def _deserialize(self, value: typing.Any, attr: str, obj: typing.Any, **kwargs):
+        if value == 'null':
+            return None
         return int(value)
 
 
@@ -56,16 +54,24 @@ class ImageField(fields.Field):
 
 class VerifyTaskBody(Schema):
     task_id = fields.String(required=True)
-    language = fields.String(required=True, validate=validate_language)
+    language = fields.String(
+        required=True,
+        validate=validate.OneOf(get_supported_languages())
+    )
     code = fields.String(required=True)
 
 
 class CreateContestBody(Schema):
     name = fields.String(required=True, validate=validate.Length(min=1))
     description = fields.String(required=True, validate=validate.Length(min=1))
-    max_participants = MaxParticipantsField(
+    max_participants_in_team = MaxParticipantsField(
         required=True,
         validate=validate.Range(1, MAX_NUMBER_OF_PARTICIPANTS)
+    )
+    max_teams = MaxTeamsField(
+        required=True,
+        validate=validate.Range(1),
+        allow_none=True
     )
     image = ImageField(required=True)
     start_date = fields.DateTime(required=True)
@@ -104,9 +110,31 @@ class RegisterUserBody(Schema):
     patronymic = fields.String(required=True, validate=validate.Length(min=1))
     email = fields.Email(required=True)
     password = fields.String(required=True, validate=validate.Length(min=1))
-    role = fields.String(required=True, validate=validate_role)
+    role = fields.String(required=True, validate=validate.OneOf(get_roles()))
 
 
 class AuthenticateUserBody(Schema):
     email = fields.Email(required=True)
     password = fields.String(required=True, validate=validate.Length(min=1))
+
+
+class CreateTeamBody(Schema):
+    name = fields.String(required=True, validate=validate.Length(min=1))
+    contest_id = fields.String(required=True)
+
+
+class CreateMemberBody(Schema):
+    user_id = fields.String(required=True)
+    team_id = fields.String(required=True)
+
+
+class AcceptInviteBody(Schema):
+    member_id = fields.String(required=True)
+
+
+class DeclineInviteBody(Schema):
+    member_id = fields.String(required=True)
+
+
+class DeleteMemberBody(Schema):
+    member_id = fields.String(required=True)

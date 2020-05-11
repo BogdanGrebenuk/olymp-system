@@ -4,14 +4,13 @@ from commandbus.commands.solution import (
     CreateSolution,
     VerifySolution
 )
-from db.procedures.contest import get_contest
-from db.procedures.task import get_task
-from db.procedures.solution import update_solution
-from validators.request import VerifyTaskBody
-from utils.request import validate_body
+from db import (
+    contest_mapper,
+    task_mapper,
+    solution_mapper
+)
 
 
-@validate_body(schema=VerifyTaskBody)
 async def verify_task(request):
     bus = request.app['bus']
     engine = request.app['db']
@@ -23,7 +22,7 @@ async def verify_task(request):
     language = body['language']
     code = body['code']
 
-    task = await get_task(engine, task_id)
+    task = await task_mapper.get(engine, task_id)
     if task is None:
         return web.json_response(
             {
@@ -33,7 +32,7 @@ async def verify_task(request):
             status=400
         )
 
-    contest = await get_contest(engine, task.contest_id)
+    contest = await contest_mapper.get(engine, task.contest_id)
 
     solution = await bus.execute(
         CreateSolution(engine, contest, task, language, code, pool)
@@ -46,7 +45,7 @@ async def verify_task(request):
     )
     solution.is_passed = is_passed
 
-    await update_solution(engine, solution)
+    await solution_mapper.update_solution(engine, solution)
 
     return web.json_response({
         'is_passed': is_passed

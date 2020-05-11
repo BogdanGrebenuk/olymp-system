@@ -1,7 +1,7 @@
 from functools import partial
 from typing import List
 
-from db.common import create, get
+from db.common import create as _create, get as _get
 from db.entities.contest import Contest as ContestEntity
 from db.entities.task import Task as TaskEntity
 from db.models import (
@@ -10,10 +10,10 @@ from db.models import (
 )
 
 
-create_contest = partial(create, model=ContestModel)
+create = partial(_create, model=ContestModel)
 
 
-get_contest = partial(get, model=ContestModel, entity=ContestEntity)
+get = partial(_get, model=ContestModel, entity=ContestEntity)
 
 
 async def get_contests(engine) -> List[ContestEntity]:

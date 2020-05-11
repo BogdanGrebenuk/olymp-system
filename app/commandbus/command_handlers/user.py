@@ -3,8 +3,8 @@ import uuid
 
 from commandbus.command_handlers.base_command_handler import CommandHandler
 from commandbus.commands.user import RegisterUser
+from db import user_mapper
 from db.entities.user import User
-from db.procedures.user import create_user
 
 
 class RegisterUserHandler(CommandHandler):
@@ -26,5 +26,5 @@ class RegisterUserHandler(CommandHandler):
             hashed_password,
             command.role
         )
-        await create_user(engine, user)
+        await user_mapper.create(engine, user)
         return user
