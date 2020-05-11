@@ -20,7 +20,8 @@ from views.task import (
 )
 from views.user import (
     authenticate_user,
-    register_user
+    register_user,
+    get_sent_invites_for_contest
 )
 from views.team import (
     create_team
@@ -143,6 +144,13 @@ resources = [
         allowed_roles=[UserRole.PARTICIPANT],
         validator=BodyValidator(schemas.DeclineInviteBody),
         handler=decline_accept
+    ),
+    Resource(
+        method='GET',
+        url='/api/invites/sent',
+        allowed_roles=[UserRole.TRAINER],
+        validator=None,
+        handler=get_sent_invites_for_contest
     )
 ]
 

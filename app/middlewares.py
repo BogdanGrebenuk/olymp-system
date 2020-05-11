@@ -89,7 +89,7 @@ async def permission_checker(request, handler):
     if (
             resource.allowed_roles is not None
             and
-            request['user'].role not in resource.allowed_roles
+            request['user'].get_user_role() not in resource.allowed_roles
             ):
         raise PermissionException(
             "you don't have permissions for this resource!"
