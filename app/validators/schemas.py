@@ -138,3 +138,11 @@ class DeclineInviteBody(Schema):
 
 class DeleteMemberBody(Schema):
     member_id = fields.String(required=True)
+
+
+class GetSentInvitesParams(Schema):
+    contest_id = fields.String(required=True)
+
+
+class GetReceivedInvitesParams(Schema):
+    contest_id = fields.String(required=True)
