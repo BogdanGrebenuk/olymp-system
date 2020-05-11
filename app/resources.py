@@ -6,7 +6,12 @@ from aiohttp.web import BaseRequest
 import validators.schemas as schemas
 from core.user_role import UserRole
 from validators import Validator
-from validators.body import BodyValidator, form_data_loader
+from validators.request import (
+    RequestValidator,
+    JSONBodyManager,
+    DataFormManager,
+    ParamsManager
+)
 from views.contest import (
     create_contest,
     get_contests,
@@ -21,7 +26,8 @@ from views.task import (
 from views.user import (
     authenticate_user,
     register_user,
-    get_sent_invites_for_contest
+    get_sent_invites_for_contest,
+    get_received_invites_for_contest
 )
 from views.team import (
     create_team
@@ -48,14 +54,14 @@ resources = [
         method='POST',
         url='/users',
         allowed_roles=None,
-        validator=BodyValidator(schemas.RegisterUserBody),
+        validator=RequestValidator(schemas.RegisterUserBody),
         handler=register_user
     ),
     Resource(
         method='POST',
         url='/login',
         allowed_roles=None,
-        validator=BodyValidator(schemas.AuthenticateUserBody),
+        validator=RequestValidator(schemas.AuthenticateUserBody),
         handler=authenticate_user
     ),
     Resource(
@@ -76,9 +82,9 @@ resources = [
         method='POST',
         url='/api/contests',
         allowed_roles=[UserRole.ORGANIZER],
-        validator=BodyValidator(
+        validator=RequestValidator(
             schemas.CreateContestBody,
-            data_loader=form_data_loader
+            data_manager=DataFormManager
         ),
         handler=create_contest
     ),
@@ -100,57 +106,70 @@ resources = [
         method='POST',
         url='/api/tasks',
         allowed_roles=None,
-        validator=BodyValidator(schemas.CreateTaskBody),
+        validator=RequestValidator(schemas.CreateTaskBody),
         handler=create_task
     ),
     Resource(
         method='POST',
         url='/api/solutions',
         allowed_roles=None,
-        validator=BodyValidator(schemas.VerifyTaskBody),
+        validator=RequestValidator(schemas.VerifyTaskBody),
         handler=verify_task
     ),
     Resource(
         method='POST',
         url='/api/teams',
         allowed_roles=[UserRole.TRAINER],
-        validator=BodyValidator(schemas.CreateTeamBody),
+        validator=RequestValidator(schemas.CreateTeamBody),
         handler=create_team
     ),
     Resource(
         method='POST',
         url='/api/invites',
         allowed_roles=[UserRole.TRAINER],
-        validator=BodyValidator(schemas.CreateMemberBody),
+        validator=RequestValidator(schemas.CreateMemberBody),
         handler=create_member
     ),
     Resource(
         method='DELETE',
         url='/api/invites/{invite_id}',
         allowed_roles=[UserRole.TRAINER],
-        validator=BodyValidator(schemas.DeleteMemberBody),
+        validator=RequestValidator(schemas.DeleteMemberBody),
         handler=delete_member
     ),
     Resource(
         method='PUT',
         url='/api/invites/{invite_id}/accept',
         allowed_roles=[UserRole.PARTICIPANT],
-        validator=BodyValidator(schemas.AcceptInviteBody),
+        validator=RequestValidator(schemas.AcceptInviteBody),
         handler=accept_invite
     ),
     Resource(
         method='PUT',
         url='/api/invites/{invite_id}/decline',
         allowed_roles=[UserRole.PARTICIPANT],
-        validator=BodyValidator(schemas.DeclineInviteBody),
+        validator=RequestValidator(schemas.DeclineInviteBody),
         handler=decline_accept
     ),
     Resource(
         method='GET',
         url='/api/invites/sent',
         allowed_roles=[UserRole.TRAINER],
-        validator=None,
+        validator=RequestValidator(
+            schemas.GetSentInvitesParams,
+            data_manager=ParamsManager
+        ),
         handler=get_sent_invites_for_contest
+    ),
+    Resource(
+        method='GET',
+        url='/api/invites/received',
+        allowed_roles=[UserRole.PARTICIPANT],
+        validator=RequestValidator(
+            schemas.GetReceivedInvitesParams,
+            data_manager=ParamsManager
+        ),
+        handler=get_received_invites_for_contest
     )
 ]
 

@@ -3,6 +3,7 @@ from functools import partial
 from aiohttp import web
 
 import utils.executor as executor
+import utils.injector as injector
 from commandbus.commands.user import RegisterUser
 from db import user_mapper, contest_mapper
 from transformers import transform_invite
@@ -74,15 +75,32 @@ async def authenticate_user(request):
     )
 
 
+@injector.inject(injector.ContestFromParams)
 async def get_sent_invites_for_contest(request):
     engine = request.app['db']
 
-    contest_id = request.rel_url.query.get('contest_id')
+    contest = request['contest']
     user = request['user']
 
-    contest = await contest_mapper.get(engine, contest_id)
-
-    invites = await user_mapper.get_sent_invites_for_contest(engine, user, contest)
+    invites = await user_mapper.get_sent_invites_for_contest(
+        engine, user, contest
+    )
     return web.json_response(
         {'invites': [transform_invite(i) for i in invites]}
     )
+
+
+@injector.inject(injector.ContestFromParams)
+async def get_received_invites_for_contest(request):
+    engine = request.app['db']
+
+    contest = request['contest']
+    user = request['user']
+
+    invites = await user_mapper.get_received_invites_for_contest(
+        engine, user, contest
+    )
+
+    return web.json_response({
+        {'invites', [transform_invite(i) for i in invites]}
+    })

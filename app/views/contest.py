@@ -1,9 +1,9 @@
 from aiohttp import web
 
+import utils.injector as injector
 from commandbus.commands.contest import CreateContest
 from db import contest_mapper
 from transformers import transform_contest
-from utils.injector import inject, Contest
 
 
 async def create_contest(request):
@@ -39,7 +39,7 @@ async def get_contests(request):
     })
 
 
-@inject(Contest)
+@injector.inject(injector.ContestFromParams)
 async def get_contest(request):
     contest = request['contest']
     return web.json_response({
