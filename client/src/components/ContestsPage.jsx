@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router";
+import {Link} from "react-router-dom"
+
+import defaultImg from '../assets/images/logo-og.png'
 
 import ContestListContainer from "../containers/ContestList";
-import PageDescriptionHeader from "./PageDescriptionHeader";
+import HeaderImage from './HeaderImage'
 
+import '../assets/styles/ContestsPage.scss'
 
 class ContestsPage extends  Component {
 
@@ -14,9 +18,11 @@ class ContestsPage extends  Component {
     render() {
         return (
             <div className='page'>
-                <PageDescriptionHeader description='Contests'/>
+                
                 <ContestListContainer/>
-                <button onClick={this.onCreateContestClicked.bind(this)}> Create contest </button>
+
+
+                {/* <button onClick={this.onCreateContestClicked.bind(this)}> Create contest </button> */}
             </div>
         )
     }

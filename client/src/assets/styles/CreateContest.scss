@@ -1,17 +1,31 @@
+@import './index.scss';
+
+h1 {
+	font-size: $bigFont;
+	text-align: center;
+	padding: 0;
+}
 .create-form {
-	margin:10px auto;
+	margin: $spacer auto;
 	max-width: 400px;
-	padding: 20px 12px 10px 20px;
-	font: 13px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+	padding: 0 $spacer;
+	font-size: $standartFont;
 }
 .create-form li {
 	padding: 0;
 	display: block;
 	list-style: none;
-	margin: 10px 0 0 0;
+	margin: $spacer 0 0 0;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+
+	&:last-child {
+		align-items: center;
+	}
 }
 .create-form label{
-	margin:0 0 3px 0;
+	margin:0 0 $spacer / 2 0;
 	padding:0px;
 	display:block;
 	font-weight: bold;
@@ -26,12 +40,13 @@
 .create-form input[type=email],
 textarea,
 select{
-	border-radius: 5px;
+	resize: none;
+	border-radius: $borderRadius;
 	box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
-	border:1px solid #BEBEBE;
-	padding: 7px;
+	border: $border solid $grey;
+	padding: $spacer / 2;
 	margin:0px;
 	-webkit-transition: all 0.30s ease-in-out;
 	-moz-transition: all 0.30s ease-in-out;
@@ -49,10 +64,10 @@ select{
 .create-form input[type=email]:focus,
 .create-form textarea:focus,
 .create-form select:focus{
-	-moz-box-shadow: 0 0 8px #88D5E9;
-	-webkit-box-shadow: 0 0 8px #88D5E9;
-	box-shadow: 0 0 8px #88D5E9;
-	border: 1px solid #88D5E9;
+	-moz-box-shadow: 0 0 8px $blue;
+	-webkit-box-shadow: 0 0 8px $blue;
+	box-shadow: 0 0 8px $blue;
+	border: 1px solid $blue;
 }
 .create-form .field-divided{
 	width: 49%;
@@ -69,21 +84,26 @@ select{
 }
 
 .create-form .required{
-	color:red;
+	color:$red;
 }
 
 .submit-button {
-	border-radius: 5px;
-	color: #ffffff !important;
-	background: #38a5d7;
-	border-color: #38a5d7 !important;
+    cursor: pointer;
+	width: $spacer * 5;
+	border-radius: $borderRadius;
+	color: $white !important;
+	background: $blue;
 	padding: 8px 15px 8px 15px;
 	border: none;
 	transition: all 0.4s ease 0s;
-}
+	outline: none;
+	font-weight: bold;
+	font-size: $standartFont;
+	border: solid $border $blue;
 
-.submit-button:hover {
-	color: #494949 !important;
-	background: #ffffff;
-	transition: all 0.4s ease 0s;
+	&:hover {
+		color: $black !important;
+		background: $white;
+		transition: all 0.4s ease 0s;
+	}
 }

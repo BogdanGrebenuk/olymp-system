@@ -1,11 +1,10 @@
-body {
-  padding-left: 25%;
-  padding-right: 25%;
-}
+@import './index.scss';
 
 .page {
-  padding-left: 5%;
-  padding-right: 5%;
+  padding-left: 15rem;
+  padding-right: 15rem;
+  padding-top: $spacer;
+  padding-bottom: $spacer;
 }
 
 .flex-container-column {

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router";
+import {Link} from "react-router-dom";
 
-import '../App.css';
+import '../assets/styles/ContestItem.scss';
 
 
 class ContestItem extends Component {
@@ -20,15 +21,12 @@ class ContestItem extends Component {
         const { contest } = this.props;
         const tempImage = "https://cdn2.cppinvestments.com/wp-content/uploads/2020/01/512x512_Logo.png";
         return (
-            <div className='card-block' onClick={this.onContestSelected.bind(this)}>
-                <div className='card-image-div'>
-                    <img className='card-image' src={'http://localhost:8000/'.concat(contest.image_path)}/>
-                </div>
-
-                <div className='card-content'>
-                    <h3 className='card-title'> {contest.name} </h3>
-                    <h4 className='card-main-text'> {contest.description} </h4>
-                    <button className='card-button' onClick={this.onReadMoreButtonClicked.bind(this)}> Read more </button>
+            <div className="contest">
+                <div className="contest-image" style={{ backgroundImage: `url(http://localhost:8000/${contest.image_path})`}} />
+                <div className="contest-information">
+                    <h1>{contest.name}</h1>
+                    <h3>{contest.description}</h3>
+                    <Link to="/contests/view/:1">Read more</Link>
                 </div>
             </div>
         )

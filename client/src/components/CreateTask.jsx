@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import TaskIOListContainer from "../containers/TaskIOList.jsx"; // TODO: doesn't work without jsx ext
 
+import "../assets/styles/CreateTask.scss"
 
 class CreateTask extends Component {
 
@@ -59,29 +60,46 @@ class CreateTask extends Component {
 
     render() {
 
-        const { contest } = this.props;
+        // const { contest } = this.props;
 
-        if (typeof contest === 'undefined') {
-            if (this.isRefreshed === true) {
-                return <div> Contest not found! </div>
-            }
-            this.isRefreshed = true;
-            this.props.onRefreshContest();
-            return <div> Wait... </div>
-        }
+        // if (typeof contest === 'undefined') {
+        //     if (this.isRefreshed === true) {
+        //         return <div> Contest not found! </div>
+        //     }
+        //     this.isRefreshed = true;
+        //     this.props.onRefreshContest();
+        //     return <div> Wait... </div>
+        // }
 
         return (
-            <div>
-                <input ref={this.taskNameInput}/> <br/>
-                <textarea ref={this.descriptionInput}/> <br/>
-                <input ref={this.maxCpuInput} type='number'/> <br/>
-                <input ref={this.maxMemoryInput} type='number'/> <br/>
-
-                <TaskIOListContainer/>
-
-                <button onClick={this.createTaskButtonClicked.bind(this)}>
-                    Create
-                </button>
+            <div className='page'>
+                <h1>Create task</h1>
+                <ul className="create-form">
+                    <li>
+                        <label>Task name <span className="required">*</span></label>
+                        <input ref={this.taskNameInput} type="text" className="field-long"/>
+                    </li>
+                    <li>
+                        <label>Description <span className="required">*</span></label>
+                        <textarea ref={this.descriptionInput} className="field-long field-textarea"/>
+                    </li>
+                    <li>
+                        <label>Time <span className="required">*</span></label>
+                        <input ref={this.maxCpuInput} type='number' className="field-long"/>
+                    </li>
+                    <li>
+                        <label>Memory <span className="required">*</span></label>
+                        <input ref={this.maxMemoryInput} type='number' className="field-long"/>
+                    </li>
+                    <li>
+                        <TaskIOListContainer/>
+                    </li>
+                    <li>
+                        <button className="submit-button" onClick={this.createTaskButtonClicked.bind(this)}>
+                            Create
+                        </button>
+                    </li>
+                </ul>
             </div>
         )
     }

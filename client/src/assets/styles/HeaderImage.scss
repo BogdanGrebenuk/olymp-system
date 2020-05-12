@@ -1,0 +1,58 @@
+@import './index.scss';
+
+.header-image {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    padding: $spacer;
+    border-radius: $borderRadius;
+    width: 100%;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    color: $white;
+    border: solid $border $grey;
+    box-shadow: inset 100em 1em rgba($grey, .05);
+
+    h1 {
+        flex: 1;
+        font-size: $bigFont;
+        margin: 0;
+        text-align: left;
+    }
+    h3 {
+        flex: 1;
+        font-weight: normal;
+        margin: 0;
+        font-size: 1.375rem;
+    }
+    .buttons {
+        text-align: right;
+    }
+    .title-input,
+    .description-input {
+        flex: 1;
+        margin: 0;
+        outline: none;
+        background: none;
+        color: $white;
+        padding: 0;
+        border: none;
+        width: 50%;
+        border-radius: $borderRadius;
+
+        &:hover {
+            background: rgba($grey, .2);
+            cursor: pointer;
+        }
+    }
+    .title-input {
+        line-height: 3.05rem;
+        font-size: 2.32rem;
+    }
+    .description-input {
+        line-height: 2rem;
+        font-size: 1.375rem;
+        font-weight: normal;
+    }
+}

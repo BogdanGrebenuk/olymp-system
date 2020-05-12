@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  font-family: "Open Sans";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@font-face {
+  font-family: "Open Sans";
+  src: url(fonts/OpenSans.ttf);
+}
+@font-face {
+  font-family: "Consolas";
+  src: url(fonts/Consolas.ttf);
+}
+
+$black: black;
+$white: white;
+$grey: #dadce0;
+$darkGrey: #5f6368;
+$blue: #61a2fb;
+$red: red;
+
+$spacer: 1.5rem;
+
+$border: 0.0625rem;
+$borderBold: 0.3rem;
+$borderRadius: 0.5rem;
+
+$smallFont: 0.8125rem;
+$standartFont: 0.875rem;
+$bigFont: 2.25rem;

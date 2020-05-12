@@ -1,0 +1,60 @@
+@import './index.scss';
+
+h1 {
+    font-size: $standartFont;
+    margin: 0 0 $spacer 0;
+}
+.task-wrap {
+    display: flex;
+    flex-direction: column;
+    border: $border $grey solid;
+    border-radius: 5px;
+    padding: $spacer;
+    align-items: center;
+
+    p {
+        font-size: $smallFont;
+        margin: 0 0 $spacer / 2 0;
+        width: 100%;
+    }
+    textarea {
+        font-family: "Consolas";
+        font-size: $smallFont;
+        color: $darkGrey;
+        margin: $spacer / 2 0;
+        border: $border $grey solid;
+        border-radius: $borderRadius;
+        width: 100%;
+    }
+    select {
+        margin: $spacer / 2 0;
+        width: 100%;
+        font-size: $smallFont;
+        outline: none;
+
+        option {
+            font-size: $smallFont;
+        }
+    }
+    button {
+        margin: $spacer / 2 0 0 0;
+        cursor: pointer;
+        width: $spacer * 5;
+        border-radius: $borderRadius;
+        color: $white !important;
+        background: $blue;
+        padding: 8px 15px 8px 15px;
+        border: none;
+        transition: all 0.4s ease 0s;
+        outline: none;
+        font-weight: bold;
+        font-size: $standartFont;
+        border: solid $border $blue;
+    
+        &:hover {
+            color: $black !important;
+            background: $white;
+            transition: all 0.4s ease 0s;
+        }
+    }
+}
