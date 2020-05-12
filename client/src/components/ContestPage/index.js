@@ -20,16 +20,16 @@ class ContestPage extends Component {
     }
 
     render() {
-        // const { contest } = this.props;
+        const { contest } = this.props;
 
-        // if (typeof contest === 'undefined') {
-        //     if (this.isRefreshed) {
-        //         return <div> Contest not found! </div>
-        //     }
-        //     this.isRefreshed = true;
-        //     this.props.onRefreshContest();
-        //     return <div> Wait... </div>
-        // }
+        if (typeof contest === 'undefined') {
+            if (this.isRefreshed) {
+                return <div> Contest not found! </div>
+            }
+            this.isRefreshed = true;
+            this.props.onRefreshContest();
+            return <div> Wait... </div>
+        }
 
         const tempImageUrl = 'https://images.pexels.com/photos/34153/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350';
 

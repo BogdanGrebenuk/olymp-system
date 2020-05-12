@@ -32,8 +32,7 @@ class TaskPage extends Component {
     }
 
     render() {
-        //const { task } = this.props;
-        const task = this.props;
+        const { task } = this.props;
 
         const languages = ['','python']; // TODO: fetch from api
 

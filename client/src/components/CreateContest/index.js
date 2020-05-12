@@ -23,8 +23,8 @@ class CreateContest extends Component {
             return alert('Contest description can\'t be empty!');
         }
 
-        // const imageData = new FormData();
-        // imageData.append('file', this.selectedImage);
+        const imageData = new FormData();
+        imageData.append('file', this.selectedImage);
 
         this.props.onCreateContest(contestName, contestDescription, this.selectedImage);
     }

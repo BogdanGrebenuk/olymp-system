@@ -59,17 +59,16 @@ class CreateTask extends Component {
     }
 
     render() {
+        const { contest } = this.props;
 
-        // const { contest } = this.props;
-
-        // if (typeof contest === 'undefined') {
-        //     if (this.isRefreshed === true) {
-        //         return <div> Contest not found! </div>
-        //     }
-        //     this.isRefreshed = true;
-        //     this.props.onRefreshContest();
-        //     return <div> Wait... </div>
-        // }
+        if (typeof contest === 'undefined') {
+            if (this.isRefreshed === true) {
+                return <div> Contest not found! </div>
+            }
+            this.isRefreshed = true;
+            this.props.onRefreshContest();
+            return <div> Wait... </div>
+        }
 
         return (
             <div className='page'>

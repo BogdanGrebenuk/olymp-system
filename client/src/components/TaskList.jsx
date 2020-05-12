@@ -11,9 +11,9 @@ class TaskList extends Component {
     }
 
     render() {
-        //const { tasks, contest } = this.props;
-        const tasks = [{ id: 1, description: "description" }];
-        const contest = { id: 1 };
+        const { tasks, contest } = this.props;
+        // const tasks = [{ id: 1, description: "description" }];
+        // const contest = { id: 1 };
         return (
             <div className='task-list-block flex-container-column'>
                 {
