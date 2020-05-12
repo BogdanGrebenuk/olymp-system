@@ -13,7 +13,6 @@ from commandbus.commands.team_member import CreateTeamMember
 from core.team_member import MemberStatus
 
 
-@injector.inject(injector.TeamFromBody)
 async def create_member(request):
     bus = request.app['bus']
     engine = request.app['db']

@@ -8,9 +8,9 @@ from core.user_role import UserRole
 from validators import Validator
 from validators.request import (
     RequestValidator,
-    JSONBodyManager,
     DataFormManager,
-    ParamsManager
+    ParamsManager,
+    UrlVariableManager
 )
 from views.contest import (
     create_contest,
@@ -45,7 +45,7 @@ class Resource:
     method: str
     url: str
     allowed_roles: Union[List[UserRole], None]  # if None, there is no restrictions
-    validator: Union[Validator, None]
+    validators: List[Validator]
     handler: Callable[[BaseRequest], Awaitable]
 
 
@@ -54,121 +54,132 @@ resources = [
         method='POST',
         url='/users',
         allowed_roles=None,
-        validator=RequestValidator(schemas.RegisterUserBody),
+        validators=[RequestValidator(schemas.RegisterUserBody)],
         handler=register_user
     ),
     Resource(
         method='POST',
         url='/login',
         allowed_roles=None,
-        validator=RequestValidator(schemas.AuthenticateUserBody),
+        validators=[RequestValidator(schemas.AuthenticateUserBody)],
         handler=authenticate_user
     ),
     Resource(
         method='GET',
         url='/api/contests',
         allowed_roles=None,
-        validator=None,
+        validators=[],
         handler=get_contests
     ),
     Resource(
         method='GET',
         url='/api/contests/{contest_id}',
         allowed_roles=None,
-        validator=None,
+        validators=[],
         handler=get_contest
     ),
     Resource(
         method='POST',
         url='/api/contests',
         allowed_roles=[UserRole.ORGANIZER],
-        validator=RequestValidator(
-            schemas.CreateContestBody,
-            data_manager=DataFormManager
-        ),
+        validators=[
+            RequestValidator(
+                schemas.CreateContestBody,
+                data_manager=DataFormManager
+            )
+        ],
         handler=create_contest
     ),
     Resource(
         method='GET',
         url='/api/contests/{contest_id}/tasks',
         allowed_roles=None,
-        validator=None,
+        validators=[
+            RequestValidator(
+                schemas.GetTasksUrlVars,
+                data_manager=UrlVariableManager
+            )
+        ],
         handler=get_tasks
     ),
     Resource(
         method='GET',
         url='/api/contests/{contest_id}/tasks/{task_id}',
         allowed_roles=None,
-        validator=None,
+        validators=[],
         handler=get_task
     ),
     Resource(
         method='POST',
         url='/api/tasks',
         allowed_roles=None,
-        validator=RequestValidator(schemas.CreateTaskBody),
+        validators=[RequestValidator(schemas.CreateTaskBody)],
         handler=create_task
     ),
     Resource(
         method='POST',
         url='/api/solutions',
         allowed_roles=None,
-        validator=RequestValidator(schemas.VerifyTaskBody),
+        validators=[RequestValidator(schemas.VerifyTaskBody)],
         handler=verify_task
     ),
     Resource(
         method='POST',
         url='/api/teams',
         allowed_roles=[UserRole.TRAINER],
-        validator=RequestValidator(schemas.CreateTeamBody),
+        validators=[RequestValidator(schemas.CreateTeamBody)],
         handler=create_team
     ),
     Resource(
         method='POST',
         url='/api/invites',
         allowed_roles=[UserRole.TRAINER],
-        validator=RequestValidator(schemas.CreateMemberBody),
+        validators=[RequestValidator(schemas.CreateMemberBody)],
         handler=create_member
     ),
     Resource(
         method='DELETE',
         url='/api/invites/{invite_id}',
         allowed_roles=[UserRole.TRAINER],
-        validator=RequestValidator(schemas.DeleteMemberBody),
+        validators=[RequestValidator(schemas.DeleteMemberBody)],
         handler=delete_member
     ),
     Resource(
         method='PUT',
         url='/api/invites/{invite_id}/accept',
         allowed_roles=[UserRole.PARTICIPANT],
-        validator=RequestValidator(schemas.AcceptInviteBody),
+        validators=[RequestValidator(schemas.AcceptInviteBody)],
         handler=accept_invite
     ),
     Resource(
         method='PUT',
         url='/api/invites/{invite_id}/decline',
         allowed_roles=[UserRole.PARTICIPANT],
-        validator=RequestValidator(schemas.DeclineInviteBody),
+        validators=[RequestValidator(schemas.DeclineInviteBody)],
         handler=decline_accept
     ),
     Resource(
         method='GET',
         url='/api/invites/sent',
         allowed_roles=[UserRole.TRAINER],
-        validator=RequestValidator(
-            schemas.GetSentInvitesParams,
-            data_manager=ParamsManager
-        ),
+        validators=[
+            RequestValidator(
+                schemas.GetSentInvitesParams,
+                data_manager=ParamsManager
+            ),
+        ],
         handler=get_sent_invites_for_contest
     ),
     Resource(
         method='GET',
         url='/api/invites/received',
         allowed_roles=[UserRole.PARTICIPANT],
-        validator=RequestValidator(
-            schemas.GetReceivedInvitesParams,
-            data_manager=ParamsManager
-        ),
+        validators=[
+            RequestValidator(
+                schemas.GetReceivedInvitesParams,
+                data_manager=ParamsManager
+            )
+        ],
         handler=get_received_invites_for_contest
     )
 ]
