@@ -13,6 +13,8 @@ import TaskPageContainer from "./containers/TaskView";
 import AuthenticationPageContainer from "./containers/AuthenticationPage";
 import RegistrationPageContainer from "./containers/ResgistrationPage";
 
+import Header from "./components/Header"
+
 import mainReducer from "./reducers";
 import rootSaga from "./sagas";
 
@@ -32,6 +34,7 @@ class App extends Component {
         return (
             <Provider store={store}>
                 <BrowserRouter>
+                    <Header />
                     <Route path={'/register'} component={RegistrationPageContainer}/>
                     <Route path={'/authenticate'} component={AuthenticationPageContainer}/>
                     <Route exact path='/contests' component={ContestsPage}/>

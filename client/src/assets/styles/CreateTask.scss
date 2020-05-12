@@ -1,0 +1,110 @@
+@import './index.scss';
+
+h1 {
+	font-size: $bigFont;
+	text-align: center;
+	padding: 0;
+}
+.create-form {
+	margin: $spacer auto;
+	max-width: 400px;
+	padding: 0 $spacer;
+	font-size: $standartFont;
+}
+.create-form li {
+	padding: 0;
+	display: block;
+	list-style: none;
+	margin: $spacer 0 0 0;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+
+    &:nth-child(5),
+	&:last-child {
+		align-items: center;
+	}
+}
+.create-form label{
+	margin:0 0 $spacer / 2 0;
+	padding:0px;
+	display:block;
+	font-weight: bold;
+}
+.create-form input[type=text],
+.create-form input[type=date],
+.create-form input[type=datetime],
+.create-form input[type=number],
+.create-form input[type=search],
+.create-form input[type=time],
+.create-form input[type=url],
+.create-form input[type=email],
+textarea,
+select{
+	resize: none;
+	border-radius: $borderRadius;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	border: $border solid $grey;
+	padding: $spacer / 2;
+	margin:0px;
+	-webkit-transition: all 0.30s ease-in-out;
+	-moz-transition: all 0.30s ease-in-out;
+	-ms-transition: all 0.30s ease-in-out;
+	-o-transition: all 0.30s ease-in-out;
+	outline: none;
+}
+.create-form input[type=text]:focus,
+.create-form input[type=date]:focus,
+.create-form input[type=datetime]:focus,
+.create-form input[type=number]:focus,
+.create-form input[type=search]:focus,
+.create-form input[type=time]:focus,
+.create-form input[type=url]:focus,
+.create-form input[type=email]:focus,
+.create-form textarea:focus,
+.create-form select:focus{
+	-moz-box-shadow: 0 0 8px $blue;
+	-webkit-box-shadow: 0 0 8px $blue;
+	box-shadow: 0 0 8px $blue;
+	border: 1px solid $blue;
+}
+.create-form .field-divided{
+	width: 49%;
+}
+
+.create-form .field-long{
+	width: 100%;
+}
+.create-form .field-select{
+	width: 100%;
+}
+.create-form .field-textarea{
+	height: 100px;
+}
+
+.create-form .required{
+	color:$red;
+}
+
+.submit-button {
+    cursor: pointer;
+	width: $spacer * 5;
+	border-radius: $borderRadius;
+	color: $white !important;
+	background: $blue;
+	padding: 8px 15px 8px 15px;
+	border: none;
+	transition: all 0.4s ease 0s;
+	outline: none;
+	font-weight: bold;
+	font-size: $standartFont;
+	border: solid $border $blue;
+
+	&:hover {
+		color: $black !important;
+		background: $white;
+		transition: all 0.4s ease 0s;
+	}
+}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import "../assets/styles/TaskPage.scss"
 
 class TaskPage extends Component {
 
@@ -36,14 +37,16 @@ class TaskPage extends Component {
         const languages = ['','python']; // TODO: fetch from api
 
         return (
-            <div>
-                <div> Task name </div>
-                <div> {task.description} </div>
-                <textarea ref={this.codeRef}/>
-                <select ref={this.languageRef}>
-                    {languages.map((lang, i) => <option key={i} value={lang}> {lang} </option>)}
-                </select>
-                <button onClick={this.onSubmitClicked.bind(this)}> Submit </button>
+            <div className="page">
+                <h1>Name</h1>
+                <div className="task-wrap">
+                    <p>Description</p>
+                    <textarea ref={this.codeRef} rows={20} placeholder={"Your code..."} />
+                    <select ref={this.languageRef} placeholder={"Select language..."}>
+                        {languages.map((lang, i) => <option key={i} value={lang}> {lang} </option>)}
+                    </select>
+                    <button onClick={this.onSubmitClicked.bind(this)}> Submit </button>
+                </div>
             </div>
         )
     }

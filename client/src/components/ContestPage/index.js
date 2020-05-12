@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { withRouter } from "react-router";
 
 import TaskList from "../../containers/TaskList";
-import '../../App.css';
-import './styles.css'
+import '../../assets/styles/App.scss';
+import '../../assets/styles/ContestPage.scss'
 import TaskPageContainer from "../../containers/TaskView";
-import PageDescriptionHeader from "../PageDescriptionHeader";
-
+import HeaderImage from '../HeaderImage'
 
 class ContestPage extends Component {
 
@@ -35,17 +34,17 @@ class ContestPage extends Component {
         const tempImageUrl = 'https://images.pexels.com/photos/34153/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350';
 
         return (
-            <div>
+            <div className="page">
 
-                {/*<PageDescriptionHeader description={contest.name}/>*/}
+                <HeaderImage title={'Title'} description={'Description'} imageUrl={tempImageUrl} adminMode={true} />
 
-                <div className='flex-container-column'>
-                    <div className='photo-header'>
-                        <img src={tempImageUrl}/>
+                <div className="content">
+                    <div className="information-block">
+                        <h6>Small title</h6>
+                        <p>Some information</p>
                     </div>
-                    <div className='contest-main'>
-                        <div className='info-block'> Useful info </div>
-                        <TaskList contest={contest}/>
+                    <div className="contests-list">
+                        <TaskList />
                     </div>
                 </div>
 

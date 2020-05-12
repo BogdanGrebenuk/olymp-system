@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import ImageUploader from "react-images-upload";
 
-import './styles.css';
-import PageDescriptionHeader from "../PageDescriptionHeader";
+import '../../assets/styles/CreateContest.scss';
 
 
 class CreateContest extends Component {
@@ -24,8 +23,8 @@ class CreateContest extends Component {
             return alert('Contest description can\'t be empty!');
         }
 
-        // const imageData = new FormData();
-        // imageData.append('file', this.selectedImage);
+        const imageData = new FormData();
+        imageData.append('file', this.selectedImage);
 
         this.props.onCreateContest(contestName, contestDescription, this.selectedImage);
     }
@@ -37,7 +36,7 @@ class CreateContest extends Component {
     render() {
         return (
             <div className='page'>
-                <PageDescriptionHeader description='Create contest'/>
+                <h1>Create contest</h1>
                 <ul className="create-form">
                     <li>
                         <label>Contest name <span className="required">*</span></label>

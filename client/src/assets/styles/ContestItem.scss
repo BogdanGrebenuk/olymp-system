@@ -1,0 +1,51 @@
+@import './index.scss';
+
+.contest {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    border-top: solid $border $grey;
+    border-left: solid $border $grey;
+    border-right: solid $border $grey;
+    border-bottom: solid $borderBold $blue;
+    border-top-left-radius: $borderRadius;
+    border-top-right-radius: $borderRadius;
+    margin: $spacer / 2;
+
+    .contest-image {
+        height: 10rem;
+        width: 100%;
+        background-size: cover;
+        background-position: center;
+        border-top-left-radius: $borderRadius;
+        border-top-right-radius: $borderRadius;
+    }
+    .contest-information {
+        padding: $spacer;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        h1 {
+            margin: 0;
+            padding: 0;
+            font-size: 1.375rem;
+        }
+        h3 {
+            padding: 0;
+            font-size: $standartFont;
+            font-weight: normal;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        a {
+            margin: $spacer 0 0 0;
+            font-size: $standartFont;
+            text-transform: uppercase;
+            color: $blue;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    }
+}

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router";
 
+import icon from "../assets/images/task.png"
+
 class TaskItem extends Component {
 
     onTaskSelected() {
@@ -14,9 +16,9 @@ class TaskItem extends Component {
     render() {
         const { task } = this.props;
         return (
-            <div onClick={this.onTaskSelected.bind(this)}>
-                <div> Task name (implement) </div>
-                <div> {task.description} </div>
+            <div className="task-block" onClick={this.onTaskSelected.bind(this)}>
+                <img src={icon} />
+                <h3>Task name</h3>
             </div>
         )
     }
