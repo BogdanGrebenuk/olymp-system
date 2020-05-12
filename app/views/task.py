@@ -1,11 +1,13 @@
 from aiohttp import web
 
 from commandbus.commands.task import CreateTask
+from core.user_role import UserRole
 from db import (
-    contest_mapper,
-    task_mapper
+    contest_mapper
 )
 from transformers import transform_task
+from utils.injector import inject
+from utils.injector.entity import Contest, Task
 
 
 async def create_task(request):
@@ -46,20 +48,21 @@ async def create_task(request):
     return web.json_response({'task_id': task.id})
 
 
+@inject(Contest)
 async def get_tasks(request):
     engine = request.app['db']
 
-    contest_id = request.match_info.get('contest_id')
+    contest = request['contest']
+    user = request['user']
 
-    contest = await contest_mapper.get(engine, contest_id)
-    if contest is None:
-        return web.json_response(
-            {
-                'error': f'there is no contest with id {contest_id}',
-                'payload': {'contest_id': contest_id}
-            },
-            status=400
-        )
+    if not contest.can_view_tasks(user):
+        return web.json_response({
+            'error': "the contest is't start yet!",
+            'payload': {
+                'contest_id': contest.id,
+                'start_date': contest.start_date
+            }
+        })
 
     tasks = await contest_mapper.get_tasks(engine, contest)
     return web.json_response({
@@ -67,29 +70,20 @@ async def get_tasks(request):
     })
 
 
+@inject(Contest, Task)
 async def get_task(request):
-    engine = request.app['db']
+    contest = request['contest']
+    user = request['user']
+    task = request['task']
 
-    contest_id = request.match_info.get('contest_id')
-    # TODO: implement entity injector and get rid of all these "entity = ...; if entity is not None"
-    contest = await contest_mapper.get(engine, contest_id)
-    if contest is None:
-        return web.json_response(
-            {
-                'error': f'there is no contest with id {contest_id}',
-                'payload': {'contest_id': contest_id}
-            },
-            status=400
-        )
-
-    task_id = request.match_info.get('task_id')
-    task = await task_mapper.get(engine, task_id)
-    if task is None:
-        return web.json_response(
-            {
-                'error': f'there is no task with id {task_id}'
+    if not contest.can_view_tasks(user):
+        return web.json_response({
+            'error': "the contest is't start yet!",
+            'payload': {
+                'contest_id': contest.id,
+                'start_date': contest.start_date
             }
-        )
+        })
 
     return web.json_response({
         'task': transform_task(task)

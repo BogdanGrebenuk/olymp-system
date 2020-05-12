@@ -3,10 +3,11 @@ from functools import partial
 from aiohttp import web
 
 import utils.executor as executor
-import utils.injector as injector
 from commandbus.commands.user import RegisterUser
-from db import user_mapper, contest_mapper
+from db import user_mapper
 from transformers import transform_invite
+from utils.injector import inject
+from utils.injector.entity import Contest
 from utils.token import create_token
 
 
@@ -75,7 +76,7 @@ async def authenticate_user(request):
     )
 
 
-@injector.inject(injector.ContestFromParams)
+@inject(Contest)
 async def get_sent_invites_for_contest(request):
     engine = request.app['db']
 
@@ -90,7 +91,7 @@ async def get_sent_invites_for_contest(request):
     )
 
 
-@injector.inject(injector.ContestFromParams)
+@inject(Contest)
 async def get_received_invites_for_contest(request):
     engine = request.app['db']
 

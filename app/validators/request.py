@@ -40,6 +40,12 @@ async def load_params(request):
     return request.rel_url.query
 
 
+async def load_vars(request):
+    return request.match_info
+
+
+# TODO: should i create enum-like class or container for these managers?
 JSONBodyManager = DataManager(load_json, 'body')
 DataFormManager = DataManager(load_form_data, 'body')
 ParamsManager = DataManager(load_params, 'params')
+UrlVariableManager = DataManager(load_vars, 'vars')

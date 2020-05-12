@@ -146,3 +146,7 @@ class GetSentInvitesParams(Schema):
 
 class GetReceivedInvitesParams(Schema):
     contest_id = fields.String(required=True)
+
+
+class GetTasksUrlVars(Schema):
+    contest_id = fields.String(required=True)
