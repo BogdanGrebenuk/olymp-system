@@ -1,11 +1,11 @@
 from aiohttp import web
 
 from commandbus.commands.task import CreateTask
-from core.user_role import UserRole
 from db import (
     contest_mapper
 )
-from transformers import transform_task
+from exceptions.entity import EntityNotFound
+from transformers import transform_task, transform_datetime
 from utils.injector import inject
 from utils.injector.entity import Contest, Task
 
@@ -57,12 +57,12 @@ async def get_tasks(request):
 
     if not contest.can_view_tasks(user):
         return web.json_response({
-            'error': "the contest is't start yet!",
+            'error': "you can't see tasks of this contest",
             'payload': {
                 'contest_id': contest.id,
-                'start_date': contest.start_date
+                'start_date': transform_datetime(contest.start_date)
             }
-        })
+        }, status=400)
 
     tasks = await contest_mapper.get_tasks(engine, contest)
     return web.json_response({
@@ -75,6 +75,12 @@ async def get_task(request):
     contest = request['contest']
     user = request['user']
     task = request['task']
+
+    if task.contest_id != contest.id:
+        raise EntityNotFound(
+            f'there is no such task in contest {contest.id}!',
+            {'task_id': task.id, 'contest_id': contest.id}
+        )
 
     if not contest.can_view_tasks(user):
         return web.json_response({

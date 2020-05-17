@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Header from "./Header";
+import {HomeElement} from "../utils";
 
 
 class AuthenticationPage extends Component {
@@ -24,8 +26,10 @@ class AuthenticationPage extends Component {
     }
 
     render() {
+        const navBarElements = [HomeElement];
         return (
             <div>
+                <Header navBarElements={navBarElements}/>
                 <input ref={this.emailInput}/>
                 <input ref={this.passwordInput}/>
                 <button onClick={this.onAuthenticateButtonClicked.bind(this)}> Sign in </button>

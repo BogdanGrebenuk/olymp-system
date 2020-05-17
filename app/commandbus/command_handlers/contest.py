@@ -22,6 +22,7 @@ class CreateContestHandler(CommandHandler):
             image_path = await self.bus.execute(GenerateContestImagePath(image))
             task = partial(save_file_field_image, image.file, image_path)
             await executor.run(task, thread_pool)
+            image_path = str(image_path.relative_to(ROOT_DIR))
 
         contest_id = str(uuid.uuid4())
         contest = Contest(
@@ -44,4 +45,4 @@ class GenerateContestImagePathHandler(CommandHandler):
     async def handle(self, command: GenerateContestImagePath):
         image = command.image
         image_path = PUBLIC_DIR / f"{uuid.uuid4()}{image.filename}"
-        return str(image_path.relative_to(ROOT_DIR))
+        return image_path

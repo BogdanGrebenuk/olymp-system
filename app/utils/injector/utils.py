@@ -22,12 +22,21 @@ def extract_attr(request, request_attr, extractors=None):
     return None
 
 
+def extract_from(source_key):
+    def inner(request, request_attr):
+        source = request.get(source_key)
+        if source is None:
+            return None
+        return source.get(request_attr)
+    return inner
+
+
 default_extractor = partial(
     extract_attr,
 
     extractors=[
-        lambda request, request_attr: request['body'].get(request_attr),
-        lambda request, request_attr: request['params'].get(request_attr),
-        lambda request, request_attr: request['vars'].get(request_attr)
+        extract_from('body'),
+        extract_from('params'),
+        extract_from('vars')
     ]
 )

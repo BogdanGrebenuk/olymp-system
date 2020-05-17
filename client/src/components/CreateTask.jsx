@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import TaskIOListContainer from "../containers/TaskIOList.jsx"; // TODO: doesn't work without jsx ext
 
 import "../assets/styles/CreateTask.scss"
+import {ContestsElement, HomeElement, NavBarElement} from "../utils";
+import Header from "./Header";
 
 class CreateTask extends Component {
 
@@ -70,35 +72,45 @@ class CreateTask extends Component {
             return <div> Wait... </div>
         }
 
+        const navBarElements = [
+            HomeElement,
+            ContestsElement,
+            new NavBarElement('Contest', `/contests/view/${contest.id}`),
+            new NavBarElement('Create task', this.props.match.url)
+        ];
+
         return (
-            <div className='page'>
-                <h1>Create task</h1>
-                <ul className="create-form">
-                    <li>
-                        <label>Task name <span className="required">*</span></label>
-                        <input ref={this.taskNameInput} type="text" className="field-long"/>
-                    </li>
-                    <li>
-                        <label>Description <span className="required">*</span></label>
-                        <textarea ref={this.descriptionInput} className="field-long field-textarea"/>
-                    </li>
-                    <li>
-                        <label>Time <span className="required">*</span></label>
-                        <input ref={this.maxCpuInput} type='number' className="field-long"/>
-                    </li>
-                    <li>
-                        <label>Memory <span className="required">*</span></label>
-                        <input ref={this.maxMemoryInput} type='number' className="field-long"/>
-                    </li>
-                    <li>
-                        <TaskIOListContainer/>
-                    </li>
-                    <li>
-                        <button className="submit-button" onClick={this.createTaskButtonClicked.bind(this)}>
-                            Create
-                        </button>
-                    </li>
-                </ul>
+            <div>
+                <Header navBarElements={navBarElements}/>
+                <div className='page'>
+
+                    <ul className="create-form">
+                        <li>
+                            <label>Task name <span className="required">*</span></label>
+                            <input ref={this.taskNameInput} type="text" className="field-long"/>
+                        </li>
+                        <li>
+                            <label>Description <span className="required">*</span></label>
+                            <textarea ref={this.descriptionInput} className="field-long field-textarea"/>
+                        </li>
+                        <li>
+                            <label>Time <span className="required">*</span></label>
+                            <input ref={this.maxCpuInput} type='number' className="field-long"/>
+                        </li>
+                        <li>
+                            <label>Memory <span className="required">*</span></label>
+                            <input ref={this.maxMemoryInput} type='number' className="field-long"/>
+                        </li>
+                        <li style={{alignItems: 'center'}}>
+                            <TaskIOListContainer/>
+                        </li>
+                        <li>
+                            <button className="submit-button" onClick={this.createTaskButtonClicked.bind(this)}>
+                                Create
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </div>
         )
     }

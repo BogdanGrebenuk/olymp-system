@@ -1,7 +1,9 @@
 import logging
+from asyncio import gather
 from functools import partial
 
 from aiohttp import web
+from jwt.exceptions import ExpiredSignatureError
 from marshmallow import ValidationError
 
 import utils.executor as executor
@@ -58,6 +60,9 @@ async def user_injector(request, handler):
     if not rel_url.startswith('/api'):
         return await handler(request)
 
+    if request.method == 'OPTIONS':
+        return await handler(request)
+
     token = get_token(request)
 
     pool = request.app['process_pool']
@@ -70,7 +75,13 @@ async def user_injector(request, handler):
         token,
         token_config
     )
-    payload = await executor.run(task, pool)
+    try:
+        payload = await executor.run(task, pool)
+    except ExpiredSignatureError:
+        return web.json_response({
+            'error': 'token signature has expired! log in again',
+            'payload': {}
+        }, status=400)
 
     user_id = payload.get('user_id')
     user = await user_mapper.get(engine, user_id)
@@ -83,7 +94,16 @@ async def user_injector(request, handler):
 
 @web.middleware
 async def permission_checker(request, handler):
-    resource = resources_map.get((request.method, str(request.rel_url)))
+    if request.method == 'OPTIONS':
+        return await handler(request)
+
+    # TODO: make a function for getting resource
+    resource = resources_map.get(
+        (
+            request.method,
+            request.match_info.route.resource.canonical
+        )
+    )
     if resource is None:
         return await handler(request)  # pass request ro resolver for 404
     if (
@@ -99,10 +119,21 @@ async def permission_checker(request, handler):
 
 @web.middleware
 async def request_validator(request, handler):
-    resource = resources_map.get((request.method, str(request.rel_url)))
+    if request.method == 'OPTIONS':
+        return await handler(request)
+
+    # TODO: make a function for getting resource
+    resource = resources_map.get(
+        (
+            request.method,
+            request.match_info.route.resource.canonical
+        )
+    )
     if resource is None:
         return await handler(request)  # pass request ro resolver for 404
-    if resource.validator is not None:
-        await resource.validator.validate(request)
+    if resource.validators:
+        await gather(*[
+            validator.validate(request)
+            for validator in resource.validators
+        ])
     return await handler(request)
-

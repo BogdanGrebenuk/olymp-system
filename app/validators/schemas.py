@@ -124,20 +124,20 @@ class CreateTeamBody(Schema):
 
 
 class CreateMemberBody(Schema):
-    user_id = fields.String(required=True)
+    email = fields.Email(required=True)
     team_id = fields.String(required=True)
 
 
-class AcceptInviteBody(Schema):
-    member_id = fields.String(required=True)
+class AcceptInviteUrlVars(Schema):
+    invite_id = fields.String(required=True)
 
 
-class DeclineInviteBody(Schema):
-    member_id = fields.String(required=True)
+class DeclineInviteUrlVars(Schema):
+    invite_id = fields.String(required=True)
 
 
-class DeleteMemberBody(Schema):
-    member_id = fields.String(required=True)
+class DeleteMemberUrlVars(Schema):
+    invite_id = fields.String(required=True)
 
 
 class GetSentInvitesParams(Schema):
@@ -150,3 +150,39 @@ class GetReceivedInvitesParams(Schema):
 
 class GetTasksUrlVars(Schema):
     contest_id = fields.String(required=True)
+
+
+class GetTaskUrlVars(Schema):
+    contest_id = fields.String(required=True)
+    task_id = fields.String(required=True)
+
+
+class GetContestUrlVars(Schema):
+    contest_id = fields.String(required=True)
+
+
+class GetUserUrlVars(Schema):
+    user_id = fields.String(required=True)
+
+
+class GetTeamsForContestUrlVars(Schema):
+    contest_id = fields.String(required=True)
+
+
+class GetTeamsForContestParams(Schema):
+    creator_id = fields.String(required=False)
+
+
+class GetTeamUrlVars(Schema):
+    contest_id = fields.String(required=True)
+    team_id = fields.String(required=True)
+
+
+class GetAcceptedMembersUrlVars(Schema):
+    contest_id = fields.String(required=True)
+    team_id = fields.String(required=True)
+
+
+class GetInvitesForTeamUrlVars(Schema):
+    contest_id = fields.String(required=True)
+    team_id = fields.String(required=True)

@@ -1,53 +1,85 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router";
+import moment from "moment";
 
 import TaskList from "../../containers/TaskList";
 import '../../assets/styles/App.scss';
 import '../../assets/styles/ContestPage.scss'
-import TaskPageContainer from "../../containers/TaskView";
 import HeaderImage from '../HeaderImage'
+import Header from "../Header";
+
+import {HomeElement, ContestsElement, NavBarElement} from '../../utils';
+
 
 class ContestPage extends Component {
 
     constructor(props) {
         super(props);
-        this.isRefreshed = false;
-    }
-
-    addTaskButtonClicked() {
-        const contestId = this.props.contest.id;
-        this.props.history.push(`/contests/${contestId}/tasks/new`);
     }
 
     render() {
-        const { contest } = this.props;
+        const { user, contest } = this.props;
 
         if (typeof contest === 'undefined') {
-            if (this.isRefreshed) {
-                return <div> Contest not found! </div>
-            }
-            this.isRefreshed = true;
             this.props.onRefreshContest();
-            return <div> Wait... </div>
+            return <div/>
         }
 
-        const tempImageUrl = 'https://images.pexels.com/photos/34153/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350';
+        const tempImage = "https://cdn2.cppinvestments.com/wp-content/uploads/2020/01/512x512_Logo.png";
+        let imageUrl;
+        if (contest.imagePath == null) {
+            imageUrl = tempImage;
+        }
+        else {
+            imageUrl = `http://localhost:8000/${contest.imagePath}`;
+        }
+
+        const startDate = moment(new Date(contest.startDate));
+        const endDate = moment(new Date(contest.endDate));
+
+        let navBarElements = [
+                HomeElement,
+                ContestsElement,
+                new NavBarElement('Contest', this.props.match.url)
+            ];
+
+        if (user.role === 'organizer') {
+            navBarElements = navBarElements.concat([
+                new NavBarElement('Create task', `/contests/${contest.id}/tasks/new`)
+            ])
+        } else if (user.role === 'trainer' || user.role === 'participant') {
+            navBarElements = navBarElements.concat([
+                new NavBarElement('Teams', `/contests/${contest.id}/teams`)
+            ]);
+        }
 
         return (
-            <div className="page">
+            <div>
+                <Header navBarElements={navBarElements}/>
+                <div className="page">
 
-                <HeaderImage title={'Title'} description={'Description'} imageUrl={tempImageUrl} adminMode={true} />
+                    <HeaderImage title={contest.name} description={contest.description} imageUrl={imageUrl} adminMode={true} />
 
-                <div className="content">
-                    <div className="information-block">
-                        <h6>Small title</h6>
-                        <p>Some information</p>
+                    <div className="content">
+                        <div className="information-block">
+                            <h6>Beginning date</h6>
+                            <p> {startDate.format('MM/DD/YYYY h:mm a')} </p>
+                            <br/>
+                            <h6> Ending date </h6>
+                            <p> {endDate.format('MM/DD/YYYY h:mm a')} </p>
+                            <br/>
+                            <h6> Max teams </h6>
+                            <p> {contest.maxTeams} </p>
+                            <br/>
+                            <h6> Max participants in team </h6>
+                            <p> {contest.maxParticipantsInTeam} </p>
+                        </div>
+                        <div className="contests-list">
+                            <TaskList contest={contest}/>
+                        </div>
                     </div>
-                    <div className="contests-list">
-                        <TaskList />
-                    </div>
+
                 </div>
-
             </div>
         )
     }

@@ -25,6 +25,14 @@ create = partial(_create, model=UserModel)
 get = partial(_get, model=UserModel, entity=UserEntity)
 
 
+async def get_all(engine) -> List[UserEntity]:
+    async with engine.acquire() as conn:
+        result = await conn.execute(
+            UserModel.select()
+        )
+        return [UserEntity(**i) for i in await result.fetchall()]
+
+
 async def get_user_by_email(engine, email: str) -> Union[UserEntity, None]:
     async with engine.acquire() as conn:
         result = await conn.execute(
@@ -121,3 +129,22 @@ async def get_sent_invites_for_contest(
 
         rows = await result.fetchall()
         return [TeamMemberEntity(**i) for i in rows]
+
+
+async def get_created_teams_by_contest(
+        engine,
+        contest: ContestEntity,
+        creator: Union[UserEntity, None]
+        ) -> List[TeamEntity]:
+    async with engine.acquire() as conn:
+        if creator is None:
+            where = TeamModel.c.contest_id == contest.id
+        else:
+            where = (
+                (TeamModel.c.trainer_id == creator.id)
+                & (TeamModel.c.contest_id == contest.id)
+            )
+        result = await conn.execute(
+            TeamModel.select().where(where)
+        )
+        return [TeamEntity(**i) for i in await result.fetchall()]

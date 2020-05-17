@@ -20,13 +20,20 @@ class ContestItem extends Component {
     render() {
         const { contest } = this.props;
         const tempImage = "https://cdn2.cppinvestments.com/wp-content/uploads/2020/01/512x512_Logo.png";
+        let imageUrl;
+        if (contest.imagePath == null) {
+            imageUrl = `url(${tempImage})`
+        }
+        else {
+            imageUrl = `url(http://localhost:8000/${contest.imagePath})`
+        }
         return (
             <div className="contest">
-                <div className="contest-image" style={{ backgroundImage: `url(http://localhost:8000/${contest.image_path})`}} />
+                <div className="contest-image" style={{ backgroundImage: `${imageUrl}` }} />
                 <div className="contest-information">
                     <h1>{contest.name}</h1>
                     <h3>{contest.description}</h3>
-                    <Link to="/contests/view/:1">Read more</Link>
+                    <Link to={`/contests/view/${contest.id}`}>Read more</Link>
                 </div>
             </div>
         )

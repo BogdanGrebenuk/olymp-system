@@ -32,7 +32,7 @@ h1 {
 }
 .create-form input[type=text],
 .create-form input[type=date],
-.create-form input[type=datetime],
+.create-form input[type=datetime-local],
 .create-form input[type=number],
 .create-form input[type=search],
 .create-form input[type=time],
@@ -56,7 +56,7 @@ select{
 }
 .create-form input[type=text]:focus,
 .create-form input[type=date]:focus,
-.create-form input[type=datetime]:focus,
+.create-form input[type=datetime-local]:focus,
 .create-form input[type=number]:focus,
 .create-form input[type=search]:focus,
 .create-form input[type=time]:focus,
@@ -74,6 +74,7 @@ select{
 }
 
 .create-form .field-long{
+	font-family: "Open Sans";
 	width: 100%;
 }
 .create-form .field-select{

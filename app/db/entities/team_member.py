@@ -15,3 +15,6 @@ class TeamMember:
 
     def is_status_pending(self):
         return self.status == MemberStatus.PENDING.value
+
+    def is_status_accepted(self):
+        return self.status == MemberStatus.ACCEPTED.value

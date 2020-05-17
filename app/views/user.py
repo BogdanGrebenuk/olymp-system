@@ -4,10 +4,12 @@ from aiohttp import web
 
 import utils.executor as executor
 from commandbus.commands.user import RegisterUser
-from db import user_mapper
-from transformers import transform_invite
+from db import user_mapper, team_mapper
+from exceptions.entity import EntityNotFound
+from exceptions.role import PermissionException
+from transformers import transform_invite, transform_user
 from utils.injector import inject
-from utils.injector.entity import Contest
+from utils.injector.entity import Contest, Team
 from utils.token import create_token
 
 
@@ -91,6 +93,31 @@ async def get_sent_invites_for_contest(request):
     )
 
 
+@inject(Team)  # TODO: also validate if this team in this contest
+async def get_sent_invites_for_team(request):
+    engine = request.app['db']
+
+    user = request['user']
+    team = request['team']
+
+    if not team.is_trainer(user):
+        raise PermissionException(
+            'you are not allowed to view invites for this team!',
+            {'team_id': team.id}
+        )
+
+    invites = await team_mapper.get_members(
+        engine, team
+    )
+    return web.json_response({
+        'invites': [
+            transform_invite(i)
+            for i in invites
+            if i.is_status_pending()  # TODO: create sql query for it
+        ]
+    })
+
+
 @inject(Contest)
 async def get_received_invites_for_contest(request):
     engine = request.app['db']
@@ -103,5 +130,35 @@ async def get_received_invites_for_contest(request):
     )
 
     return web.json_response({
-        {'invites', [transform_invite(i) for i in invites]}
+        'invites': [transform_invite(i) for i in invites]
+    })
+
+
+async def get_user(request):
+    engine = request.app['db']
+
+    user_id = request.match_info.get('user_id')
+    if user_id == 'me':
+        return web.json_response({
+            'user': transform_user(request['user'])
+        })
+
+    user = await user_mapper.get(engine, user_id)
+    if user is None:
+        raise EntityNotFound(
+            f'there is no user with id {user_id}',
+            {'user_id': user_id}
+        )
+    return web.json_response({
+        'user': transform_user(user)
+    })
+
+
+async def get_users(request):
+    engine = request.app['db']
+
+    users = await user_mapper.get_all(engine)
+
+    return web.json_response({
+        'users': [transform_user(p) for p in users]
     })

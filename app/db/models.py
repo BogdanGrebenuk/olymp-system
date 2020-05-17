@@ -24,8 +24,8 @@ Contest = sa.Table(
     sa.Column('name', sa.Text, nullable=False),
     sa.Column('description', sa.Text, nullable=False),
     sa.Column('image_path', sa.Text),
-    sa.Column('start_date', sa.DateTime, nullable=False),
-    sa.Column('end_date', sa.DateTime, nullable=False),
+    sa.Column('start_date', sa.TIMESTAMP(timezone=True), nullable=False),
+    sa.Column('end_date', sa.TIMESTAMP(timezone=True), nullable=False),
     sa.Column('max_teams', sa.Integer, nullable=True),
     sa.Column('max_participants_in_team', sa.Integer, nullable=False),
     sa.Column(

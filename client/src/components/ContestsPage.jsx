@@ -1,28 +1,30 @@
 import React, { Component } from 'react';
 import { withRouter } from "react-router";
-import {Link} from "react-router-dom"
 
-import defaultImg from '../assets/images/logo-og.png'
+import {HomeElement, ContestsElement, ContestsNewElement} from '../utils';
+
 
 import ContestListContainer from "../containers/ContestList";
-import HeaderImage from './HeaderImage'
 
 import '../assets/styles/ContestsPage.scss'
+import Header from "./Header";
 
 class ContestsPage extends  Component {
 
-    onCreateContestClicked() {
-        this.props.history.push('/contests/new');
-    }
-
     render() {
+        const { user } = this.props;
+
+        let navBarElements = [HomeElement, ContestsElement];
+        if (user.role === 'organizer') {
+            navBarElements = navBarElements.concat([ContestsNewElement]);
+        }
+
         return (
-            <div className='page'>
-                
-                <ContestListContainer/>
-
-
-                {/* <button onClick={this.onCreateContestClicked.bind(this)}> Create contest </button> */}
+            <div>
+                <Header navBarElements={navBarElements}/>
+                <div className='page'>
+                    <ContestListContainer/>
+                </div>
             </div>
         )
     }

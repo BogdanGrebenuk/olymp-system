@@ -2,13 +2,12 @@ import { connect } from 'react-redux';
 
 import TaskListComponent from "../components/TaskList";
 
-import { getTasks } from '../actions';
+import {getContest, getTasks} from '../actions';
 
 
 const onFetchContestTasks = dispatch => (contestId) => {
     dispatch(getTasks(contestId));
 }
-
 
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -18,9 +17,9 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        onFetchContestTasks: onFetchContestTasks(dispatch)
+        onFetchContestTasks: onFetchContestTasks(dispatch),
     }
 }
 

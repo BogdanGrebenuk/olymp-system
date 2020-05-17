@@ -2,7 +2,8 @@ from db import (
     contest_mapper,
     task_mapper,
     team_mapper,
-    user_mapper
+    user_mapper,
+    team_member_mapper
 )
 from exceptions.entity import EntityNotFound
 from utils.injector import default_extractor
@@ -37,3 +38,5 @@ Contest = Entity('contest', 'contest_id', contest_mapper)
 RequestedUser = Entity('requested_user', 'user_id', user_mapper)
 Task = Entity('task', 'task_id', task_mapper)
 Team = Entity('team', 'team_id', team_mapper)
+Member = Entity('member', 'member_id', team_member_mapper)
+Invite = Entity('member', 'invite_id', team_member_mapper)

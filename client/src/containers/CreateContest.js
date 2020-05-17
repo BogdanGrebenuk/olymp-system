@@ -4,8 +4,8 @@ import CreateContestComponent from "../components/CreateContest";
 import { createContest } from "../actions";
 
 
-const onCreateContest = dispatch => (name, description, imageData) => {
-    dispatch(createContest(name, description, imageData));
+const onCreateContest = dispatch => (contestData) => {
+    dispatch(createContest(contestData));
 }
 
 

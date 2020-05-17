@@ -5,15 +5,10 @@ import { Route } from 'react-router';
 import { Provider } from 'react-redux';
 import { applyMiddleware, createStore, compose } from "redux";
 
-import ContestsPage from "./components/ContestsPage";
-import CreateContest from "./containers/CreateContest";
-import ContestPage from "./containers/ContestPage"
-import CreateTaskContainer from "./containers/CreateTask";
-import TaskPageContainer from "./containers/TaskView";
 import AuthenticationPageContainer from "./containers/AuthenticationPage";
 import RegistrationPageContainer from "./containers/ResgistrationPage";
-
-import Header from "./components/Header"
+import UserProviderContainer from "./containers/UserProvider";
+import RoleDependentRoutesContainer from "./containers/RoleDependentRoutes";
 
 import mainReducer from "./reducers";
 import rootSaga from "./sagas";
@@ -34,14 +29,10 @@ class App extends Component {
         return (
             <Provider store={store}>
                 <BrowserRouter>
-                    <Header />
                     <Route path={'/register'} component={RegistrationPageContainer}/>
                     <Route path={'/authenticate'} component={AuthenticationPageContainer}/>
-                    <Route exact path='/contests' component={ContestsPage}/>
-                    <Route exact path='/contests/new' component={CreateContest}/>
-                    <Route exact path='/contests/view/:contestId' component={ContestPage}/>
-                    <Route exact path='/contests/:contestId/tasks/new' component={CreateTaskContainer}/>
-                    <Route path='/contests/:contestId/tasks/:taskId/view' component={TaskPageContainer}/>
+                    <UserProviderContainer/>
+                    <RoleDependentRoutesContainer/>
                 </BrowserRouter>
             </Provider>
         )

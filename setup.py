@@ -14,6 +14,7 @@ setup(
         'docker',
         'pyjwt',
         'bcrypt',
-        'sqlalchemy'
+        'sqlalchemy',
+        'dateutil'
     ]
 )
