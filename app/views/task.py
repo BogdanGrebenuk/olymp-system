@@ -1,19 +1,15 @@
 from aiohttp import web
 
 from commandbus.commands.task import CreateTask
-from db.procedures.contest import (
-    get_contest,
-    get_tasks as get_tasks_procedure
+from db import (
+    contest_mapper
 )
-from db.procedures.task import (
-    get_task as get_task_procedure
-)
-from transformers import transform_task
-from utils.request import validate_body
-from validators.request import CreateTaskBody
+from exceptions.entity import EntityNotFound
+from transformers import transform_task, transform_datetime
+from utils.injector import inject
+from utils.injector.entity import Contest, Task
 
 
-@validate_body(schema=CreateTaskBody)
 async def create_task(request):
     bus = request.app['bus']
     engine = request.app['db']
@@ -27,7 +23,7 @@ async def create_task(request):
     max_cpu_time = body['max_cpu_time']
     max_memory = body['max_memory']
 
-    contest = await get_contest(engine, contest_id)
+    contest = await contest_mapper.get(engine, contest_id)
     if contest is None:
         return web.json_response(
             {
@@ -52,50 +48,48 @@ async def create_task(request):
     return web.json_response({'task_id': task.id})
 
 
+@inject(Contest)
 async def get_tasks(request):
     engine = request.app['db']
 
-    contest_id = request.match_info.get('contest_id')
+    contest = request['contest']
+    user = request['user']
 
-    contest = await get_contest(engine, contest_id)
-    if contest is None:
-        return web.json_response(
-            {
-                'error': f'there is no contest with id {contest_id}',
-                'payload': {'contest_id': contest_id}
-            },
-            status=400
-        )
+    if not contest.can_view_tasks(user):
+        return web.json_response({
+            'error': "you can't see tasks of this contest",
+            'payload': {
+                'contest_id': contest.id,
+                'start_date': transform_datetime(contest.start_date)
+            }
+        }, status=400)
 
-    tasks = await get_tasks_procedure(engine, contest)
+    tasks = await contest_mapper.get_tasks(engine, contest)
     return web.json_response({
         'tasks': [transform_task(i) for i in tasks]
     })
 
 
+@inject(Contest, Task)
 async def get_task(request):
-    engine = request.app['db']
+    contest = request['contest']
+    user = request['user']
+    task = request['task']
 
-    contest_id = request.match_info.get('contest_id')
-    # TODO: implement entity injector and get rid of all these "entity = ...; if entity is not None"
-    contest = await get_contest(engine, contest_id)
-    if contest is None:
-        return web.json_response(
-            {
-                'error': f'there is no contest with id {contest_id}',
-                'payload': {'contest_id': contest_id}
-            },
-            status=400
+    if task.contest_id != contest.id:
+        raise EntityNotFound(
+            f'there is no such task in contest {contest.id}!',
+            {'task_id': task.id, 'contest_id': contest.id}
         )
 
-    task_id = request.match_info.get('task_id')
-    task = await get_task_procedure(engine, task_id)
-    if task is None:
-        return web.json_response(
-            {
-                'error': f'there is no task with id {task_id}'
+    if not contest.can_view_tasks(user):
+        return web.json_response({
+            'error': "the contest is't start yet!",
+            'payload': {
+                'contest_id': contest.id,
+                'start_date': contest.start_date
             }
-        )
+        })
 
     return web.json_response({
         'task': transform_task(task)

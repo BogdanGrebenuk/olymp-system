@@ -1,6 +1,6 @@
+from concurrent.futures import Executor
 from dataclasses import dataclass
 from datetime import datetime
-from os import PathLike
 from typing import Union
 
 from aiohttp.web import FileField
@@ -13,14 +13,16 @@ from commandbus.commands.base_command import Command
 class CreateContest(Command):
     name: str
     description: str
-    max_participants: int
+    max_teams: Union[int, None]
+    max_participants_in_team: int
     image: Union[FileField, None]
-    engine: Engine
     start_date: datetime
     end_date: datetime
+    creator_id: str
+    engine: Engine
+    pool: Executor
 
 
 @dataclass
-class SaveContestImage(Command):
-    image_bytes: bytes
-    image_path: PathLike
+class GenerateContestImagePath(Command):
+    image: Union[FileField]

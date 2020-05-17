@@ -1,14 +1,18 @@
 import logging
+from asyncio import gather
 from functools import partial
 
 from aiohttp import web
+from jwt.exceptions import ExpiredSignatureError
 from marshmallow import ValidationError
 
 import utils.executor as executor
-from utils.token import decode_token
-from db.procedures.user import (
-    get_user
-)
+from db import user_mapper
+from exceptions import OlympException
+from exceptions.token import InvalidTokenContent
+from exceptions.role import PermissionException
+from resources import resources_map
+from utils.token import decode_token, get_token
 
 
 logger = logging.getLogger(__name__)
@@ -25,7 +29,16 @@ async def error_handler(request, handler):
                 'error': 'Validation error',
                 'payload': e.messages
             },
-            status=400)
+            status=400
+        )
+    except OlympException as e:
+        return web.json_response(
+            {
+                'error': e.message,
+                'payload': e.payload
+            },
+            status=e.HTTP_STATUS
+        )
     except Exception as e:
         logger.exception(f"Unexpected exception")
         return web.json_response(
@@ -35,25 +48,22 @@ async def error_handler(request, handler):
 
 
 @web.middleware
+async def request_logger(request, handler):
+    logger.info(f"{request.method} {request.rel_url}")
+    response = await handler(request)
+    return response
+
+
+@web.middleware
 async def user_injector(request, handler):
     rel_url = str(request.rel_url)
     if not rel_url.startswith('/api'):
         return await handler(request)
 
-    token_header = request.headers.get('Authorization')
-    if token_header is None:
-        return web.json_response({
-            'error': 'this action requires a token!',
-            'payload': {}
-        }, status=400)
+    if request.method == 'OPTIONS':
+        return await handler(request)
 
-    try:
-        _, token = token_header.split()
-    except ValueError:
-        return web.json_response({
-            'error': 'invalid token header',
-            'payload': {}
-        }, status=400)
+    token = get_token(request)
 
     pool = request.app['process_pool']
     engine = request.app['db']
@@ -65,22 +75,65 @@ async def user_injector(request, handler):
         token,
         token_config
     )
-    payload = await executor.run(task, pool)
-
-    user_id = payload.get('user_id')
-    user = await get_user(engine, user_id)
-    if user is None:
+    try:
+        payload = await executor.run(task, pool)
+    except ExpiredSignatureError:
         return web.json_response({
-            'error': f'token contains invalid information',
+            'error': 'token signature has expired! log in again',
             'payload': {}
         }, status=400)
+
+    user_id = payload.get('user_id')
+    user = await user_mapper.get(engine, user_id)
+    if user is None:
+        raise InvalidTokenContent('token contains invalid information')
 
     request['user'] = user
     return await handler(request)
 
 
 @web.middleware
-async def request_logger(request, handler):
-    logger.info(f"{request.method} {request.rel_url}")
-    response = await handler(request)
-    return response
+async def permission_checker(request, handler):
+    if request.method == 'OPTIONS':
+        return await handler(request)
+
+    # TODO: make a function for getting resource
+    resource = resources_map.get(
+        (
+            request.method,
+            request.match_info.route.resource.canonical
+        )
+    )
+    if resource is None:
+        return await handler(request)  # pass request ro resolver for 404
+    if (
+            resource.allowed_roles is not None
+            and
+            request['user'].get_user_role() not in resource.allowed_roles
+            ):
+        raise PermissionException(
+            "you don't have permissions for this resource!"
+        )
+    return await handler(request)
+
+
+@web.middleware
+async def request_validator(request, handler):
+    if request.method == 'OPTIONS':
+        return await handler(request)
+
+    # TODO: make a function for getting resource
+    resource = resources_map.get(
+        (
+            request.method,
+            request.match_info.route.resource.canonical
+        )
+    )
+    if resource is None:
+        return await handler(request)  # pass request ro resolver for 404
+    if resource.validators:
+        await gather(*[
+            validator.validate(request)
+            for validator in resource.validators
+        ])
+    return await handler(request)

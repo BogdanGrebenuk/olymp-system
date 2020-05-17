@@ -4,16 +4,15 @@ from aiohttp import web
 
 import utils.executor as executor
 from commandbus.commands.user import RegisterUser
-from db.procedures.user import get_user_by_email
-from utils.request import validate_body
+from db import user_mapper, team_mapper
+from exceptions.entity import EntityNotFound
+from exceptions.role import PermissionException
+from transformers import transform_invite, transform_user
+from utils.injector import inject
+from utils.injector.entity import Contest, Team
 from utils.token import create_token
-from validators.request import (
-    AuthenticateUserBody,
-    RegisterUserBody
-)
 
 
-@validate_body(schema=RegisterUserBody)
 async def register_user(request):
     body = request['body']
 
@@ -36,7 +35,6 @@ async def register_user(request):
     return web.json_response({'user_id': user.id})
 
 
-@validate_body(schema=AuthenticateUserBody)
 async def authenticate_user(request):
     body = request['body']
     engine = request.app['db']
@@ -45,7 +43,7 @@ async def authenticate_user(request):
     email = body['email']
     password = body['password']
 
-    user = await get_user_by_email(engine, email)
+    user = await user_mapper.get_user_by_email(engine, email)
     if user is None:
         return web.json_response(
             {
@@ -78,3 +76,89 @@ async def authenticate_user(request):
     return web.json_response(
         {'token': token}
     )
+
+
+@inject(Contest)
+async def get_sent_invites_for_contest(request):
+    engine = request.app['db']
+
+    contest = request['contest']
+    user = request['user']
+
+    invites = await user_mapper.get_sent_invites_for_contest(
+        engine, user, contest
+    )
+    return web.json_response(
+        {'invites': [transform_invite(i) for i in invites]}
+    )
+
+
+@inject(Team)  # TODO: also validate if this team in this contest
+async def get_sent_invites_for_team(request):
+    engine = request.app['db']
+
+    user = request['user']
+    team = request['team']
+
+    if not team.is_trainer(user):
+        raise PermissionException(
+            'you are not allowed to view invites for this team!',
+            {'team_id': team.id}
+        )
+
+    invites = await team_mapper.get_members(
+        engine, team
+    )
+    return web.json_response({
+        'invites': [
+            transform_invite(i)
+            for i in invites
+            if i.is_status_pending()  # TODO: create sql query for it
+        ]
+    })
+
+
+@inject(Contest)
+async def get_received_invites_for_contest(request):
+    engine = request.app['db']
+
+    contest = request['contest']
+    user = request['user']
+
+    invites = await user_mapper.get_received_invites_for_contest(
+        engine, user, contest
+    )
+
+    return web.json_response({
+        'invites': [transform_invite(i) for i in invites]
+    })
+
+
+async def get_user(request):
+    engine = request.app['db']
+
+    user_id = request.match_info.get('user_id')
+    if user_id == 'me':
+        return web.json_response({
+            'user': transform_user(request['user'])
+        })
+
+    user = await user_mapper.get(engine, user_id)
+    if user is None:
+        raise EntityNotFound(
+            f'there is no user with id {user_id}',
+            {'user_id': user_id}
+        )
+    return web.json_response({
+        'user': transform_user(user)
+    })
+
+
+async def get_users(request):
+    engine = request.app['db']
+
+    users = await user_mapper.get_all(engine)
+
+    return web.json_response({
+        'users': [transform_user(p) for p in users]
+    })

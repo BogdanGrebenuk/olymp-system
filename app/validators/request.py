@@ -1,112 +1,51 @@
-import typing
-
-from marshmallow import (
-    Schema,
-    fields,
-    ValidationError,
-    validate,
-    validates_schema
-)
-
-from common import (
-    get_supported_languages,
-    get_roles,
-    MAX_NUMBER_OF_PARTICIPANTS,
-    DEFAULT_NUMBER_OF_PARTICIPANTS
-)
+from validators import Validator
 
 
-def validate_role(role):
-    if role not in get_roles():
-        raise ValidationError('there is not such role!')
+class RequestValidator(Validator):
+
+    def __init__(self, schema, data_manager=None):
+        if data_manager is None:
+            data_manager = JSONBodyManager
+        self.schema = schema
+        self.data_manager = data_manager
+
+    async def validate(self, request):
+        raw_data = await self.data_manager.load(request)
+        data = self.schema().load(raw_data)
+        self.data_manager.set(request, data)
 
 
-def validate_language(lang):
-    if lang not in get_supported_languages():
-        raise ValidationError('unsupported language!')
+class DataManager:
+
+    def __init__(self, loader, request_attr):
+        self.loader = loader
+        self.request_attr = request_attr
+
+    async def load(self, request):
+        return await self.loader(request)
+
+    def set(self, request, data):
+        request[self.request_attr] = data
 
 
-def validate_task_io(task_ios):
-    for io in task_ios:
-        if len(io) != 2:
-            raise ValidationError('io incorrect specified!')
+async def load_json(request):
+    return await request.json()
 
 
-class MaxParticipantsField(fields.Field):
-
-    def _deserialize(self, value: typing.Any, attr: str, obj: typing.Any, **kwargs):
-        if value == 'null':
-            return DEFAULT_NUMBER_OF_PARTICIPANTS
-        return int(value)
+async def load_form_data(request):
+    return await request.post()
 
 
-class ImageField(fields.Field):
-
-    def _deserialize(
-        self,
-        value: typing.Any,
-        attr: typing.Optional[str],
-        data: typing.Optional[typing.Mapping[str, typing.Any]],
-        **kwargs
-    ):
-        if value == 'null':
-            return None
-        return value
+async def load_params(request):
+    return request.rel_url.query
 
 
-class VerifyTaskBody(Schema):
-    task_id = fields.String(required=True)
-    language = fields.String(required=True, validate=validate_language)
-    code = fields.String(required=True)
+async def load_vars(request):
+    return request.match_info
 
 
-class CreateContestBody(Schema):
-    name = fields.String(required=True, validate=validate.Length(min=1))
-    description = fields.String(required=True, validate=validate.Length(min=1))
-    max_participants = MaxParticipantsField(
-        required=True,
-        validate=validate.Range(1, MAX_NUMBER_OF_PARTICIPANTS)
-    )
-    image = ImageField(required=True)
-    start_date = fields.DateTime(required=True)
-    end_date = fields.DateTime(required=True)
-
-    @validates_schema
-    def validate_date(self, data, **kwargs):
-        errors = {}
-        if data['start_date'] >= data['end_date']:
-            errors['start_date'] = ['start_date is greater then end_date!']
-        if errors:
-            raise ValidationError(errors)
-
-
-class CreateTaskBody(Schema):
-    contest_id = fields.String(required=True)
-    input_output = fields.List(
-        fields.List(fields.String),
-        validate=validate_task_io
-    )
-    name = fields.String(required=True, validate=validate.Length(min=1))
-    description = fields.String(required=True)
-    max_cpu_time = fields.Integer(
-        required=True,
-        validate=validate.Range(min=1)
-    )
-    max_memory = fields.Integer(
-        required=True,
-        validate=validate.Range(min=1)
-    )
-
-
-class RegisterUserBody(Schema):
-    first_name = fields.String(required=True, validate=validate.Length(min=1))
-    last_name = fields.String(required=True, validate=validate.Length(min=1))
-    patronymic = fields.String(required=True, validate=validate.Length(min=1))
-    email = fields.Email(required=True)
-    password = fields.String(required=True, validate=validate.Length(min=1))
-    role = fields.String(required=True, validate=validate_role)
-
-
-class AuthenticateUserBody(Schema):
-    email = fields.Email(required=True)
-    password = fields.String(required=True, validate=validate.Length(min=1))
+# TODO: should i create enum-like class or container for these managers?
+JSONBodyManager = DataManager(load_json, 'body')
+DataFormManager = DataManager(load_form_data, 'body')
+ParamsManager = DataManager(load_params, 'params')
+UrlVariableManager = DataManager(load_vars, 'vars')

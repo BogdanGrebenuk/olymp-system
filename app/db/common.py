@@ -26,3 +26,12 @@ async def update(engine, entity, model):
             .values(asdict(entity))
             .where(model.c.id == entity.id)
         )
+
+
+async def delete(engine, entity, model):
+    async with engine.acquire() as conn:
+        return await conn.execute(
+            model
+            .delete()
+            .where(model.c.id == entity.id)
+        )

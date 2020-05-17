@@ -10,7 +10,7 @@
     .information-block,
     .task-block {
         padding: $spacer;
-        flex: 0.17;
+        flex: 0.15;
         border-radius: $borderRadius;
         border: solid $border $grey;
         width: 100%;
@@ -28,7 +28,7 @@
         }
     }
     .contests-list {
-        flex: 0.8;
+        flex: 0.82;
 
         .task-block {
             height: fit-content;

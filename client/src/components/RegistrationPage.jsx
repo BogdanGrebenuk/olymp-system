@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import Header from "./Header";
+
+import {HomeElement} from '../utils';
 
 
 class RegistrationPage extends Component {
@@ -35,14 +38,18 @@ class RegistrationPage extends Component {
     render() {
         // TODO: fetch it from api
         const roles = ['trainer', 'participant', 'organizer'];
+        const navBarElements = [HomeElement];
         return (
             <div>
-                <input ref={this.emailInput}/>
-                <input ref={this.passwordInput}/>
-                <select ref={this.roleInput}>
-                    {roles.map((role, i) => <option key={i} value={role}> {role} </option>)}
-                </select>
-                <button onClick={this.onRegisterButtonClicked.bind(this)}> Register </button>
+                <Header navBarElements={navBarElements} />
+                <div>
+                    <input ref={this.emailInput}/>
+                    <input ref={this.passwordInput}/>
+                    <select ref={this.roleInput}>
+                        {roles.map((role, i) => <option key={i} value={role}> {role} </option>)}
+                    </select>
+                    <button onClick={this.onRegisterButtonClicked.bind(this)}> Register </button>
+                </div>
             </div>
         )
     }

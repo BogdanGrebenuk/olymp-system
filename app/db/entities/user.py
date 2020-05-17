@@ -2,6 +2,8 @@ import dataclasses
 
 import bcrypt
 
+from core.user_role import UserRole
+
 
 @dataclasses.dataclass
 class User:
@@ -18,3 +20,11 @@ class User:
             password.encode(encoding='utf-8'),
             self.password.encode(encoding='utf-8')
         )
+
+    def get_user_role(self):
+        if self.role == UserRole.PARTICIPANT.value:
+            return UserRole.PARTICIPANT
+        if self.role == UserRole.TRAINER.value:
+            return UserRole.TRAINER
+        if self.role == UserRole.ORGANIZER.value:
+            return UserRole.ORGANIZER

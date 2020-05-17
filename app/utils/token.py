@@ -2,6 +2,24 @@ import time
 
 import jwt
 
+from exceptions.token import (
+    TokenHeaderNotFound,
+    InvalidTokenHeaderFormat
+)
+
+
+def get_token(request):
+    token_header = request.headers.get('Authorization')
+    if token_header is None:
+        raise TokenHeaderNotFound('Authorization header is not found!')
+    try:
+        _, token = token_header.split()
+        return token
+    except ValueError:
+        raise InvalidTokenHeaderFormat(
+            'token header must me in format "<scheme> <token>"'
+        )
+
 
 def create_token(payload, token_config):
     token = jwt.encode(

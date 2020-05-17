@@ -11,6 +11,7 @@ const onRefreshContest = (dispatch, contestId) => () => {
 
 const mapStateToProps = (state, ownProps) => {
     return {
+        user: state.currentUser,
         contest: state.contests[ownProps.match.params.contestId]
     }
 }

@@ -26,7 +26,6 @@ export default class HeaderImage extends Component {
     }
 
     render() {
-        console.log(this.props.adminMode, this.state.changeTitle)
         return(
             <div className="header-image" style={{ backgroundImage: `url(${this.state.image})` }}>
                 <div style={{ flex: 0.85, flexDirection: "column" }}>
@@ -40,7 +39,7 @@ export default class HeaderImage extends Component {
                                 defaultValue={this.state.title}
                                 onBlur={() => this.setState({ changeTitle: false })}
                                 onChange={this.handleChange.bind(this)}
-                                autocomplete="off"
+                                autoComplete="off"
                             />
                         : <h1 onClick={() => this.setState({ changeTitle: true })}>{this.state.title}</h1>
                     }
@@ -54,7 +53,7 @@ export default class HeaderImage extends Component {
                                 defaultValue={this.state.description}
                                 onBlur={() => this.setState({ changeDescription: false })}
                                 onChange={this.handleChange.bind(this)}
-                                autocomplete="off"
+                                autoComplete="off"
                             />
                         : <h3 onClick={() => this.setState({ changeDescription: true })}>{this.props.description}</h3>
                     }
@@ -78,9 +77,9 @@ export default class HeaderImage extends Component {
                                         background: 'none',
                                         fontFamily: "Open Sans",
                                         padding: 0,
-                                        fontSize: 18
+                                        fontSize: 15
                                     }}
-                                    buttonText='Загрузить фото'
+                                    buttonText='Upload image'
                                     imgExtension={['.jpg', '.gif', '.png', '.gif']}
                                     maxFileSize={5242880}
                                 />
