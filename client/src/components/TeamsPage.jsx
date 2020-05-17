@@ -29,12 +29,12 @@ class TeamsPage extends Component {
         }
 
         return (
-            <div>
+            <>
                 <Header navBarElements={navBarElements}/>
                 <div className="page">
                     <TeamListContainer contest={contest}/>
                 </div>
-            </div>
+            </>
         )
     }
 

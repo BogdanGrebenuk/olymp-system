@@ -1,0 +1,58 @@
+@import './index.scss';
+
+h4 {
+    margin-top: $spacer * 2;
+    font-size: $bigFont * 0.5;
+    color: $darkGrey;
+    text-align: center;
+}
+
+.invite-list {
+    border-radius: $borderRadius;
+    border: $border $grey solid;
+    width: 70%;
+
+    .invite-item {
+        padding: $spacer;
+        display: flex;
+        flex-direction: row;
+        flex-flow: row wrap;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: solid $grey $border;
+
+        h6 {
+            margin: $spacer / 3;
+            font-size: $smallFont;
+        }
+        p {
+            margin: $spacer / 3;
+            font-size: $smallFont;
+        }
+        button {
+            margin: $spacer / 3;
+            cursor: pointer;
+            width: $spacer * 5;
+            border-radius: $borderRadius;
+            color: $white !important;
+            background: $darkGrey;
+            padding: 8px 15px 8px 15px;
+            border: none;
+            transition: all 0.4s ease 0s;
+            outline: none;
+            font-weight: bold;
+            font-size: $standartFont;
+            border: solid $border $darkGrey;
+
+            &:hover {
+                color: $black !important;
+                background: $white;
+                transition: all 0.4s ease 0s;
+            }
+        }
+
+        &:last-child {
+            border: none;
+        }
+    }
+}

@@ -62,17 +62,25 @@ class ContestPage extends Component {
 
                     <div className="content">
                         <div className="information-block">
-                            <h6>Beginning date</h6>
-                            <p> {startDate.format('MM/DD/YYYY h:mm a')} </p>
-                            <br/>
-                            <h6> Ending date </h6>
-                            <p> {endDate.format('MM/DD/YYYY h:mm a')} </p>
-                            <br/>
-                            <h6> Max teams </h6>
-                            <p> {contest.maxTeams} </p>
-                            <br/>
-                            <h6> Max participants in team </h6>
-                            <p> {contest.maxParticipantsInTeam} </p>
+                            <div className="">
+                                <h6>Beginning date</h6>
+                                <p> {startDate.format('MM/DD/YYYY h:mm a')} </p>
+                            </div>
+                            <div className="spacer" />
+                            <div>
+                                <h6> Ending date </h6>
+                                <p> {endDate.format('MM/DD/YYYY h:mm a')} </p>
+                            </div>
+                            <div className="spacer" />
+                            <div>
+                                <h6> Max teams </h6>
+                                <p> {contest.maxTeams} </p>
+                            </div>
+                            <div className="spacer" />
+                            <div>
+                                <h6> Max participants in team </h6>
+                                <p> {contest.maxParticipantsInTeam} </p>
+                            </div>
                         </div>
                         <div className="contests-list">
                             <TaskList contest={contest}/>

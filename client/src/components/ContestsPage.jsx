@@ -20,12 +20,12 @@ class ContestsPage extends  Component {
         }
 
         return (
-            <div>
+            <>
                 <Header navBarElements={navBarElements}/>
                 <div className='page'>
                     <ContestListContainer/>
                 </div>
-            </div>
+            </>
         )
     }
 

@@ -5,6 +5,7 @@ import Header from "./Header";
 import MemberListContainer from "../containers/MemberList";
 import InviteBlockContainer from "../containers/InviteBlock";
 
+import "../assets/styles/TeamPage.scss"
 
 class TeamPage extends Component {
 
@@ -25,20 +26,21 @@ class TeamPage extends Component {
         ];
 
         return (
-            <div>
+            <>
                 <Header navBarElements={navBarElements}/>
-                <div>
+                <div className="page">
                     <h3> {team.name} </h3>
                     <MemberListContainer team={team}/>
+
+                    <div className="delimiter" />
 
                     {
                         team.trainerId === user.id
                             ? <InviteBlockContainer team={team}/>
                             : null
                     }
-
                 </div>
-            </div>
+            </>
         )
     }
 }

@@ -24,7 +24,7 @@ class TeamItem extends Component {
     render() {
         const { team, invite } = this.props;
         return (
-            <div onClick={this.onTeamSelected.bind(this)}>
+            <div className="team-block" onClick={this.onTeamSelected.bind(this)}>
                 <h3> {team.name} </h3>
                 {
                     invite == null

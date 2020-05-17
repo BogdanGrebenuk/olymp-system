@@ -28,12 +28,24 @@ class AuthenticationPage extends Component {
     render() {
         const navBarElements = [HomeElement];
         return (
-            <div>
+            <>
                 <Header navBarElements={navBarElements}/>
-                <input ref={this.emailInput}/>
-                <input ref={this.passwordInput}/>
-                <button onClick={this.onAuthenticateButtonClicked.bind(this)}> Sign in </button>
-            </div>
+                <div className="page">
+                    <ul className="create-form">
+                        <li>
+                            <label>Email <span className="required">*</span></label>
+                            <input ref={this.emailInput} type="text" className="field-long" />
+                        </li>
+                        <li>
+                            <label>Password <span className="required">*</span></label>
+                            <input ref={this.passwordInput} type="password" className="field-long"/>
+                        </li>
+                        <li>
+                            <button className='submit-button' onClick={this.onAuthenticateButtonClicked.bind(this)}> Sign in </button>
+                        </li>
+                    </ul>
+                </div>
+            </>
         )
     }
 }

@@ -18,8 +18,10 @@ class TaskItem extends Component {
         return (
             <div className="task-block" onClick={this.onTaskSelected.bind(this)}>
                 <img src={icon} />
-                <h3> {task.name} </h3>
-                <p> dfsdf </p>
+                <div>
+                    <h3> {task.name} </h3>
+                    <p> {task.description} </p>
+                </div>
             </div>
         )
     }

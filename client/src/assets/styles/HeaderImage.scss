@@ -12,11 +12,11 @@
     background-position: center;
     color: $white;
     border: solid $border $grey;
-    box-shadow: inset 100em 1em rgba($grey, .05);
+    box-shadow: inset 100em 1em rgba($black, .4);
 
     h1 {
         flex: 1;
-        font-size: $bigFont;
+        font-size: $bigFont * 1.2;
         margin: 0;
         text-align: left;
     }
@@ -28,6 +28,10 @@
     }
     .buttons {
         text-align: right;
+
+        button {
+            box-shadow: none;
+        }
     }
     .title-input,
     .description-input {

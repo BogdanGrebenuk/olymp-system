@@ -80,7 +80,7 @@ class CreateTask extends Component {
         ];
 
         return (
-            <div>
+            <>
                 <Header navBarElements={navBarElements}/>
                 <div className='page'>
 
@@ -101,7 +101,7 @@ class CreateTask extends Component {
                             <label>Memory <span className="required">*</span></label>
                             <input ref={this.maxMemoryInput} type='number' className="field-long"/>
                         </li>
-                        <li style={{alignItems: 'center'}}>
+                        <li style={{ alignItems: 'center' }}>
                             <TaskIOListContainer/>
                         </li>
                         <li>
@@ -111,7 +111,7 @@ class CreateTask extends Component {
                         </li>
                     </ul>
                 </div>
-            </div>
+            </>
         )
     }
 

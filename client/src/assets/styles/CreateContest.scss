@@ -38,6 +38,7 @@ h1 {
 .create-form input[type=time],
 .create-form input[type=url],
 .create-form input[type=email],
+.create-form input[type=password],
 textarea,
 select{
 	resize: none;
@@ -62,6 +63,7 @@ select{
 .create-form input[type=time]:focus,
 .create-form input[type=url]:focus,
 .create-form input[type=email]:focus,
+.create-form input[type=password]:focus,
 .create-form textarea:focus,
 .create-form select:focus{
 	-moz-box-shadow: 0 0 8px $blue;

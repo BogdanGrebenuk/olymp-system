@@ -18,12 +18,14 @@ class TaskIOList extends Component {
     render() {
         const { taskIOs } = this.props;
         return (
-            <div>
-                {taskIOs.map((taskIO, i) => <div key={i}> {taskIO.taskIO} </div>)}
-                <button onClick={this.addTaskIOButtonClicked.bind(this)}>
+            <>
+                <div className="io-block">
+                    {taskIOs.map((taskIO, i) => <div key={i}> {taskIO.taskIO} </div>)}
+                </div>
+                <button className="io-button" onClick={this.addTaskIOButtonClicked.bind(this)}>
                     Add task IO
                 </button>
-            </div>
+            </>
         );
     }
 

@@ -11,8 +11,8 @@ class InviteItem extends Component {
     render() {
         const { invite } = this.props;
         return (
-            <div>
-                <h3> {invite.email} </h3>
+            <div className="invite-item">
+                <h6>{invite.email}</h6>
                 <p> {invite.firstName} {invite.lastName} </p>
                 <button onClick={this.onDeleteButtonClicked.bind(this)}> Delete </button>
             </div>

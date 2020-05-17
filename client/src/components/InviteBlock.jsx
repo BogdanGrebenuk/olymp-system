@@ -28,11 +28,18 @@ class InviteBlock extends Component {
     render() {
         const { team, user } = this.props;
         return (
-            <div>
-                <input ref={this.userEmailInput}/>
-                <button onClick={this.onInviteClicked.bind(this)}> Invite </button>
+            <>
+                <ul className="create-form">
+                    <li>
+                        <label>Email</label>
+                        <input ref={this.userEmailInput} type="text" className="field-long" />
+                    </li>
+                    <li>
+                        <button className="submit-button" onClick={this.onInviteClicked.bind(this)}> Invite </button>
+                    </li>
+                </ul>
                 <InviteListContainer team={team}/>
-            </div>
+            </>
         )
     }
 }

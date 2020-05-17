@@ -40,17 +40,29 @@ class RegistrationPage extends Component {
         const roles = ['trainer', 'participant', 'organizer'];
         const navBarElements = [HomeElement];
         return (
-            <div>
+            <>
                 <Header navBarElements={navBarElements} />
-                <div>
-                    <input ref={this.emailInput}/>
-                    <input ref={this.passwordInput}/>
-                    <select ref={this.roleInput}>
-                        {roles.map((role, i) => <option key={i} value={role}> {role} </option>)}
-                    </select>
-                    <button onClick={this.onRegisterButtonClicked.bind(this)}> Register </button>
+                <div className="page">
+                    <ul className="create-form">
+                        <li>
+                            <label>Email <span className="required">*</span></label>
+                            <input ref={this.emailInput} type="text" className="field-long"/>
+                        </li>
+                        <li>
+                            <label>Password <span className="required">*</span></label>
+                            <input ref={this.passwordInput} type="password" className="field-long"/>
+                        </li>
+                        <li>
+                            <select ref={this.roleInput}>
+                                {roles.map((role, i) => <option key={i} value={role}> {role} </option>)}
+                            </select>
+                        </li>
+                        <li>
+                            <button className='submit-button' onClick={this.onRegisterButtonClicked.bind(this)}> Register </button>
+                        </li>
+                    </ul>
                 </div>
-            </div>
+            </>
         )
     }
 }

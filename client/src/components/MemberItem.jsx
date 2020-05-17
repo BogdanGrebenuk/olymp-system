@@ -11,8 +11,8 @@ class MemberItem extends Component {
     render() {
         const { user, team, member } = this.props;
         return (
-            <div>
-                <h3> {member.email} </h3>
+            <div className="member-item">
+                <h6> {member.email} </h6>
                 <p> {member.firstName} {member.lastName} </p>
                 {
                     user.id === team.trainerId

@@ -6,6 +6,7 @@
     flex: 1;
     width: 100%;
     justify-content: space-between;
+    padding: $spacer 0;
 
     .information-block,
     .task-block {
@@ -15,16 +16,19 @@
         border: solid $border $grey;
         width: 100%;
         height: fit-content;
-        margin: $spacer 0;
 
         h6 {
             font-size: $standartFont;
-            margin: 0 0 $spacer / 1.5 0;
+            margin: 0 0 $spacer / 4 0;
             padding: 0;
         }
         p {
             margin: 0;
             font-size: $smallFont;
+            margin: 0;
+        }
+        .spacer {
+            height: $spacer;
         }
     }
     .contests-list {
@@ -35,14 +39,19 @@
             display: flex;
             flex-direction: row;
             align-items: center;
+            margin: 0 0 $spacer 0;
 
             img {
                 width: $spacer * 1.5;
                 height: $spacer * 1.5;
             }
-            h3 {
-                margin: 0 $spacer;
-                font-size: $standartFont;
+            >div {
+                padding: 0 $spacer;
+
+                h3 {
+                    margin: 0 0 $spacer / 3 0;
+                    font-size: $standartFont;
+                }
             }
             &:hover {
                 background-color: rgba($blue, .2);

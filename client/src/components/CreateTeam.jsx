@@ -52,19 +52,28 @@ class CreateTeam extends Component {
         ];
 
         return (
-            <div>
+            <>
                 <Header navBarElements={navBarElements} />
-                Team name <input ref={this.teamNameInput}/>
-                <ImageUploader
-                    withIcon={true}
-                    buttonText="Choose image"
-                    onChange={this.onDrop.bind(this)}
-                    imgExtension={[".jpg", ".gif", ".png", ".gif"]}
-                    maxFileSize={5242880}
-                    singleImage={true}
-                  />
-                <button onClick={this.onCreateButtonClicked.bind(this)}> Create team </button>
-            </div>
+                <div className='page'>
+                    <ul className="create-form">
+                        <li>
+                            <label>Team name <span className="required">*</span></label>
+                            <input ref={this.teamNameInput} type="text" className="field-long"/>
+                        </li>
+                        <ImageUploader
+                            withIcon={true}
+                            buttonText="Choose image"
+                            onChange={this.onDrop.bind(this)}
+                            imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+                            maxFileSize={5242880}
+                            singleImage={true}
+                        />
+                        <li>
+                            <button className='submit-button' onClick={this.onCreateButtonClicked.bind(this)}> Create team </button>
+                        </li>
+                    </ul>
+                </div>
+            </>
         )
     }
 }

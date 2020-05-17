@@ -12,6 +12,7 @@ class Header extends Component {
                 {navBarElements.map((el, i) => {
                     return <NavLink exact to={el.link} activeClassName="active" key={i}>{el.name}</NavLink>
                 })}
+                <NavLink exact to={'/authenticate'} activeClassName="active">Log out</NavLink>
             </div>
         )
     }

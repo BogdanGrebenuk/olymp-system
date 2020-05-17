@@ -1,0 +1,55 @@
+@import './index.scss';
+
+h3 {
+    font-size: $bigFont / 1.5;
+    margin: 0;
+    text-align: center;
+}
+
+.delimiter {
+    height: $border;
+    background-color: $grey;
+    margin: $spacer * 2 0;
+}
+
+.team-block {
+    border-radius: $borderRadius;
+    border: $border $grey solid;
+    margin-bottom: $spacer;
+    padding: $spacer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h3 {
+        margin: 0;
+        font-size: $standartFont;
+    }
+
+    &:hover {
+        background-color: rgba($blue, .2);
+        cursor: pointer;
+    }
+
+    button {
+        margin: $spacer $spacer 0 $spacer;
+        cursor: pointer;
+        width: $spacer * 5;
+        border-radius: $borderRadius;
+        color: $white !important;
+        background: $darkGrey;
+        padding: 8px 15px 8px 15px;
+        border: none;
+        transition: all 0.4s ease 0s;
+        outline: none;
+        font-weight: bold;
+        font-size: $standartFont;
+        border: solid $border $darkGrey;
+
+        &:hover {
+            color: $black !important;
+            background: $white;
+            transition: all 0.4s ease 0s;
+        }
+    }
+}

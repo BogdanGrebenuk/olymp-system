@@ -3,6 +3,7 @@ import { withRouter } from "react-router";
 
 import InviteItemContainer from "../containers/InviteItem";
 
+import "../assets/styles/InviteList.scss"
 
 class InviteList extends Component {
 
@@ -12,11 +13,22 @@ class InviteList extends Component {
 
     render() {
         const { invites } = this.props;
+        console.log(invites)
         return (
-            <div>
-                {invites.map((invite, i) => {
-                    return <InviteItemContainer key={i} invite={invite}/>
-                })}
+            <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
+                {
+                    invites.length !== 0
+                    ?
+                        <>
+                            <h4>Invited people</h4>
+                            <div className="invite-list">
+                                {invites.map((invite, i) => {
+                                    return <InviteItemContainer key={i} invite={invite}/>
+                                })}
+                            </div>
+                        </>
+                    : null
+                }
             </div>
         )
     }
