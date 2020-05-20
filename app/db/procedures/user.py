@@ -1,7 +1,7 @@
 from functools import partial
 from typing import Union, List
 
-from sqlalchemy.sql import select
+from sqlalchemy.sql import select, exists
 
 from core.team_member import MemberStatus
 from db.common import create as _create, get as _get
@@ -148,3 +148,46 @@ async def get_created_teams_by_contest(
             TeamModel.select().where(where)
         )
         return [TeamEntity(**i) for i in await result.fetchall()]
+
+
+async def is_registered_for_contest_as_participant(
+        engine,
+        user: UserEntity,
+        contest: ContestEntity
+        ) -> bool:
+    async with engine.acquire() as conn:
+        join = TeamMemberModel.join(
+            TeamModel,
+            TeamMemberModel.c.team_id == TeamModel.c.id,
+        )
+        where = (
+            (TeamMemberModel.c.user_id == user.id)
+            & (TeamModel.c.contest_id == contest.id)
+        )
+        query = (
+            select([TeamMemberModel])
+            .select_from(join)
+            .where(where)
+        )
+        result = await conn.execute(select([exists(query)]))
+        return await result.scalar()
+
+
+async def is_registered_for_contest_as_trainer(
+        engine,
+        user: UserEntity,
+        contest: ContestEntity
+        ) -> bool:
+    async with engine.acquire() as conn:
+        query = (
+            TeamModel
+            .select()
+            .where(
+                (TeamModel.c.contest_id == contest.id)
+                & (TeamModel.c.trainer_id == user.id)
+            )
+        )
+        result = await conn.execute(
+            select([exists(query)])
+        )
+        return await result.scalar()

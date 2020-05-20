@@ -28,35 +28,37 @@ export default class HeaderImage extends Component {
     render() {
         return(
             <div className="header-image" style={{ backgroundImage: `url(${this.state.image})` }}>
-                <div style={{ flex: 0.85, flexDirection: "column" }}>
-                    {
-                        this.props.adminMode && this.state.changeTitle
-                        ?
-                            <input
-                                type="text"
-                                name="title"
-                                className="title-input"
-                                defaultValue={this.state.title}
-                                onBlur={() => this.setState({ changeTitle: false })}
-                                onChange={this.handleChange.bind(this)}
-                                autoComplete="off"
-                            />
-                        : <h1 onClick={() => this.setState({ changeTitle: true })}>{this.state.title}</h1>
-                    }
-                    {
-                        this.props.adminMode && this.state.changeDescription
-                        ?
-                            <input
-                                type="text"
-                                name="description"
-                                className="description-input"
-                                defaultValue={this.state.description}
-                                onBlur={() => this.setState({ changeDescription: false })}
-                                onChange={this.handleChange.bind(this)}
-                                autoComplete="off"
-                            />
-                        : <h3 onClick={() => this.setState({ changeDescription: true })}>{this.props.description}</h3>
-                    }
+                <div style={{display: "flex",  flex: 0.85, flexDirection: "column" }}>
+                    <h1 >{this.state.title}</h1>
+                    <h3 >{this.props.description}</h3>
+                    {/*{*/}
+                    {/*    this.props.adminMode && this.state.changeTitle*/}
+                    {/*    ?*/}
+                    {/*        <input*/}
+                    {/*            type="text"*/}
+                    {/*            name="title"*/}
+                    {/*            className="title-input"*/}
+                    {/*            defaultValue={this.state.title}*/}
+                    {/*            onBlur={() => this.setState({ changeTitle: false })}*/}
+                    {/*            onChange={this.handleChange.bind(this)}*/}
+                    {/*            autoComplete="off"*/}
+                    {/*        />*/}
+                    {/*    : <h1 onClick={() => this.setState({ changeTitle: true })}>{this.state.title}</h1>*/}
+                    {/*}*/}
+                    {/*{*/}
+                    {/*    this.props.adminMode && this.state.changeDescription*/}
+                    {/*    ?*/}
+                    {/*        <input*/}
+                    {/*            type="text"*/}
+                    {/*            name="description"*/}
+                    {/*            className="description-input"*/}
+                    {/*            defaultValue={this.state.description}*/}
+                    {/*            onBlur={() => this.setState({ changeDescription: false })}*/}
+                    {/*            onChange={this.handleChange.bind(this)}*/}
+                    {/*            autoComplete="off"*/}
+                    {/*        />*/}
+                    {/*    : <h3 onClick={() => this.setState({ changeDescription: true })}>{this.props.description}</h3>*/}
+                    {/*}*/}
                 </div>
                 <div style={{ flex: 0.15, flexDirection: "row-reverse" }}>
                     {

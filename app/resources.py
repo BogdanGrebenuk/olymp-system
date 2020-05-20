@@ -38,7 +38,6 @@ from views.team_member import (
 from views.user import (
     authenticate_user,
     register_user,
-    get_sent_invites_for_contest,
     get_sent_invites_for_team,
     get_received_invites_for_contest,
     get_users,
@@ -229,18 +228,6 @@ resources = [
         ],
         handler=decline_accept
     ),
-    # Resource(
-    #     method='GET',
-    #     url='/api/invites/sent',
-    #     allowed_roles=[UserRole.TRAINER],
-    #     validators=[
-    #         RequestValidator(
-    #             schemas.GetSentInvitesParams,
-    #             data_manager=ParamsManager
-    #         ),
-    #     ],
-    #     handler=get_sent_invites_for_contest
-    # ),
     Resource(
         method='GET',
         url='/api/contests/{contest_id}/teams/{team_id}/invites',

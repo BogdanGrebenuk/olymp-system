@@ -1,4 +1,5 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects';
+import {ToastsStore} from "react-toasts";
 
 import {
     setContests,
@@ -10,7 +11,7 @@ import {
     setTeamMembers,
     setUsers,
     setInvitesForTeam,
-    setInvitesForContest, DECLINE_INVITE
+    setInvitesForContest, DECLINE_INVITE, addToast
 } from '../actions';
 
 import {
@@ -60,38 +61,59 @@ import {
 
 
 function* createContest(action) {
-    yield call(
-        createContestService,
-        action.payload.contestData
-    );
+    try {
+        yield call(
+            createContestService,
+            action.payload.contestData
+        );
+        yield put(addToast('success', 'successfully authenticated!'));
+    } catch (e) {
+
+        // yield put(addToast('error', ));
+    }
+
 }
 
 
 function* fetchContest(action) {
-    const { data } = yield call(
-        fetchContestService,
-        action.payload.contestId
-    );
-    const { contest } = data;
-    yield put(setContest(contest));
+    try{
+        const { data } = yield call(
+            fetchContestService,
+            action.payload.contestId
+        );
+        const { contest } = data;
+        yield put(setContest(contest));
+    } catch (e) {
+
+    }
+
 }
 
 
 function* fetchContests(action) {
-    const { data } = yield call(fetchContestsService);
-    const { contests } = data;
-    yield put(setContests(contests));
+    try {
+        const { data } = yield call(fetchContestsService);
+        const { contests } = data;
+        yield put(setContests(contests));
+    } catch (e) {
+
+    }
+
 }
 
 
 function* fetchTask(action) {
-    const { data } = yield call(
-        fetchTaskService,
-        action.payload.contestId,
-        action.payload.taskId
-    );
-    const { task } = data;
-    yield put(setTask(task));
+    try {
+        const { data } = yield call(
+            fetchTaskService,
+            action.payload.contestId,
+            action.payload.taskId
+        );
+        const { task } = data;
+        yield put(setTask(task));
+    } catch (e) {
+
+    }
 }
 
 
@@ -108,7 +130,8 @@ function* fetchTasks(action) {
 
 
 function* createTask(action) {
-    yield call(
+    try{
+        yield call(
         createTaskService,
         action.payload.contestId,
         action.payload.taskName,
@@ -116,7 +139,12 @@ function* createTask(action) {
         action.payload.maxCPU,
         action.payload.maxMemory,
         action.payload.taskIOs
-    );
+        );
+        yield put(addToast('success', 'successfully authenticated!'));
+    } catch (e) {
+        yield put(addToast('error', e.toString()));
+    }
+
 }
 
 
@@ -176,6 +204,7 @@ function* fetchTeams(action) {
 
 function* createTeam(action) {
     yield call(createTeamService, action.payload.teamData);
+    yield put(addToast('success', 'Created!'));
 }
 
 
@@ -192,11 +221,13 @@ function* fetchTeamMembers(action) {
 
 function* deleteMember(action) {
     yield call(deleteMemberService, action.payload.memberId);
+    yield put(addToast('success', 'Deleted!'));
 }
 
 
 function* inviteUser(action) {
     yield call(inviteUserService, action.payload.inviteData);
+    yield put(addToast('success', 'Invited!'));
 }
 
 
@@ -233,6 +264,7 @@ function* acceptInvite(action) {
         acceptInviteService,
         action.payload.inviteId
     )
+    yield put(addToast('success', 'Accepted!'));
 }
 
 
@@ -241,6 +273,7 @@ function* declineInvite(action) {
         declineInviteService,
         action.payload.inviteId
     )
+    yield put(addToast('success', 'Declined!'));
 }
 
 

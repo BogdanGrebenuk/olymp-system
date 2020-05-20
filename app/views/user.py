@@ -2,11 +2,12 @@ from functools import partial
 
 from aiohttp import web
 
+import core.validators as domain_validator
 import utils.executor as executor
+from core.team_member import MemberStatus
 from commandbus.commands.user import RegisterUser
 from db import user_mapper, team_mapper
 from exceptions.entity import EntityNotFound
-from exceptions.role import PermissionException
 from transformers import transform_invite, transform_user
 from utils.injector import inject
 from utils.injector.entity import Contest, Team
@@ -25,6 +26,8 @@ async def register_user(request):
     patronymic = body['patronymic']
     password = body['password']
     role = body['role']
+
+    await domain_validator.create_user(engine, email)
 
     user = await bus.execute(
         RegisterUser(
@@ -78,43 +81,21 @@ async def authenticate_user(request):
     )
 
 
-@inject(Contest)
-async def get_sent_invites_for_contest(request):
-    engine = request.app['db']
-
-    contest = request['contest']
-    user = request['user']
-
-    invites = await user_mapper.get_sent_invites_for_contest(
-        engine, user, contest
-    )
-    return web.json_response(
-        {'invites': [transform_invite(i) for i in invites]}
-    )
-
-
-@inject(Team)  # TODO: also validate if this team in this contest
+@inject(Contest, Team)
 async def get_sent_invites_for_team(request):
     engine = request.app['db']
 
     user = request['user']
+    contest = request['contest']
     team = request['team']
 
-    if not team.is_trainer(user):
-        raise PermissionException(
-            'you are not allowed to view invites for this team!',
-            {'team_id': team.id}
-        )
+    await domain_validator.get_sent_invites_for_team(user, contest, team)
 
     invites = await team_mapper.get_members(
-        engine, team
+        engine, team, MemberStatus.PENDING
     )
     return web.json_response({
-        'invites': [
-            transform_invite(i)
-            for i in invites
-            if i.is_status_pending()  # TODO: create sql query for it
-        ]
+        'invites': [transform_invite(i) for i in invites]
     })
 
 

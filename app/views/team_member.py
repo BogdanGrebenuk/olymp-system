@@ -45,7 +45,7 @@ async def create_member(request):
         contest_mapper.get(engine, team.contest_id)
     )
 
-    if contest.is_started():
+    if contest.is_running():
         return web.json_response({
             'error': "you can't add member for already running contest!",
             'payload': {'contest_id': contest.id}
@@ -120,7 +120,7 @@ async def delete_member(request):
     if not team.is_trainer(user):
         raise PermissionException('you are not allowed to delete this participant!')
 
-    if contest.is_started():
+    if contest.is_running():
         return web.json_response({
             'error': f"you can't delete member from running contest!",
             'payload': {}
@@ -164,7 +164,7 @@ async def accept_invite(request):
 
         }, status=400)
 
-    if contest.is_started():
+    if contest.is_running():
         return web.json_response({
             'error': f"you can't accept invite for running contest!",
             'payload': {}

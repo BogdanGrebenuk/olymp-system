@@ -38,6 +38,9 @@ export const SET_INVITES_FOR_CONTEST = 'SET_INVITES_FOR_CONTEST';
 export const ACCEPT_INVITE = 'ACCEPT_INVITE';
 export const DECLINE_INVITE = 'DECLINE_INVITE';
 
+export const ADD_TOAST = 'ADD_TOAST';
+export const REMOVE_FIRST_TOAST = 'REMOVE_FIRST_TOAST';
+
 
 export function getContest(contestId) {
     return {
@@ -286,5 +289,21 @@ export function declineInvite(inviteId) {
     return {
         type: DECLINE_INVITE,
         payload: { inviteId }
+    }
+}
+
+
+export function addToast(toastType, message) {
+    return {
+        type: ADD_TOAST,
+        payload: { type: toastType, message }
+    }
+}
+
+
+export function removeFirstToast() {
+    return {
+        type: REMOVE_FIRST_TOAST,
+        payload: {}
     }
 }

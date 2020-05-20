@@ -12,6 +12,7 @@ import RoleDependentRoutesContainer from "./containers/RoleDependentRoutes";
 
 import mainReducer from "./reducers";
 import rootSaga from "./sagas";
+import ToastContainer from "./containers/Toast";
 
 
 const sagaMiddleware = createSagaMiddleware();
@@ -33,6 +34,7 @@ class App extends Component {
                     <Route path={'/authenticate'} component={AuthenticationPageContainer}/>
                     <UserProviderContainer/>
                     <RoleDependentRoutesContainer/>
+                    <ToastContainer/>
                 </BrowserRouter>
             </Provider>
         )

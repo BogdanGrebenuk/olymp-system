@@ -1,8 +1,8 @@
 from aiohttp import web
 
+import core.validators as domain_validator
 from commandbus.commands.team import CreateTeam
 from db import user_mapper
-from exceptions.entity import EntityNotFound
 from transformers import transform_team
 from utils.injector import inject
 from utils.injector.entity import (
@@ -19,14 +19,7 @@ async def create_team(request):
 
     contest = request['contest']
 
-    if contest.is_started():
-        return web.json_response(
-            {
-                'error': f"you can't register new command for already running contest",
-                'payload': {'contest_id': contest.id}
-            },
-            status=400
-        )
+    await domain_validator.create_team(contest)
 
     team = await bus.execute(
         CreateTeam(
@@ -47,6 +40,8 @@ async def get_teams(request):
     contest = request['contest']
 
     # if creator_id is None, return all teams of contest
+    # otherwise return all teams for specified creator
+
     creator = None
     creator_id = request['params'].get('creator_id')
     if creator_id is not None:
@@ -66,11 +61,7 @@ async def get_team(request):
     team = request['team']
     contest = request['contest']
 
-    if team.contest_id != contest.id:
-        raise EntityNotFound(
-            'there is no such team in requested contest',
-            {'team_id': team.id, 'contest_id': contest.id}
-        )
+    await domain_validator.get_team(contest, team)
 
     return web.json_response({
         'team': transform_team(team)

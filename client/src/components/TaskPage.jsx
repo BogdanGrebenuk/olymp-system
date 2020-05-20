@@ -47,7 +47,7 @@ class TaskPage extends Component {
             new NavBarElement('Task', this.props.match.url),
         ]
 
-        const languages = ['','python']; // TODO: fetch from api
+        const languages = ['','python', 'c++11']; // TODO: fetch from api
 
         return (
             <div>

@@ -29,7 +29,7 @@ async def create_contest(request):
             pool=thread_pool
         )
     )
-    return web.json_response({'contest_id': contest.id})  # TODO: hide bare web.json_response
+    return web.json_response({'contest_id': contest.id})
 
 
 async def get_contests(request):
