@@ -51,11 +51,7 @@ async def get_accepted_team_for_contest(
         ) -> Union[TeamEntity, None]:
     async with engine.acquire() as conn:
         join = (
-            ContestModel
-            .join(
-                TeamModel,
-                ContestModel.c.id == TeamModel.c.contest_id
-            )
+            TeamModel
             .join(
                 TeamMemberModel,
                 TeamModel.c.id == TeamMemberModel.c.team_id
@@ -65,7 +61,7 @@ async def get_accepted_team_for_contest(
             select([TeamModel])
             .select_from(join)
             .where(
-                (ContestModel.c.id == contest.id)
+                (TeamModel.c.contest_id == contest.id)
                 & (TeamMemberModel.c.user_id == user.id)
                 & (TeamMemberModel.c.status == MemberStatus.ACCEPTED.value)
             )
@@ -134,7 +130,7 @@ async def get_sent_invites_for_contest(
 async def get_created_teams_by_contest(
         engine,
         contest: ContestEntity,
-        creator: Union[UserEntity, None]
+        creator: Union[UserEntity, None] = None
         ) -> List[TeamEntity]:
     async with engine.acquire() as conn:
         if creator is None:
@@ -163,6 +159,7 @@ async def is_registered_for_contest_as_participant(
         where = (
             (TeamMemberModel.c.user_id == user.id)
             & (TeamModel.c.contest_id == contest.id)
+            & (TeamMemberModel.c.status == MemberStatus.ACCEPTED.value)
         )
         query = (
             select([TeamMemberModel])
@@ -184,6 +181,47 @@ async def is_registered_for_contest_as_trainer(
             .select()
             .where(
                 (TeamModel.c.contest_id == contest.id)
+                & (TeamModel.c.trainer_id == user.id)
+            )
+        )
+        result = await conn.execute(
+            select([exists(query)])
+        )
+        return await result.scalar()
+
+
+async def is_registered_for_team_as_participant(
+        engine,
+        user: UserEntity,
+        team: TeamEntity
+        ):
+    async with engine.acquire() as conn:
+        query = (
+            TeamMemberModel
+            .select()
+            .where(
+                (TeamMemberModel.c.user_id == user.id)
+                & (TeamMemberModel.c.team_id == team.id)
+                & (TeamMemberModel.c.status == MemberStatus.ACCEPTED.value)
+            )
+        )
+        result = await conn.execute(
+            select([exists(query)])
+        )
+        return await result.scalar()
+
+
+async def is_registered_for_team_as_trainer(
+        engine,
+        user: UserEntity,
+        team: TeamEntity,
+        ):
+    async with engine.acquire() as conn:
+        query = (
+            TeamModel
+            .select()
+            .where(
+                (TeamModel.c.id == team.id)
                 & (TeamModel.c.trainer_id == user.id)
             )
         )

@@ -40,17 +40,15 @@ class ContestPage extends Component {
         let navBarElements = [
                 HomeElement,
                 ContestsElement,
-                new NavBarElement('Contest', this.props.match.url)
+                new NavBarElement('Teams', `/contests/${contest.id}/teams`),
+                new NavBarElement('Solutions', `/contests/${contest.id}/solutions`)
+                // new NavBarElement('Contest', this.props.match.url)
             ];
 
         if (user.role === 'organizer') {
             navBarElements = navBarElements.concat([
                 new NavBarElement('Create task', `/contests/${contest.id}/tasks/new`)
             ])
-        } else if (user.role === 'trainer' || user.role === 'participant') {
-            navBarElements = navBarElements.concat([
-                new NavBarElement('Teams', `/contests/${contest.id}/teams`)
-            ]);
         }
 
         return (

@@ -1,4 +1,3 @@
-import pathlib
 import uuid
 from functools import partial
 
@@ -10,13 +9,13 @@ from commandbus.commands.solution import (
     PrepareSolutionDir,
     VerifySolution
 )
-from common import CODE_DIR
+from common import CODE_DIR, ROOT_DIR
 from db import (
     solution_mapper,
     task_mapper
 )
 from db.entities.solution import Solution
-from services.codesaver import manager
+from services.codesaver import DefaultCodeManager
 from services.docker.manager import DockerManager
 
 
@@ -32,14 +31,18 @@ class CreateSolutionHandler(CommandHandler):
                 command.pool
             )
         )
-        solution_dir_path = str(solution_dir.resolve())
         await self.bus.execute(
             SaveSolutionCode(
-                solution_dir_path, command.language, command.code, command.pool
+                solution_dir, command.language, command.code, command.pool
             )
         )
         solution = Solution(
-            solution_id, command.task.id, solution_dir_path, command.language
+            id=solution_id,
+            task_id=command.task.id,
+            path=str(solution_dir.relative_to(ROOT_DIR)),
+            language=command.language,
+            user_id=command.user.id,
+            team_id=command.team.id
         )
         await solution_mapper.create(command.engine, solution)
         return solution
@@ -48,10 +51,12 @@ class CreateSolutionHandler(CommandHandler):
 class PrepareSolutionDirHandler(CommandHandler):
 
     async def handle(self, command: PrepareSolutionDir):
-        code_dir = CODE_DIR
-        contest_dir = code_dir / command.contest_id
-        task_dir = contest_dir / command.task_id
-        solution_dir = task_dir / command.solution_id
+        solution_dir = (
+            CODE_DIR
+            / command.contest_id
+            / command.task_id
+            / command.solution_id
+        )
 
         task = partial(
             solution_dir.mkdir,
@@ -66,11 +71,11 @@ class PrepareSolutionDirHandler(CommandHandler):
 class SaveSolutionCodeHandler(CommandHandler):
 
     async def handle(self, command: SaveSolutionCode):
-        saver = manager.get_saver(command.language)
+        code_manager = DefaultCodeManager.from_language(command.language)
         task = partial(
-            saver,
+            code_manager.save,
 
-            pathlib.Path(command.solution_dir_path),
+            command.solution_dir_path,
             command.code
         )
         return await executor.run(task, command.pool)
@@ -93,5 +98,7 @@ class VerifySolutionHandler(CommandHandler):
                 if answer != task_io.output:
                     return False
             return True
+        except Exception as e:
+            print(e)
         finally:
             await docker_manager.close()

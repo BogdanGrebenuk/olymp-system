@@ -44,7 +44,7 @@ class TaskPage extends Component {
             HomeElement,
             ContestsElement,
             new NavBarElement('Contest', `/contests/view/${task.contestId}`),
-            new NavBarElement('Task', this.props.match.url),
+            // new NavBarElement('Task', this.props.match.url),
         ]
 
         const languages = ['','python', 'c++11']; // TODO: fetch from api

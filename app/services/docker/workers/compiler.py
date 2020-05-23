@@ -25,7 +25,7 @@ class DefaultCompiler(Compiler):
             )
 
         solution_id = self.solution.id
-        solution_path = self.solution.path
+        solution_path = self.solution.get_full_path()
 
         self._compiler_tag = create_tag(self.meta.compiler_tag, solution_id)
 
@@ -43,7 +43,7 @@ class DefaultCompiler(Compiler):
         if self._compiler_tag is None:
             raise ValueError("Image isn't specified! Build an image!")
 
-        solution_path = self.solution.path
+        solution_path = self.solution.get_full_path()
         compiled_dir_path = str(pathlib.Path(solution_path) / 'code-compiled')
 
         task = partial(

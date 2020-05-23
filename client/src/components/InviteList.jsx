@@ -13,7 +13,6 @@ class InviteList extends Component {
 
     render() {
         const { invites } = this.props;
-        console.log(invites)
         return (
             <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
                 {

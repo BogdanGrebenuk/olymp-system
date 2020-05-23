@@ -17,9 +17,6 @@ class Contest:
     end_date: datetime  
     creator_id: str
 
-    def is_creator(self, user) -> bool:
-        return user.id == self.creator_id
-
     def is_running(self, t: datetime = None) -> bool:
         if t is None:
             t = datetime.now(tzutc())

@@ -19,6 +19,7 @@ const GET_TASKS_URL = API_URL.concat('contests/{}/tasks');
 const GET_TASK_URL = API_URL.concat('contests/{}/tasks/{}')
 const POST_TASKS_URL = API_URL.concat('tasks');
 const POST_SOLUTION = API_URL.concat('solutions');
+const GET_SOLUTIONS_FOR_CONTEST = API_URL.concat('contests/{}/solutions');
 const REGISTER_USER_URL = BASE_URL.concat('users');
 const AUTHENTICATE_USER_URL = BASE_URL.concat('login');
 const GET_CURRENT_USER_URL = API_URL.concat('users/me')
@@ -160,6 +161,19 @@ export function submitSolutionService(taskId, code, language, token) {
         }
     })
 }
+
+
+export function getSolutionsForContestService(contestId, token) {
+    if (typeof token === 'undefined') {
+        token = getToken();
+    }
+    return axios.get(GET_SOLUTIONS_FOR_CONTEST.format(contestId), {
+        headers: {
+            Authorization: 'Bearer '.concat(token)
+        }
+    });
+}
+
 
 export function registerUserService(userData, token) {
     if (typeof token === 'undefined') {

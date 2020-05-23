@@ -14,6 +14,8 @@ export const ADD_TASK_IO = 'ADD_TASK_IO';
 export const RESET_TASK_IOS = 'RESET_TASK_IOS';
 
 export const SUBMIT_SOLUTION = 'SUBMIT_SOLUTION';
+export const GET_SOLUTIONS_FOR_CONTEST = 'GET_SOLUTIONS_FOR_CONTEST';
+export const SET_SOLUTIONS = 'SET_SOLUTIONS';
 
 export const REGISTER_USER = 'REGISTER_USER';
 export const AUTHENTICATE_USER = 'AUTHENTICATE_USER';
@@ -305,5 +307,21 @@ export function removeFirstToast() {
     return {
         type: REMOVE_FIRST_TOAST,
         payload: {}
+    }
+}
+
+
+export function getSolutionsForContest(contestId) {
+    return {
+        type: GET_SOLUTIONS_FOR_CONTEST,
+        payload: { contestId }
+    }
+}
+
+
+export function setSolutions(solutions) {
+    return {
+        type: SET_SOLUTIONS,
+        payload: { solutions }
     }
 }

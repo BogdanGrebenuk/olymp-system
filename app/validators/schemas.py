@@ -9,10 +9,10 @@ from marshmallow import (
 )
 
 from common import (
-    get_supported_languages,
     MAX_NUMBER_OF_PARTICIPANTS,
     DEFAULT_NUMBER_OF_PARTICIPANTS
 )
+from core.language import get_supported_languages
 from core.user_role import get_roles
 
 
@@ -52,7 +52,11 @@ class ImageField(fields.Field):
         return value
 
 
-class VerifyTaskBody(Schema):
+class CreateSolutionUrlVars(Schema):
+    contest_id = fields.String(required=True)
+
+
+class CreateSolutionBody(Schema):
     task_id = fields.String(required=True)
     language = fields.String(
         required=True,
@@ -186,3 +190,16 @@ class GetAcceptedMembersUrlVars(Schema):
 class GetInvitesForTeamUrlVars(Schema):
     contest_id = fields.String(required=True)
     team_id = fields.String(required=True)
+
+
+class GetSolutionsUrlVars(Schema):
+    contest_id = fields.String(required=True)
+
+
+class GetSolutionParams(Schema):
+    team_id = fields.String(required=False)
+
+
+class GetSolutionCodeUrlVars(Schema):
+    contest_id = fields.String(required=True)
+    solution_id = fields.String(required=True)

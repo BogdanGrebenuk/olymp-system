@@ -23,7 +23,7 @@ class DefaultRunner(Runner):
             )
 
         solution_id = self.solution.id
-        solution_path = self.solution.path
+        solution_path = self.solution.get_full_path()
 
         self._runner_tag = create_tag(self.meta.runner_tag, solution_id)
 

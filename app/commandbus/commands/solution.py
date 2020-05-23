@@ -1,12 +1,17 @@
 from concurrent.futures import Executor
 from dataclasses import dataclass
+from pathlib import Path
 
 from aiopg.sa import Engine
 
 from commandbus.commands.base_command import Command
-from db.entities.contest import Contest
-from db.entities.solution import Solution
-from db.entities.task import Task
+from db.entities import (
+    Contest,
+    Solution,
+    Task,
+    User,
+    Team
+)
 
 
 @dataclass
@@ -14,6 +19,8 @@ class CreateSolution(Command):
     engine: Engine
     contest: Contest
     task: Task
+    user: User
+    team: Team
     language: str
     code: str
     pool: Executor
@@ -29,7 +36,7 @@ class PrepareSolutionDir(Command):
 
 @dataclass
 class SaveSolutionCode(Command):
-    solution_dir_path: str
+    solution_dir_path: Path
     language: str
     code: str
     pool: Executor

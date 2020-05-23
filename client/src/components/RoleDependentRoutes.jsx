@@ -8,6 +8,7 @@ import TaskPageContainer from "../containers/TaskPage";
 import CreateTeamContainer from "../containers/CreateTeam";
 import TeamsPageContainer from "../containers/TeamsPage";
 import TeamPageContainer from "../containers/TeamPage";
+import SolutionsPageContainer from "../containers/SolutionsPage";
 
 
 class RoleDependentRoutes extends Component {
@@ -24,6 +25,8 @@ class RoleDependentRoutes extends Component {
             {path: '/contests/:contestId/teams', component: TeamsPageContainer},
             {path: '/contests/:contestId/teams/:teamId/view', component: TeamPageContainer},
             {path: '/contests/:contestId/tasks/:taskId/view', component: TaskPageContainer},
+            {path: '/contests/:contestId/solutions', component: SolutionsPageContainer},
+            // {path: '/contests/:contestId/solutions/:solutionId/view', component: SolutionPageContainer}
         ];
 
         if (user.role === 'organizer') {

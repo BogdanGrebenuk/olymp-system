@@ -3,11 +3,13 @@ from aiohttp import web
 import core.validators as domain_validator
 from commandbus.commands.team import CreateTeam
 from db import user_mapper
+from exceptions.entity import EntityNotFound
 from transformers import transform_team
 from utils.injector import inject
 from utils.injector.entity import (
     Contest,
-    Team
+    Team,
+    Creator
 )
 
 
@@ -34,18 +36,26 @@ async def create_team(request):
 
 
 @inject(Contest)
-async def get_teams(request):
+async def get_teams_for_contest(request):
     engine = request.app['db']
 
     contest = request['contest']
 
-    # if creator_id is None, return all teams of contest
-    # otherwise return all teams for specified creator
+    teams = await user_mapper.get_created_teams_by_contest(
+        engine, contest
+    )
 
-    creator = None
-    creator_id = request['params'].get('creator_id')
-    if creator_id is not None:
-        creator = await user_mapper.get(engine, creator_id)
+    return web.json_response({
+        'teams': [transform_team(team) for team in teams]
+    })
+
+
+@inject(Contest, Creator)
+async def get_teams_for_contest_and_creator(request):
+    engine = request.app['db']
+
+    contest = request['contest']
+    creator = request['creator']
 
     teams = await user_mapper.get_created_teams_by_contest(
         engine, contest, creator

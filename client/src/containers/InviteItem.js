@@ -8,8 +8,6 @@ import {deleteMember} from '../actions';
 const getMember = (state, member) => {
     let temp;
     temp = {...member};
-    console.log(member)
-    console.log(state)
     const user = state.users[member.userId];
     temp['email'] = user.email;
     temp['firstName'] = user.firstName;

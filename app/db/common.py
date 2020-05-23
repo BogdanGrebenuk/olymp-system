@@ -15,8 +15,14 @@ async def get(engine, id, entity, model):
             model.select().where(model.c.id == id)
         )).fetchone()
         if result is None:
-            return None
+            return None  # TODO: raise an exception
         return entity(**result)
+
+
+async def get_all(engine, entity, model):
+    async with engine.acquire() as conn:
+        result = await conn.execute(model.select())
+        return [entity(**i) for i in await result.fetchall()]
 
 
 async def update(engine, entity, model):

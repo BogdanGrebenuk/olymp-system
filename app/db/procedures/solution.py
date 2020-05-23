@@ -1,12 +1,24 @@
 from functools import partial
+from typing import List
+
+from sqlalchemy.sql import select
 
 from db.common import (
     create as _create,
     get as _get,
-    update
+    get_all as _get_all,
+    update as _update
 )
-from db.entities.solution import Solution as SolutionEntity
-from db.models import Solution as SolutionModel
+from db.entities import (
+    Solution as SolutionEntity,
+    Contest as ContestEntity,
+    Team as TeamEntity
+)
+
+from db.models import (
+    Solution as SolutionModel,
+    Task as TaskModel,
+)
 
 
 create = partial(_create, model=SolutionModel)
@@ -15,6 +27,52 @@ create = partial(_create, model=SolutionModel)
 get = partial(_get, model=SolutionModel, entity=SolutionEntity)
 
 
-# TODO: create it via partial
-async def update_solution(engine, solution: SolutionEntity):
-    return await update(engine, solution, SolutionModel)
+get_all = partial(_get_all, model=SolutionModel, entity=SolutionEntity)
+
+
+update = partial(_update, model=SolutionModel)
+
+
+async def get_team(engine, solution: SolutionEntity) -> TeamEntity:
+    from db import team_mapper  # TODO: investgate what can i do with it
+    return await team_mapper.get(engine, solution.team_id)
+
+
+async def get_all_from_contest(
+        engine,
+        contest: ContestEntity
+        ) -> List[SolutionEntity]:
+    async with engine.acquire() as conn:
+        join = (
+            SolutionModel
+            .join(
+                TaskModel,
+                SolutionModel.c.task_id == TaskModel.c.id
+            )
+        )
+        result = await conn.execute(
+            select([SolutionModel])
+            .select_from(join)
+            .where(
+                TaskModel.c.contest_id == contest.id
+            )
+        )
+        return [
+            SolutionEntity(**i)
+            for i in await result.fetchall()
+        ]
+
+
+async def get_all_from_team(engine, team: TeamEntity) -> List[SolutionEntity]:
+    async with engine.acquire() as conn:
+        result = await conn.execute(
+            SolutionModel
+            .select()
+            .where(
+                SolutionModel.c.team_id == team.id
+            )
+        )
+        return [
+            SolutionEntity(**i)
+            for i in await result.fetchall()
+        ]

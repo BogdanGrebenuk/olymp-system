@@ -4,7 +4,7 @@ from exceptions.entity import EntityNotFound
 
 
 async def create_team(contest: Contest):
-    if contest.is_running():
+    if contest.is_running():  # TODO: trainer can create team when contest is finished
         raise DomainException(
             "contest is already running!", {'contest_id': contest.id}
         )

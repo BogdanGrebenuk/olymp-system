@@ -123,5 +123,17 @@ Solution = sa.Table(
     ),
     sa.Column('path', sa.Text, nullable=False),
     sa.Column('language', sa.Text, nullable=False),
-    sa.Column('is_passed', sa.Boolean, nullable=False, default=False)
+    sa.Column('is_passed', sa.Boolean, nullable=False, default=False),
+    sa.Column(
+        'user_id',
+        sa.Text,
+        sa.ForeignKey('user.id', onupdate="CASCADE", ondelete="CASCADE"),
+        nullable=False
+    ),
+    sa.Column(
+        'team_id',
+        sa.Text,
+        sa.ForeignKey('team.id', onupdate="CASCADE", ondelete="CASCADE"),
+        nullable=False
+    )
 )

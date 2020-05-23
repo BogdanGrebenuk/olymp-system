@@ -5,6 +5,7 @@ from aiohttp.web import BaseRequest
 
 import validators.schemas as schemas
 from core.user_role import UserRole
+from utils.resource import SingleParamChooser
 from validators import Validator
 from validators.request import (
     RequestValidator,
@@ -17,7 +18,12 @@ from views.contest import (
     get_contests,
     get_contest
 )
-from views.solution import verify_task
+from views.solution import (
+    create_solution,
+    get_solutions_for_contest,
+    get_solutions_for_team,
+    get_solution_code
+)
 from views.task import (
     create_task,
     get_tasks,
@@ -25,7 +31,8 @@ from views.task import (
 )
 from views.team import (
     create_team,
-    get_teams,
+    get_teams_for_contest,
+    get_teams_for_contest_and_creator,
     get_team
 )
 from views.team_member import (
@@ -126,20 +133,57 @@ resources = [
     ),
     Resource(
         method='POST',
-        url='/api/tasks',
+        url='/api/tasks',  # TODO make this route restful
         allowed_roles=None,
         validators=[RequestValidator(schemas.CreateTaskBody)],
         handler=create_task
     ),
     Resource(
         method='POST',
-        url='/api/solutions',
-        allowed_roles=None,  # TODO: allow only for participants
-        validators=[RequestValidator(schemas.VerifyTaskBody)],
-        handler=verify_task
+        url='/api/contests/{contest_id}/solutions',
+        allowed_roles=[UserRole.PARTICIPANT],
+        validators=[
+            RequestValidator(
+                schemas.CreateSolutionUrlVars, data_manager=UrlVariableManager
+            ),
+            RequestValidator(schemas.CreateSolutionBody)
+        ],
+        handler=create_solution
     ),
     Resource(
-        method='POST',
+        method='GET',
+        url='/api/contests/{contest_id}/solutions',
+        allowed_roles=None,
+        validators=[
+            RequestValidator(
+                schemas.GetSolutionsUrlVars,
+                data_manager=UrlVariableManager
+            ),
+            RequestValidator(
+                schemas.GetSolutionParams,
+                data_manager=ParamsManager
+            )
+        ],
+        handler=SingleParamChooser(
+            'team_id',
+            get_solutions_for_team,
+            get_solutions_for_contest
+        ).handle
+    ),
+    Resource(
+        method='GET',
+        url='/api/contests/{contest_id}/solutions/{solution_id}/code',  # is it restful?
+        allowed_roles=None,
+        validators=[
+            RequestValidator(
+                schemas.GetSolutionCodeUrlVars,
+                data_manager=UrlVariableManager
+            )
+        ],
+        handler=get_solution_code
+    ),
+    Resource(
+        method='POST',  # TODO make this route restful
         url='/api/teams',
         allowed_roles=[UserRole.TRAINER],
         validators=[RequestValidator(schemas.CreateTeamBody)],
@@ -159,7 +203,11 @@ resources = [
                 data_manager=ParamsManager
             )
         ],
-        handler=get_teams
+        handler=SingleParamChooser(
+            'creator_id',
+            get_teams_for_contest_and_creator,
+            get_teams_for_contest
+        ).handle
     ),
     Resource(
         method='GET',
@@ -187,7 +235,7 @@ resources = [
     ),
     Resource(
         method='POST',
-        url='/api/invites',
+        url='/api/invites',  # TODO make this route restful
         allowed_roles=[UserRole.TRAINER],
         validators=[RequestValidator(schemas.CreateMemberBody)],
         handler=create_member
@@ -206,7 +254,7 @@ resources = [
     ),
     Resource(
         method='PUT',
-        url='/api/invites/{invite_id}/accept',
+        url='/api/invites/{invite_id}/accept',  # TODO make this route restful
         allowed_roles=[UserRole.PARTICIPANT],
         validators=[
             RequestValidator(
@@ -218,7 +266,7 @@ resources = [
     ),
     Resource(
         method='PUT',
-        url='/api/invites/{invite_id}/decline',
+        url='/api/invites/{invite_id}/decline',  # TODO make this route restful
         allowed_roles=[UserRole.PARTICIPANT],
         validators=[
             RequestValidator(
@@ -242,7 +290,7 @@ resources = [
     ),
     Resource(
         method='GET',
-        url='/api/invites/received',
+        url='/api/invites/received',  # TODO make this route restful
         allowed_roles=[UserRole.PARTICIPANT],
         validators=[
             RequestValidator(

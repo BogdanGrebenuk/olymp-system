@@ -11,7 +11,9 @@ import {
     setTeamMembers,
     setUsers,
     setInvitesForTeam,
-    setInvitesForContest, DECLINE_INVITE, addToast
+    setInvitesForContest,
+    addToast,
+    setSolutions
 } from '../actions';
 
 import {
@@ -22,6 +24,7 @@ import {
     GET_TASK,
     CREATE_TASK,
     SUBMIT_SOLUTION,
+    GET_SOLUTIONS_FOR_CONTEST,
     REGISTER_USER,
     AUTHENTICATE_USER,
     GET_CURRENT_USER,
@@ -33,7 +36,8 @@ import {
     GET_USERS,
     GET_INVITES_FOR_TEAM,
     GET_INVITES_FOR_CONTEST,
-    ACCEPT_INVITE
+    ACCEPT_INVITE,
+    DECLINE_INVITE
 } from "../actions";
 
 import {
@@ -44,6 +48,7 @@ import {
     fetchTasksService,
     createTaskService,
     submitSolutionService,
+    getSolutionsForContestService,
     registerUserService,
     authenticateUserService,
     fetchCurrentUserService,
@@ -155,6 +160,16 @@ function* submitSolution(action) {
         action.payload.code,
         action.payload.language
     );
+}
+
+
+function* getSolutionsForContest(action) {
+    const { data } = yield call(
+        getSolutionsForContestService,
+        action.payload.contestId
+    );
+    const { solutions } = data;
+    yield put(setSolutions(solutions));
 }
 
 
@@ -312,6 +327,11 @@ function* watchSubmitSolution() {
 }
 
 
+function* watchGetSolutionsForContest() {
+    yield takeEvery(GET_SOLUTIONS_FOR_CONTEST, getSolutionsForContest);
+}
+
+
 function* watchRegisterUser(){
     yield takeEvery(REGISTER_USER, registerUser);
 }
@@ -387,6 +407,7 @@ export default function* rootSaga() {
         watchFetchTasks(),
         watchCreateTask(),
         watchSubmitSolution(),
+        watchGetSolutionsForContest(),
         watchRegisterUser(),
         watchAuthenticateUser(),
         watchFetchCurrentUser(),

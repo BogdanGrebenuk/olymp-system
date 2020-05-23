@@ -22,7 +22,7 @@ class TeamPage extends Component {
             ContestsElement,
             new NavBarElement('Contest', `/contests/view/${team.contestId}`),
             new NavBarElement('Teams', `/contests/${team.contestId}/teams`),
-            new NavBarElement('Team', this.props.match.url)
+            // new NavBarElement('Team', this.props.match.url)
         ];
 
         return (

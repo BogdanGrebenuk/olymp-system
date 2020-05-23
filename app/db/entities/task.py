@@ -9,3 +9,6 @@ class Task:
     description: str
     max_cpu_time: int
     max_memory: int
+
+    def from_contest(self, contest) -> bool:
+        return self.contest_id == contest.id

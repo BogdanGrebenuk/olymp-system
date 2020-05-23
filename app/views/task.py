@@ -15,24 +15,22 @@ async def create_task(request):
 
     body = request['body']
 
+    user = request['user']
     contest = request['contest']
-    input_output = [tuple(i) for i in body['input_output']]
-    name = body['name']
-    description = body['description']
-    max_cpu_time = body['max_cpu_time']
-    max_memory = body['max_memory']
 
-    await domain_validator.create_task(contest)
+    input_output = [tuple(i) for i in body['input_output']]
+
+    await domain_validator.create_task(user, contest)
 
     task = await bus.execute(
         CreateTask(
             engine=engine,
             contest=contest,
             input_output=input_output,
-            name=name,
-            description=description,
-            max_cpu_time=max_cpu_time,
-            max_memory=max_memory
+            name=body['name'],
+            description=body['description'],
+            max_cpu_time=body['max_cpu_time'],
+            max_memory=body['max_memory']
         )
     )
 

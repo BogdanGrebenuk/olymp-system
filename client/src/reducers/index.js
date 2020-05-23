@@ -10,7 +10,11 @@ import {
     SET_CURRENT_USER,
     SET_TEAMS,
     SET_TEAM_MEMBERS,
-    SET_USERS, SET_INVITES_FOR_TEAM, SET_INVITES_FOR_CONTEST, ADD_TOAST, REMOVE_FIRST_TOAST
+    SET_USERS,
+    SET_INVITES_FOR_TEAM,
+    SET_INVITES_FOR_CONTEST,
+    ADD_TOAST,
+    REMOVE_FIRST_TOAST, SET_SOLUTIONS
 } from "../actions";
 
 
@@ -170,6 +174,22 @@ function toastMessagesReducer(state=[], action) {
 }
 
 
+function solutionReducer(state={}, action) {
+    let temp;
+    switch (action.type) {
+        case SET_SOLUTIONS:
+            const solutions = action.payload.solutions;
+            temp = {};
+            for (let i of solutions) {
+                temp[i.id] = i;
+            }
+            return temp;
+        default:
+            return state;
+    }
+}
+
+
 const mainReducer = combineReducers({
     contests: contestReducer,
     tasks: taskReducer,
@@ -180,7 +200,9 @@ const mainReducer = combineReducers({
     users: usersReducer,
     invitesForTeam: invitesForTeamReducer, // for trainer
     invitesForContest: invitesForContestReducer, // for participant
-    toastMessages: toastMessagesReducer
+    toastMessages: toastMessagesReducer,
+    solutions: solutionReducer
 });
+
 
 export default mainReducer;

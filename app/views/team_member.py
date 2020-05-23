@@ -34,7 +34,7 @@ async def create_member(request):
         )
 
     # TODO: create is_participant method
-    if requested_user.get_user_role() != UserRole.PARTICIPANT:
+    if not requested_user.is_participant():
         raise PermissionException(
             "you can't invite this user!",
             {'user_id': requested_user.id}
@@ -88,8 +88,7 @@ async def get_accepted_members(request):
     team = request['team']
     contest = request['contest']
 
-    # TODO: rewrite it as team method
-    if team.contest_id != contest.id:
+    if not team.from_contest(contest):
         raise EntityNotFound(
             'there is no such team in requested contest',
             {'team_id': team.id, 'contest_id': contest.id}
