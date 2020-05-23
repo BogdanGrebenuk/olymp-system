@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import SolutionsTableRowContainer from "../containers/SolutionsTableRow";
 
+import "../assets/styles/SolutionsTable.scss"
 
 class SolutionsTable extends Component {
     componentDidMount() {
@@ -14,17 +15,21 @@ class SolutionsTable extends Component {
         const { contest, solutions } = this.props;
         return (
             <table>
-                <tr>
-                    <th> Team</th>
-                    <th> Task </th>
-                    <th> Language </th>
-                    <th> Passed </th>
-                </tr>
-                {
-                    solutions.map(
-                        (solution, i) => <SolutionsTableRowContainer key={i} contest={contest} solution={solution}/>
-                    )
-                }
+                <thead>
+                    <tr>
+                        <th> Team</th>
+                        <th> Task </th>
+                        <th> Language </th>
+                        <th> Passed </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        solutions.map(
+                            (solution, i) => <SolutionsTableRowContainer key={i} contest={contest} solution={solution}/>
+                        )
+                    }
+                </tbody>
             </table>
         )
     }

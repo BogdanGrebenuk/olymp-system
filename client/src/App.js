@@ -32,7 +32,7 @@ class App extends Component {
                 <BrowserRouter>
                     <Route path={'/register'} component={RegistrationPageContainer}/>
                     <Route path={'/authenticate'} component={AuthenticationPageContainer}/>
-                    <UserProviderContainer/>
+                    {/* <UserProviderContainer/> */}
                     <RoleDependentRoutesContainer/>
                     <ToastContainer/>
                 </BrowserRouter>

@@ -1,0 +1,56 @@
+@import './index.scss';
+
+table {
+    width: 100%;
+    border: $border $grey solid;
+    border-spacing: 0;
+    border-radius: $borderRadius;
+    font-size: $standartFont;
+    overflow: hidden;
+    text-align: center;
+    table-layout: fixed;
+
+    thead {
+        border-bottom: $border $grey solid;
+
+        th {
+            white-space: nowrap;
+            background-color: $grey;
+            padding: $spacer / 2;
+            border-right: $border $white solid;
+            border-bottom: $border $grey solid;
+            width: 25%;
+            text-overflow: ellipsis;
+            overflow: hidden;
+
+            &:last-child {
+                border-right: none;
+            }
+        }
+    }
+    tbody {
+        tr {
+            td {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;       
+                padding: $spacer / 2;
+                border-right: $border $grey solid;
+                width: 25%;
+                border-bottom: $border $grey solid;
+
+                &:last-child {
+                    border-right: none;
+                }
+            }
+
+            &:last-child>td {
+                border-bottom: none;
+            }
+            &:hover {
+                background-color: rgba($blue, .2);
+                cursor: pointer;
+            }
+        }
+    }
+}
