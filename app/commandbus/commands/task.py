@@ -11,7 +11,7 @@ from db.entities.contest import Contest
 class CreateTask(Command):
     engine: Engine
     contest: Contest
-    input_output: List[Tuple[str, str]]
+    input_output: List[Tuple[str, str, bool]]
     name: str
     description: str
     max_cpu_time: int

@@ -26,7 +26,7 @@ async def create_task(request):
         CreateTask(
             engine=engine,
             contest=contest,
-            input_output=input_output,
+            input_output=body["input_output"],
             name=body['name'],
             description=body['description'],
             max_cpu_time=body['max_cpu_time'],

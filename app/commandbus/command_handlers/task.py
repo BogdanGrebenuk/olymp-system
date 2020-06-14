@@ -26,8 +26,8 @@ class CreateTaskHandler(CommandHandler):
         )
         await task_mapper.create(engine, task)
         tasks_io = [
-            TaskIO(str(uuid.uuid4()), task.id, input_, output)
-            for input_, output in command.input_output
+            TaskIO(str(uuid.uuid4()), task.id, input_, output, public)
+            for input_, output, public in command.input_output
         ]
         await asyncio.gather(*[
             task_io_mapper.create(engine, task_io)

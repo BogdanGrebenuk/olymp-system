@@ -7,3 +7,4 @@ class TaskIO:
     task_id: str
     input: str
     output: str
+    public: bool = False

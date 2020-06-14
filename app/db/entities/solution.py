@@ -1,5 +1,5 @@
 from common import ROOT_DIR
-
+from datetime import datetime
 import dataclasses
 
 
@@ -11,6 +11,7 @@ class Solution:
     task_id: str
     user_id: str
     team_id: str
+    created_at: datetime
     is_passed: bool = False
 
     def get_full_path(self) -> str:
