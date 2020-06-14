@@ -34,7 +34,8 @@ class CreateTask extends Component {
         const { taskIOs } = this.props;
         const taskIOValues = taskIOs.map(taskIO => [
             taskIO.inputRef.current.value.trim(),
-            taskIO.outputRef.current.value.trim()
+            taskIO.outputRef.current.value.trim(),
+            false
         ]);
 
         if (

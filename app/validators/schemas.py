@@ -16,11 +16,6 @@ from core.language import get_supported_languages
 from core.user_role import get_roles
 
 
-def validate_task_io(task_ios):
-    for io in task_ios:
-        if len(io) != 2:
-            raise ValidationError('io incorrect specified!')
-
 
 class MaxParticipantsField(fields.Field):
 
@@ -93,8 +88,10 @@ class CreateContestBody(Schema):
 class CreateTaskBody(Schema):
     contest_id = fields.String(required=True)
     input_output = fields.List(
-        fields.List(fields.String),
-        validate=validate_task_io
+        fields.Tuple(
+            (fields.String(), fields.String(), fields.Bool())
+        ),
+        validate=validate.Length(1)
     )
     name = fields.String(required=True, validate=validate.Length(min=1))
     description = fields.String(required=True)

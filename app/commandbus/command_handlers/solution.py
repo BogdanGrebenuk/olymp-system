@@ -1,4 +1,6 @@
 import uuid
+from datetime import datetime
+from dateutil.tz import tzutc
 from functools import partial
 
 import utils.executor as executor
@@ -42,7 +44,8 @@ class CreateSolutionHandler(CommandHandler):
             path=str(solution_dir.relative_to(ROOT_DIR)),
             language=command.language,
             user_id=command.user.id,
-            team_id=command.team.id
+            team_id=command.team.id,
+            created_at=datetime.now(tzutc())
         )
         await solution_mapper.create(command.engine, solution)
         return solution

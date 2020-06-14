@@ -107,7 +107,8 @@ TaskIO = sa.Table(
         nullable=False
     ),
     sa.Column('input', sa.Text, nullable=False),
-    sa.Column('output', sa.Text, nullable=False)
+    sa.Column('output', sa.Text, nullable=False),
+    sa.Column('public', sa.Boolean, nullable=False, default=False)
 )
 
 
@@ -135,5 +136,6 @@ Solution = sa.Table(
         sa.Text,
         sa.ForeignKey('team.id', onupdate="CASCADE", ondelete="CASCADE"),
         nullable=False
-    )
+    ),
+    sa.Column('created_at', sa.TIMESTAMP(timezone=True), nullable=False)
 )
