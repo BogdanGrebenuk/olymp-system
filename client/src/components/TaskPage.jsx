@@ -26,6 +26,7 @@ class TaskPage extends Component {
             return alert('you must specify language!');
         }
         this.props.onSubmitSolution(
+            this.props.contest.id,
             this.props.task.id,
             code,
             language
@@ -33,17 +34,22 @@ class TaskPage extends Component {
     }
 
     render() {
-        const { user, task } = this.props;
+        const { user, task, contest } = this.props;
 
         if (typeof task === 'undefined') {
             this.props.onRefreshTask();
             return <div/>
         }
 
+        if (typeof contest === 'undefined') {
+            this.props.onRefreshContest();
+            return null;
+        }
+
         let navBarElements = [
             HomeElement,
             ContestsElement,
-            new NavBarElement('Contest', `/contests/view/${task.contestId}`),
+            new NavBarElement(contest.name, `/contests/view/${task.contestId}`),
             // new NavBarElement('Task', this.props.match.url),
         ]
 

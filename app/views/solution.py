@@ -33,7 +33,7 @@ async def create_solution(request):
 
     user = request['user']
     task = request['task']
-    contest = request['contest.id']
+    contest = request['contest']
 
     team = await user_mapper.get_accepted_team_for_contest(
         engine, user, contest

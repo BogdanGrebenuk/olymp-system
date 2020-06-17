@@ -40,6 +40,9 @@ export const SET_INVITES_FOR_CONTEST = 'SET_INVITES_FOR_CONTEST';
 export const ACCEPT_INVITE = 'ACCEPT_INVITE';
 export const DECLINE_INVITE = 'DECLINE_INVITE';
 
+export const GET_LEADERBOARD = 'GET_LEADERBOARD';
+export const SET_LEADERBOARD = 'SET_LEADERBOARD';
+
 export const ADD_TOAST = 'ADD_TOAST';
 export const REMOVE_FIRST_TOAST = 'REMOVE_FIRST_TOAST';
 
@@ -133,11 +136,11 @@ export function resetTaskIOs() {
     }
 }
 
-export function submitSolution(taskId, code, language) {
+export function submitSolution(contestId, taskId, code, language) {
     return {
         type: SUBMIT_SOLUTION,
         payload: {
-            taskId, code, language
+            contestId, taskId, code, language
         }
     }
 }
@@ -323,5 +326,21 @@ export function setSolutions(solutions) {
     return {
         type: SET_SOLUTIONS,
         payload: { solutions }
+    }
+}
+
+
+export function getLeaderBoard(contestId) {
+    return {
+        type: GET_LEADERBOARD,
+        payload: { contestId }
+    }
+}
+
+
+export function setLeaderBoard(leaderBoard) {
+    return {
+        type: SET_LEADERBOARD,
+        payload: { leaderBoard }
     }
 }

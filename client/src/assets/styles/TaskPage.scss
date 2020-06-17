@@ -13,9 +13,11 @@ h1 {
     align-items: center;
 
     p {
-        font-size: $smallFont;
+        font-size: $smallFont + 0.1;
         margin: 0 0 $spacer / 2 0;
         width: 100%;
+        line-height: 2.0;
+        text-align: justify;
     }
     .code-input {
         font-family: "Consolas";

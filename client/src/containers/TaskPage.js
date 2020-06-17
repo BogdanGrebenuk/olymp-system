@@ -14,8 +14,8 @@ const onRefreshContest = (dispatch, contestId) => () => {
 }
 
 
-const onSubmitSolution = dispatch => (taskId, code, language) => {
-    dispatch(submitSolution(taskId, code, language));
+const onSubmitSolution = dispatch => (contestId, taskId, code, language) => {
+    dispatch(submitSolution(contestId, taskId, code, language));
 }
 
 

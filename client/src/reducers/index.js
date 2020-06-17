@@ -14,7 +14,7 @@ import {
     SET_INVITES_FOR_TEAM,
     SET_INVITES_FOR_CONTEST,
     ADD_TOAST,
-    REMOVE_FIRST_TOAST, SET_SOLUTIONS
+    REMOVE_FIRST_TOAST, SET_SOLUTIONS, SET_LEADERBOARD
 } from "../actions";
 
 
@@ -190,6 +190,16 @@ function solutionReducer(state={}, action) {
 }
 
 
+function leaderBoardReducer(state=[], action) {
+    switch (action.type) {
+        case SET_LEADERBOARD:
+            return action.payload.leaderBoard;
+        default:
+            return state;
+    }
+}
+
+
 const mainReducer = combineReducers({
     contests: contestReducer,
     tasks: taskReducer,
@@ -201,7 +211,8 @@ const mainReducer = combineReducers({
     invitesForTeam: invitesForTeamReducer, // for trainer
     invitesForContest: invitesForContestReducer, // for participant
     toastMessages: toastMessagesReducer,
-    solutions: solutionReducer
+    solutions: solutionReducer,
+    leaderBoard: leaderBoardReducer
 });
 
 

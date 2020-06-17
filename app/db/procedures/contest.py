@@ -1,12 +1,18 @@
 from functools import partial
 from typing import List
 
+from sqlalchemy.sql import select
+
 from db.common import create as _create, get as _get
-from db.entities.contest import Contest as ContestEntity
-from db.entities.task import Task as TaskEntity
+from db.entities import (
+    Contest as ContestEntity,
+    Task as TaskEntity,
+    Team as TeamEntity
+)
 from db.models import (
     Contest as ContestModel,
-    Task as TaskModel
+    Task as TaskModel,
+    Team as TeamModel
 )
 
 
@@ -28,3 +34,12 @@ async def get_tasks(engine, contest: ContestEntity) -> List[TaskEntity]:
             TaskModel.select().where(TaskModel.c.contest_id == contest.id)
         )
         return [TaskEntity(**i) for i in await result.fetchall()]
+
+
+# todo: user_mapper.get_created_teams_by_contest ?
+async def get_teams(engine, contest: ContestEntity) -> List[TeamEntity]:
+    async with engine.acquire() as conn:
+        res = await conn.execute(
+            select([TeamModel]).where(TeamModel.c.contest_id == contest.id)
+        )
+        return [TeamEntity(**i) for i in await res.fetchall()]

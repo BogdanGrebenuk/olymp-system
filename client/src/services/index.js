@@ -18,7 +18,7 @@ const POST_CONTESTS_URL = API_URL.concat('contests');
 const GET_TASKS_URL = API_URL.concat('contests/{}/tasks');
 const GET_TASK_URL = API_URL.concat('contests/{}/tasks/{}')
 const POST_TASKS_URL = API_URL.concat('tasks');
-const POST_SOLUTION = API_URL.concat('solutions');
+const POST_SOLUTION = API_URL.concat('contests/{}/solutions');
 const GET_SOLUTIONS_FOR_CONTEST = API_URL.concat('contests/{}/solutions');
 const REGISTER_USER_URL = BASE_URL.concat('users');
 const AUTHENTICATE_USER_URL = BASE_URL.concat('login');
@@ -33,6 +33,7 @@ const GET_INVITES_FOR_TEAM_URL = API_URL.concat('contests/{}/teams/{}/invites')
 const GET_INVITES_FOR_CONTEST_URL = API_URL.concat('invites/received')
 const ACCEPT_INVITE_URL = API_URL.concat('invites/{}/accept')
 const DECLINE_INVITE_URL = API_URL.concat('invites/{}/decline')
+const GET_LEADERBOARD_URL = API_URL.concat('contests/{}/leader-board')
 
 
 function getToken() {
@@ -147,11 +148,11 @@ export function createTaskService(
 }
 
 
-export function submitSolutionService(taskId, code, language, token) {
+export function submitSolutionService(contestId, taskId, code, language, token) {
     if (typeof token === 'undefined') {
         token = getToken();
     }
-    return axios.post(POST_SOLUTION, {
+    return axios.post(POST_SOLUTION.format(contestId), {
         task_id: taskId,
         code,
         language
@@ -345,4 +346,17 @@ export function declineInviteService(inviteId, token) {
             Authorization: 'Bearer '.concat(token)
         }
     });
+}
+
+
+export function fetchLeaderBoardService(contestId, token) {
+    if (typeof token === 'undefined') {
+        token = getToken();
+    }
+
+    return axios.get(GET_LEADERBOARD_URL.format(contestId), {
+        headers: {
+            Authorization: 'Bearer '.concat(token)
+        }
+    })
 }

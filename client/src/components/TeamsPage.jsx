@@ -18,7 +18,7 @@ class TeamsPage extends Component {
         let navBarElements = [
             HomeElement,
             ContestsElement,
-            new NavBarElement('Contest', `/contests/view/${contest.id}`),
+            new NavBarElement(contest.name, `/contests/view/${contest.id}`),
             new NavBarElement('Teams', this.props.match.url),
         ]
 

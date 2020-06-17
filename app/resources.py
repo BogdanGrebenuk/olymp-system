@@ -16,7 +16,8 @@ from validators.request import (
 from views.contest import (
     create_contest,
     get_contests,
-    get_contest
+    get_contest,
+    get_leader_board
 )
 from views.solution import (
     create_solution,
@@ -319,6 +320,19 @@ resources = [
         validators=[],
         handler=get_users
     ),
+    # TODO: reinvestigate this resource
+    Resource(
+        method='GET',
+        url='/api/contests/{contest_id}/leader-board',
+        allowed_roles=None,
+        validators=[
+            RequestValidator(
+                schemas.GetContestLeaderBoardUrlVars,
+                data_manager=UrlVariableManager  # TODO: make it enum-like field?
+            )
+        ],
+        handler=get_leader_board
+    )
 ]
 
 

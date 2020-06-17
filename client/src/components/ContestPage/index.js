@@ -41,8 +41,8 @@ class ContestPage extends Component {
                 HomeElement,
                 ContestsElement,
                 new NavBarElement('Teams', `/contests/${contest.id}/teams`),
-                new NavBarElement('Solutions', `/contests/${contest.id}/solutions`)
-                // new NavBarElement('Contest', this.props.match.url)
+                new NavBarElement('Solutions', `/contests/${contest.id}/solutions`),
+                new NavBarElement('Leaderboard', `/contests/${contest.id}/leader-board`)
             ];
 
         if (user.role === 'organizer') {

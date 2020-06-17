@@ -13,7 +13,8 @@ import {
     setInvitesForTeam,
     setInvitesForContest,
     addToast,
-    setSolutions
+    setSolutions,
+    setLeaderBoard
 } from '../actions';
 
 import {
@@ -37,7 +38,8 @@ import {
     GET_INVITES_FOR_TEAM,
     GET_INVITES_FOR_CONTEST,
     ACCEPT_INVITE,
-    DECLINE_INVITE
+    DECLINE_INVITE,
+    GET_LEADERBOARD
 } from "../actions";
 
 import {
@@ -61,7 +63,8 @@ import {
     getInvitesForTeamService,
     getInvitesForContestService,
     acceptInviteService,
-    declineInviteService
+    declineInviteService,
+    fetchLeaderBoardService
 } from '../services';
 
 
@@ -156,6 +159,7 @@ function* createTask(action) {
 function* submitSolution(action) {
     yield call(
         submitSolutionService,
+        action.payload.contestId,
         action.payload.taskId,
         action.payload.code,
         action.payload.language
@@ -292,6 +296,16 @@ function* declineInvite(action) {
 }
 
 
+function* fetchLeaderBoard(action) {
+    const { data } = yield call(
+        fetchLeaderBoardService,
+        action.payload.contestId
+    )
+    const { teamsInfo } = data;
+    yield put(setLeaderBoard(teamsInfo));
+}
+
+
 function* watchFetchContest() {
     yield takeEvery(GET_CONTEST, fetchContest);
 }
@@ -397,6 +411,10 @@ function* watchDeclineInvite() {
 }
 
 
+function* watchFetchLeaderBoard() {
+    yield takeEvery(GET_LEADERBOARD, fetchLeaderBoard)
+}
+
 
 export default function* rootSaga() {
     yield all([
@@ -420,6 +438,7 @@ export default function* rootSaga() {
         watchFetchInvitesForTeam(),
         watchFetchInvitesForContest(),
         watchAcceptInvite(),
-        watchDeclineInvite()
+        watchDeclineInvite(),
+        watchFetchLeaderBoard()
     ]);
 }

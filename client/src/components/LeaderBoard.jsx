@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import {withRouter} from "react-router";
 
-import SolutionsTableContainer from "../containers/SolutionsTable";
 import Header from "./Header";
 import {ContestsElement, HomeElement, NavBarElement} from "../utils";
+import LeaderBoardTableContainer from "../containers/LeaderBoardTable";
 
 
-class SolutionsPage extends Component {
+class LeaderBoard extends Component {
     render() {
         const { contest } = this.props;
         if (typeof contest === 'undefined') {
@@ -24,7 +24,7 @@ class SolutionsPage extends Component {
             <div>
                 <Header navBarElements={navBarElements}/>
                 <div className='page'>
-                    <SolutionsTableContainer contest={contest}/>
+                    <LeaderBoardTableContainer contest={contest}/>
                 </div>
             </div>
         )
@@ -32,4 +32,4 @@ class SolutionsPage extends Component {
 }
 
 
-export default withRouter(SolutionsPage);
+export default withRouter(LeaderBoard);

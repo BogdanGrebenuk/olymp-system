@@ -101,7 +101,7 @@ class VerifySolutionHandler(CommandHandler):
                 if answer != task_io.output:
                     return False
             return True
-        except Exception as e:
-            print(e)
+        except Exception as e:  # todo: refactor
+            return False
         finally:
             await docker_manager.close()

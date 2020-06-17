@@ -200,3 +200,7 @@ class GetSolutionParams(Schema):
 class GetSolutionCodeUrlVars(Schema):
     contest_id = fields.String(required=True)
     solution_id = fields.String(required=True)
+
+
+class GetContestLeaderBoardUrlVars(Schema):
+    contest_id = fields.String(required=True)

@@ -10,17 +10,22 @@ import "../assets/styles/TeamPage.scss"
 class TeamPage extends Component {
 
     render() {
-        const { user, team } = this.props;
+        const { user, team, contest } = this.props;
 
         if (typeof team === 'undefined') {
             this.props.onRefreshTeams();
             return <div/>
         }
 
+        if (typeof contest === 'undefined') {
+            this.props.onRefreshContest();
+            return null;
+        }
+
         const navBarElements = [
             HomeElement,
             ContestsElement,
-            new NavBarElement('Contest', `/contests/view/${team.contestId}`),
+            new NavBarElement(contest.name, `/contests/view/${team.contestId}`),
             new NavBarElement('Teams', `/contests/${team.contestId}/teams`),
             // new NavBarElement('Team', this.props.match.url)
         ];

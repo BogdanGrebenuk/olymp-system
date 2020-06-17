@@ -33,12 +33,11 @@ async def create_member(request):
             {'email': user_email}
         )
 
-    # TODO: create is_participant method
     if not requested_user.is_participant():
         raise PermissionException(
             "you can't invite this user!",
             {'user_id': requested_user.id}
-        )  # TODO: raise other exception
+        )
 
     team_members, contest = await gather(
         team_mapper.get_members(engine, team),
