@@ -25,7 +25,7 @@ class ContestItem extends Component {
             imageUrl = `url(${tempImage})`
         }
         else {
-            imageUrl = `url(http://localhost:8000/${contest.imagePath})`
+            imageUrl = `url( http://47d2e7c54767.ngrok.io/${contest.imagePath})`
         }
         return (
             <div className="contest">

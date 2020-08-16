@@ -31,7 +31,7 @@ class ContestPage extends Component {
             imageUrl = tempImage;
         }
         else {
-            imageUrl = `http://localhost:8000/${contest.imagePath}`;
+            imageUrl = `http://47d2e7c54767.ngrok.io/${contest.imagePath}`;
         }
 
         const startDate = moment(new Date(contest.startDate));
