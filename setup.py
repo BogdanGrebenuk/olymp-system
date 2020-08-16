@@ -15,6 +15,6 @@ setup(
         'pyjwt',
         'bcrypt',
         'sqlalchemy',
-        'dateutil'
+        'python-dateutil'
     ]
 )
