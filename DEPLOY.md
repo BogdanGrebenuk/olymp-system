@@ -17,6 +17,12 @@ In the project root create venv and activate it:
 
 `source venv/bin/activate`
 
+Create folders:
+
+`public` in `olymp-system`
+
+`var/logs/dev.log` in `olymp-system/app`
+
 Install packages:
 
 `pip install .`
