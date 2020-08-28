@@ -22,7 +22,7 @@ public
 build
 dist
 init_venv.egg-info
-app/var/logs/*
+var/logs/*
 
 
 app/alembic.ini
