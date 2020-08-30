@@ -1,11 +1,11 @@
 from aiohttp import web
 
-import core.validators as domain_validator
-from commandbus.commands.task import CreateTask
-from db import contest_mapper
-from transformers import transform_task
-from utils.injector import inject
-from utils.injector.entity import Contest, Task
+import app.core.validators as domain_validator
+from app.commandbus.commands.task import CreateTask
+from app.db import contest_mapper
+from app.transformers import transform_task
+from app.utils.injector import inject
+from app.utils.injector.entity import Contest, Task
 
 
 @inject(Contest)

@@ -6,7 +6,7 @@ from typing import Union
 from aiohttp.web import FileField
 from aiopg.sa import Engine
 
-from commandbus.commands.base_command import Command
+from app.commandbus.commands.base_command import Command
 
 
 @dataclass

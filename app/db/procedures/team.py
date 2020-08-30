@@ -1,15 +1,15 @@
 from functools import partial
 from typing import List, Union
 
-from core.team_member import MemberStatus
-from db import contest_mapper
-from db.common import create as _create, get as _get
-from db.entities import (
+from app.core.team_member import MemberStatus
+from app.db import contest_mapper
+from app.db.common import create as _create, get as _get
+from app.db.entities import (
     Team as TeamEntity,
     TeamMember as TeamMemberEntity,
     Contest as ContestEntity
 )
-from db.models import (
+from app.db.models import (
     Team as TeamModel,
     TeamMember as TeamMemberModel,
 )

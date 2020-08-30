@@ -1,14 +1,14 @@
 import asyncio
 import uuid
 
-from commandbus.command_handlers.base_command_handler import CommandHandler
-from commandbus.commands.task import CreateTask
-from db import (
+from app.commandbus.command_handlers.base_command_handler import CommandHandler
+from app.commandbus.commands.task import CreateTask
+from app.db import (
     task_mapper,
     task_io_mapper
 )
-from db.entities.task import Task
-from db.entities.task_io import TaskIO
+from app.db.entities.task import Task
+from app.db.entities.task_io import TaskIO
 
 
 class CreateTaskHandler(CommandHandler):

@@ -8,11 +8,11 @@ from marshmallow import (
     validates_schema
 )
 
-from common import (
+from app.common import (
     MAX_NUMBER_OF_PARTICIPANTS,
     DEFAULT_NUMBER_OF_PARTICIPANTS
 )
-from core.language import get_supported_languages
+from app.core.language import get_supported_languages
 
 
 class MaxParticipantsField(fields.Field):

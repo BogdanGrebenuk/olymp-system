@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from aiopg.sa import Engine
 
-from commandbus.commands.base_command import Command
+from app.commandbus.commands.base_command import Command
 
 
 @dataclass

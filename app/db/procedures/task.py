@@ -1,10 +1,10 @@
 from functools import partial
 from typing import List
 
-from db.common import create as _create, get as _get
-from db.entities.task import Task as TaskEntity
-from db.entities.task_io import TaskIO as TaskIOEntity
-from db.models import (
+from app.db.common import create as _create, get as _get
+from app.db.entities.task import Task as TaskEntity
+from app.db.entities.task_io import TaskIO as TaskIOEntity
+from app.db.models import (
     Task as TaskModel,
     TaskIO as TaskIOModel
 )

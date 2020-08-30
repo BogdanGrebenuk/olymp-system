@@ -1,1 +1,1 @@
-from commandbus.bus import Bus
+from app.commandbus.bus import Bus

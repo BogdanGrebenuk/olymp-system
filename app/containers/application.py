@@ -8,9 +8,9 @@ from aiohttp import web
 from aiopg.sa import Engine
 from dependency_injector import providers, containers
 
-from commandbus import Bus
-from commandbus.middlewares import Resolver
-from utils.executor import Executor
+from app.commandbus import Bus
+from app.commandbus.middlewares import Resolver
+from app.utils.executor import Executor
 
 
 application_container = containers.DynamicContainer()

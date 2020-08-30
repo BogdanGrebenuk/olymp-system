@@ -1,6 +1,6 @@
 import abc
 
-from utils.docker.client import Client
+from app.utils.docker.client import Client
 
 
 class Worker(abc.ABC):

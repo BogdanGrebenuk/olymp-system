@@ -3,8 +3,8 @@ from typing import List, Tuple
 
 from aiopg.sa import Engine
 
-from commandbus.commands.base_command import Command
-from db.entities.contest import Contest
+from app.commandbus.commands.base_command import Command
+from app.db.entities.contest import Contest
 
 
 @dataclass

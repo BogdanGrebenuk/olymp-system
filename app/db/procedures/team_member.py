@@ -3,20 +3,20 @@ from typing import Union
 
 from sqlalchemy.sql.expression import select
 
-from core.user.domain.entity import User as UserEntity
-from db import team_mapper
-from db.common import (
+from app.core.user.domain.entity import User as UserEntity
+from app.db import team_mapper
+from app.db.common import (
     create as _create,
     get as _get,
     update as _update,
     delete as _delete
 )
-from db.entities import (
+from app.db.entities import (
     Contest as ContestEntity,
     Team as TeamEntity,
     TeamMember as TeamMemberEntity,
 )
-from db.models import (
+from app.db.models import (
     Contest as ContestModel,
     TeamMember as TeamMemberModel,
     Team as TeamModel,

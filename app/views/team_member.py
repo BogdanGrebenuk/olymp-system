@@ -2,19 +2,19 @@ from asyncio import gather
 
 from aiohttp import web
 
-from db import (
+from app.db import (
     contest_mapper,
     team_mapper,
     team_member_mapper,
     user_mapper
 )
-from commandbus.commands.team_member import CreateTeamMember
-from core.team_member import MemberStatus
-from exceptions.entity import EntityNotFound
-from exceptions.role import PermissionException
-from transformers import transform_member
-from utils.injector import inject
-from utils.injector.entity import Team, Contest, Invite
+from app.commandbus.commands.team_member import CreateTeamMember
+from app.core.team_member import MemberStatus
+from app.exceptions.entity import EntityNotFound
+from app.exceptions.role import PermissionException
+from app.transformers import transform_member
+from app.utils.injector import inject
+from app.utils.injector.entity import Team, Contest, Invite
 
 
 @inject(Team)

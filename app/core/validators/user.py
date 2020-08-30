@@ -1,7 +1,7 @@
-from core.user.domain.entity import User
-from db.entities import Contest, Team
-from exceptions.entity import EntityNotFound
-from exceptions.role import PermissionException
+from app.core.user.domain.entity import User
+from app.db.entities import Contest, Team
+from app.exceptions.entity import EntityNotFound
+from app.exceptions.role import PermissionException
 
 
 async def get_sent_invites_for_team(user: User, contest: Contest, team: Team):

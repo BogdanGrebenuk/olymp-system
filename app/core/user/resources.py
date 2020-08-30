@@ -1,7 +1,7 @@
-from utils.resource import Resource
-from core.user.containers import controllers
-import core.user.schemas as schemas
-from utils.request import RequestValidator, UrlVariableManager
+import app.core.user.schemas as schemas
+from app.core.user.containers import controllers
+from app.utils.request import RequestValidator, UrlVariableManager
+from app.utils.resource import Resource
 
 
 resources = [

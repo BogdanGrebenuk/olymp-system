@@ -4,7 +4,7 @@ from marshmallow import (
     validate
 )
 
-from core.user.domain.role import get_roles
+from app.core.user.domain.role import get_roles
 
 
 class RegisterUserBody(Schema):

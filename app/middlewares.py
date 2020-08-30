@@ -8,13 +8,13 @@ from dependency_injector.ext import aiohttp as ext_aiohttp
 from jwt.exceptions import ExpiredSignatureError
 from marshmallow import ValidationError
 
-from containers import application_container
-from db import mappers_container
-from exceptions import OlympException
-from resources import resources_map
-from utils.token import token_services_container
-from utils.token import TokenDecoder
-from utils.token import InvalidTokenContent
+from app.containers import application_container
+from app.db import mappers_container
+from app.exceptions import OlympException
+from app.resources import resources_map
+from app.utils.token import token_services_container
+from app.utils.token import TokenDecoder
+from app.utils.token import InvalidTokenContent
 
 
 logger = logging.getLogger(__name__)

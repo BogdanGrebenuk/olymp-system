@@ -2,22 +2,22 @@ import dependency_injector.containers as containers
 import dependency_injector.providers as providers
 from dependency_injector.ext import aiohttp as ext_aiohttp
 
-from containers import application_container
-from core.user.command_handlers import CreateUserHandler
-from core.user.controllers import (
+from app.containers import application_container
+from app.core.user.command_handlers import CreateUserHandler
+from app.core.user.controllers import (
     authenticate_user,
     register_user,
     get_user,
     get_users
 )
 
-from core.user.services import (
+from app.core.user.services import (
     PasswordChecker,
     PasswordGenerator
 )
-from core.user.transformers import UserTransformer
-from db import mappers_container as mapper_container
-from utils.token import token_services_container
+from app.core.user.transformers import UserTransformer
+from app.db import mappers_container as mapper_container
+from app.utils.token import token_services_container
 
 
 services = containers.DynamicContainer()

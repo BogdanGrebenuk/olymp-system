@@ -1,6 +1,7 @@
-from common import ROOT_DIR
-from datetime import datetime
 import dataclasses
+from datetime import datetime
+
+from app.common import ROOT_DIR
 
 
 @dataclasses.dataclass

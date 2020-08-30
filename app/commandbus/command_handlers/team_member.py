@@ -1,9 +1,9 @@
 import uuid
 
-from commandbus.commands.team_member import CreateTeamMember
-from commandbus.command_handlers.base_command_handler import CommandHandler
-from db import team_member_mapper
-from db.entities.team_member import TeamMember
+from app.commandbus.commands.team_member import CreateTeamMember
+from app.commandbus.command_handlers.base_command_handler import CommandHandler
+from app.db import team_member_mapper
+from app.db.entities.team_member import TeamMember
 
 
 class CreateTeamMemberHandler(CommandHandler):

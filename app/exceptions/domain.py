@@ -1,4 +1,4 @@
-from exceptions import OlympException
+from app.exceptions import OlympException
 
 
 class DomainException(OlympException):

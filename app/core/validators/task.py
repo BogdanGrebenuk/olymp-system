@@ -1,9 +1,9 @@
-from core.user.domain.entity import User
-from core.validators.contest_resource import get_contest_resources
-from db.entities import Contest, Task
-from exceptions.domain import DomainException
-from exceptions.entity import EntityNotFound
-from exceptions.role import PermissionException
+from app.core.user.domain.entity import User
+from app.core.validators.contest_resource import get_contest_resources
+from app.db.entities import Contest, Task
+from app.exceptions.domain import DomainException
+from app.exceptions.entity import EntityNotFound
+from app.exceptions.role import PermissionException
 
 
 async def get_tasks(engine, user: User, contest: Contest):

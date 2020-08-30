@@ -1,8 +1,8 @@
 from aiohttp import web
 from aiopg.sa import Engine
 
-from core.user.transformers import UserTransformer
-from exceptions.entity import EntityNotFound
+from app.core.user.transformers import UserTransformer
+from app.exceptions.entity import EntityNotFound
 
 
 async def get_user(

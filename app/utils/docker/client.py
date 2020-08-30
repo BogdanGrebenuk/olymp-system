@@ -1,4 +1,5 @@
-from utils.docker import client
+from app.utils.docker import client
+# TODO: rename module? looks very bad
 
 
 class Client:

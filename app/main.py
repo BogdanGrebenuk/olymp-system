@@ -3,21 +3,21 @@ from aiohttp import web
 from dependency_injector import providers
 from dependency_injector.ext import aiohttp as ext_aiohttp
 
-from common import PUBLIC_DIR
-from db.utils import init_pg, close_pg
-from commandbus import Bus
-from commandbus.middlewares import Resolver
-from containers import application_container
-from core.user.containers import command_handlers
-from middlewares import middlewares_container
-from resources import setup_routes, resources
-from settings import config
-from utils.executor import Executor
-from utils.executor.utils import init_pools, close_pools
-from utils.logger import init_logging
+from app.common import PUBLIC_DIR
+from app.db.utils import init_pg, close_pg
+from app.commandbus import Bus
+from app.commandbus.middlewares import Resolver
+from app.containers import application_container
+from app.core.user.containers import command_handlers
+from app.middlewares import middlewares_container
+from app.resources import setup_routes, resources
+from app.settings import config
+from app.utils.executor import Executor
+from app.utils.executor.utils import init_pools, close_pools
+from app.utils.logger import init_logging
 
 
-if __name__ == '__main__':
+def create_app():
     application_container.config.from_dict(config)
     application_container.app.provided_by(
         ext_aiohttp.Application(web.Application)
@@ -84,6 +84,12 @@ if __name__ == '__main__':
 
     for route in app.router.routes():
         cors.add(route)
+
+    return app
+
+
+if __name__ == '__main__':
+    app = create_app()
 
     host = config['app']['host']
     port = config['app']['port']

@@ -1,9 +1,9 @@
 import uuid
 
-from commandbus.command_handlers.base_command_handler import CommandHandler
-from core.user.commands import CreateUser
-from core.user.services import PasswordGenerator
-from core.user.domain.entity import User
+from app.commandbus.command_handlers.base_command_handler import CommandHandler
+from app.core.user.commands import CreateUser
+from app.core.user.services import PasswordGenerator
+from app.core.user.domain.entity import User
 
 
 class CreateUserHandler(CommandHandler):

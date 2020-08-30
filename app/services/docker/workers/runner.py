@@ -1,11 +1,11 @@
 from concurrent.futures import Executor
 from functools import partial
 
-import utils.executor as executor
-from db.entities.solution import Solution
-from services.docker.meta import DockerMeta
-from services.docker.workers.interface import Runner
-from utils.docker.tag import create_tag
+import app.utils.executor as executor
+from app.db.entities.solution import Solution
+from app.services.docker.meta import DockerMeta
+from app.services.docker.workers.interface import Runner
+from app.utils.docker.tag import create_tag
 
 
 class DefaultRunner(Runner):

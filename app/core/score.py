@@ -2,7 +2,7 @@ from collections import defaultdict
 
 from typing import List
 
-from db.entities import Solution, Contest
+from app.db.entities import Solution, Contest
 
 
 # todo: refactor..

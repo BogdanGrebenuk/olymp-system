@@ -1,8 +1,8 @@
 from aiohttp import web
 from aiopg.sa import Engine
 
-from core.user.services import PasswordChecker
-from utils.token import TokenGenerator
+from app.core.user.services import PasswordChecker
+from app.utils.token import TokenGenerator
 
 
 async def authenticate_user(

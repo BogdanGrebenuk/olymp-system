@@ -1,9 +1,9 @@
-from core.user.domain.entity import User
-from db import (
+from app.core.user.domain.entity import User
+from app.db import (
     user_mapper
 )
-from db.entities import Team, Contest
-from exceptions.role import PermissionException
+from app.db.entities import Team, Contest
+from app.exceptions.role import PermissionException
 
 
 async def get_team_resources(

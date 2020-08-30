@@ -1,44 +1,44 @@
-import validators.schemas as schemas
-from core.user.resources import resources as user_resources
-from core.user.domain.role import UserRole
-from utils.resource import SingleParamChooser, combine_resources, Resource
-from utils.request import (
+import app.validators.schemas as schemas
+from app.core.user.resources import resources as user_resources
+from app.core.user.domain.role import UserRole
+from app.utils.resource import SingleParamChooser, combine_resources, Resource
+from app.utils.request import (
     RequestValidator,
     DataFormManager,
     ParamsManager,
     UrlVariableManager
 )
-from views.contest import (
+from app.views.contest import (
     create_contest,
     get_contests,
     get_contest,
     get_leader_board
 )
-from views.solution import (
+from app.views.solution import (
     create_solution,
     get_solutions_for_contest,
     get_solutions_for_team,
     get_solution_code
 )
-from views.task import (
+from app.views.task import (
     create_task,
     get_tasks,
     get_task
 )
-from views.team import (
+from app.views.team import (
     create_team,
     get_teams_for_contest,
     get_teams_for_contest_and_creator,
     get_team
 )
-from views.team_member import (
+from app.views.team_member import (
     create_member,
     get_accepted_members,
     accept_invite,
     decline_accept,
     delete_member
 )
-from views.user import (
+from app.views.user import (
     get_sent_invites_for_team,
     get_received_invites_for_contest
 )

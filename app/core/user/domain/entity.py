@@ -1,6 +1,6 @@
 import dataclasses
 
-from core.user.domain.role import UserRole
+from app.core.user.domain.role import UserRole
 
 
 @dataclasses.dataclass

@@ -1,11 +1,11 @@
 from aiohttp import web
 
-import core.validators as domain_validator
-from core.team_member import MemberStatus
-from db import user_mapper, team_mapper
-from transformers import transform_invite
-from utils.injector import inject
-from utils.injector.entity import Contest, Team
+import app.core.validators as domain_validator
+from app.core.team_member import MemberStatus
+from app.db import user_mapper, team_mapper
+from app.transformers import transform_invite
+from app.utils.injector import inject
+from app.utils.injector.entity import Contest, Team
 
 
 @inject(Contest, Team)

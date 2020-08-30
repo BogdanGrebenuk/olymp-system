@@ -3,13 +3,13 @@ from typing import List
 
 from sqlalchemy.sql import select
 
-from db.common import create as _create, get as _get
-from db.entities import (
+from app.db.common import create as _create, get as _get
+from app.db.entities import (
     Contest as ContestEntity,
     Task as TaskEntity,
     Team as TeamEntity
 )
-from db.models import (
+from app.db.models import (
     Contest as ContestModel,
     Task as TaskModel,
     Team as TeamModel

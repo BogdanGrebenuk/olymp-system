@@ -2,9 +2,9 @@ import abc
 from os import PathLike
 from pathlib import Path
 
-from db.entities import Solution
-from core.language import Language
-from exceptions.domain import LanguageNotFound
+from app.db.entities import Solution
+from app.core.language import Language
+from app.exceptions.domain import LanguageNotFound
 
 
 class CodeManager(abc.ABC):

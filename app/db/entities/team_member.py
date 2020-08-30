@@ -1,6 +1,6 @@
 import dataclasses
 
-from core.team_member import MemberStatus
+from app.core.team_member import MemberStatus
 
 
 @dataclasses.dataclass

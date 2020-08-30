@@ -1,1 +1,1 @@
-from containers.application import application_container
+from app.containers.application import application_container

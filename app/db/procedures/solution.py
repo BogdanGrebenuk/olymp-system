@@ -3,19 +3,19 @@ from typing import List
 
 from sqlalchemy.sql import select
 
-from db.common import (
+from app.db.common import (
     create as _create,
     get as _get,
     get_all as _get_all,
     update as _update
 )
-from db.entities import (
+from app.db.entities import (
     Solution as SolutionEntity,
     Contest as ContestEntity,
     Team as TeamEntity
 )
 
-from db.models import (
+from app.db.models import (
     Solution as SolutionModel,
     Task as TaskModel,
 )
@@ -34,7 +34,7 @@ update = partial(_update, model=SolutionModel)
 
 
 async def get_team(engine, solution: SolutionEntity) -> TeamEntity:
-    from db import team_mapper  # TODO: investgate what can i do with it
+    from app.db import team_mapper  # TODO: investgate what can i do with it
     return await team_mapper.get(engine, solution.team_id)
 
 

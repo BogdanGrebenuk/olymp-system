@@ -1,13 +1,13 @@
 import uuid
 from functools import partial
 
-import utils.executor as executor
-from db import contest_mapper
-from commandbus.command_handlers.base_command_handler import CommandHandler
-from commandbus.commands.contest import CreateContest, GenerateContestImagePath
-from common import ROOT_DIR, PUBLIC_DIR
-from db.entities.contest import Contest
-from utils.filesystem import save_file_field_image
+import app.utils.executor as executor
+from app.db import contest_mapper
+from app.commandbus.command_handlers.base_command_handler import CommandHandler
+from app.commandbus.commands.contest import CreateContest, GenerateContestImagePath
+from app.common import ROOT_DIR, PUBLIC_DIR
+from app.db.entities.contest import Contest
+from app.utils.filesystem import save_file_field_image
 
 
 class CreateContestHandler(CommandHandler):

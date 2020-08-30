@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from commandbus.commands.base_command import Command
+from app.commandbus.commands.base_command import Command
 
 
 @dataclass

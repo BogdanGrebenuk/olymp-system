@@ -3,22 +3,22 @@ from datetime import datetime
 from dateutil.tz import tzutc
 from functools import partial
 
-import utils.executor as executor
-from commandbus.command_handlers.base_command_handler import CommandHandler
-from commandbus.commands.solution import (
+import app.utils.executor as executor
+from app.commandbus.command_handlers.base_command_handler import CommandHandler
+from app.commandbus.commands.solution import (
     CreateSolution,
     SaveSolutionCode,
     PrepareSolutionDir,
     VerifySolution
 )
-from common import CODE_DIR, ROOT_DIR
-from db import (
+from app.common import CODE_DIR, ROOT_DIR
+from app.db import (
     solution_mapper,
     task_mapper
 )
-from db.entities.solution import Solution
-from services.codesaver import DefaultCodeManager
-from services.docker.manager import DockerManager
+from app.db.entities.solution import Solution
+from app.services.codesaver import DefaultCodeManager
+from app.services.docker.manager import DockerManager
 
 
 class CreateSolutionHandler(CommandHandler):

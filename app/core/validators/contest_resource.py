@@ -1,7 +1,7 @@
-from core.user.domain.entity import User
-from db import user_mapper
-from db.entities import Contest
-from exceptions.role import PermissionException
+from app.core.user.domain.entity import User
+from app.db import user_mapper
+from app.db.entities import Contest
+from app.exceptions.role import PermissionException
 
 
 async def get_contest_resources(engine, user: User, contest: Contest):

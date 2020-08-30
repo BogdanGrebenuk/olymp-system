@@ -1,4 +1,4 @@
-from core.user.domain.entity import User
+from app.core.user.domain.entity import User
 
 
 class UserTransformer:

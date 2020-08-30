@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from db.entities import (
+from app.db.entities import (
     Contest,
     Task,
     TeamMember,

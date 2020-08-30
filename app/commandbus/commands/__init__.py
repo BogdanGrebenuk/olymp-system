@@ -1,2 +1,2 @@
-import commandbus.commands.solution
+import app.commandbus.commands.solution
 

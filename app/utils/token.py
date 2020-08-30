@@ -3,8 +3,8 @@ import time
 import jwt
 from dependency_injector import providers, containers
 
-from containers.application import application_container
-from exceptions import OlympException
+from app.containers.application import application_container
+from app.exceptions import OlympException
 
 
 class TokenException(OlympException):

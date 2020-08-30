@@ -1,4 +1,4 @@
-from db import (
+from app.db import (
     contest_mapper,
     task_mapper,
     team_mapper,
@@ -6,8 +6,8 @@ from db import (
     team_member_mapper,
     solution_mapper
 )
-from exceptions.entity import EntityNotFound
-from utils.injector import default_extractor
+from app.exceptions.entity import EntityNotFound
+from app.utils.injector import default_extractor
 
 
 class Entity:

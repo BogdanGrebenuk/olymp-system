@@ -1,12 +1,12 @@
 from aiohttp import web
 
-import core.validators as domain_validator
-from commandbus.commands.team import CreateTeam
-from db import user_mapper
-from exceptions.entity import EntityNotFound
-from transformers import transform_team
-from utils.injector import inject
-from utils.injector.entity import (
+import app.core.validators as domain_validator
+from app.commandbus.commands.team import CreateTeam
+from app.db import user_mapper
+from app.exceptions.entity import EntityNotFound
+from app.transformers import transform_team
+from app.utils.injector import inject
+from app.utils.injector.entity import (
     Contest,
     Team,
     Creator

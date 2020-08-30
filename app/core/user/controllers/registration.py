@@ -2,9 +2,9 @@ from aiohttp import web
 
 from aiopg.sa import Engine
 
-from commandbus import Bus
-from core.user.commands import CreateUser
-from core.user.transformers import UserTransformer
+from app.commandbus import Bus
+from app.core.user.commands import CreateUser
+from app.core.user.transformers import UserTransformer
 
 
 async def register_user(

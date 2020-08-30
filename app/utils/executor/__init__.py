@@ -1,1 +1,1 @@
-from utils.executor.executor import Executor
+from app.utils.executor.executor import Executor

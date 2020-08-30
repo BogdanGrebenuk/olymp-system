@@ -3,7 +3,7 @@ from typing import Union, List, Callable, Awaitable
 
 from aiohttp.web_request import BaseRequest
 
-from utils.request import Validator
+from app.utils.request import Validator
 
 
 @dataclass

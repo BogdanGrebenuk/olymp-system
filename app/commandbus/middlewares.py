@@ -1,6 +1,6 @@
 import abc
 
-from commandbus.exceptions import HandlerNotFoundException
+from app.commandbus.exceptions import HandlerNotFoundException
 
 
 class Middleware(abc.ABC):

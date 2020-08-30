@@ -3,16 +3,16 @@ from collections import defaultdict
 
 from aiohttp import web
 
-from commandbus.commands.contest import CreateContest
-from core.score import get_total_score
-from db import contest_mapper, solution_mapper
-from transformers import (
+from app.commandbus.commands.contest import CreateContest
+from app.core.score import get_total_score
+from app.db import contest_mapper, solution_mapper
+from app.transformers import (
     transform_contest,
     transform_team,
     transform_solution
 )
-from utils.injector import inject
-from utils.injector.entity import Contest
+from app.utils.injector import inject
+from app.utils.injector.entity import Contest
 
 
 async def create_contest(request):

@@ -2,9 +2,9 @@ from concurrent.futures import Executor
 
 from docker.errors import APIError
 
-from db.entities.solution import Solution
-from services.docker.meta import get_language_meta
-from services.docker.workers import DefaultCompiler, DefaultRunner
+from app.db.entities.solution import Solution
+from app.services.docker.meta import get_language_meta
+from app.services.docker.workers import DefaultCompiler, DefaultRunner
 
 
 class DockerManager:

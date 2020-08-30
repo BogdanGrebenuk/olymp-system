@@ -3,21 +3,21 @@ from pathlib import Path
 
 from aiohttp import web
 
-import core.validators as domain_validator
-import utils.executor as executor
-from commandbus.commands.solution import (
+import app.core.validators as domain_validator
+import app.utils.executor as executor
+from app.commandbus.commands.solution import (
     CreateSolution,
     VerifySolution
 )
-from db import (
+from app.db import (
     solution_mapper,
     user_mapper
 )
-from exceptions.role import PermissionException
-from services.codesaver import DefaultCodeManager
-from transformers import transform_solution
-from utils.injector import inject
-from utils.injector.entity import Task, Contest, Team, Solution
+from app.exceptions.role import PermissionException
+from app.services.codesaver import DefaultCodeManager
+from app.transformers import transform_solution
+from app.utils.injector import inject
+from app.utils.injector.entity import Task, Contest, Team, Solution
 
 
 @inject(Contest, Task)
