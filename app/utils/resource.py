@@ -1,3 +1,20 @@
+from dataclasses import dataclass
+from typing import Union, List, Callable, Awaitable
+
+from aiohttp.web_request import BaseRequest
+
+from utils.request import Validator
+
+
+@dataclass
+class Resource:
+    method: str
+    url: str
+    allowed_roles: Union[List, None]  # if None, there is no restrictions
+    validators: List[Validator]
+    handler: Callable[[BaseRequest], Awaitable]
+
+
 class SingleParamChooser:
     """Class that implement custom route resolving
     basing on presence of specified query parameter
@@ -21,3 +38,10 @@ class SingleParamChooser:
             return await self.found_handler(request)
         else:
             return await self.missing_handler(request)
+
+
+def combine_resources(*resources):
+    result = []
+    for r in resources:
+        result += r
+    return result

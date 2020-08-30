@@ -1,7 +1,10 @@
 import aiopg.sa
+from dependency_injector import providers
 
 
-async def init_pg(app, config):
+async def init_pg(app):
+    container = app['container']
+    config = container.config()
     database_info = config['database']
     engine = await aiopg.sa.create_engine(
         database=database_info['name'],
@@ -10,7 +13,11 @@ async def init_pg(app, config):
         host=database_info['host'],
         port=database_info['port']
     )
+    container.engine.provided_by(
+        providers.Object(engine)
+    )
     app['db'] = engine
+    app['engine'] = engine
 
 
 async def close_pg(app):

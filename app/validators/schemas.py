@@ -13,8 +13,6 @@ from common import (
     DEFAULT_NUMBER_OF_PARTICIPANTS
 )
 from core.language import get_supported_languages
-from core.user_role import get_roles
-
 
 
 class MaxParticipantsField(fields.Field):
@@ -105,20 +103,6 @@ class CreateTaskBody(Schema):
     )
 
 
-class RegisterUserBody(Schema):
-    first_name = fields.String(required=True, validate=validate.Length(min=1))
-    last_name = fields.String(required=True, validate=validate.Length(min=1))
-    patronymic = fields.String(required=True, validate=validate.Length(min=1))
-    email = fields.Email(required=True)
-    password = fields.String(required=True, validate=validate.Length(min=1))
-    role = fields.String(required=True, validate=validate.OneOf(get_roles()))
-
-
-class AuthenticateUserBody(Schema):
-    email = fields.Email(required=True)
-    password = fields.String(required=True, validate=validate.Length(min=1))
-
-
 class CreateTeamBody(Schema):
     name = fields.String(required=True, validate=validate.Length(min=1))
     contest_id = fields.String(required=True)
@@ -160,10 +144,6 @@ class GetTaskUrlVars(Schema):
 
 class GetContestUrlVars(Schema):
     contest_id = fields.String(required=True)
-
-
-class GetUserUrlVars(Schema):
-    user_id = fields.String(required=True)
 
 
 class GetTeamsForContestUrlVars(Schema):

@@ -1,17 +1,8 @@
-class CommandHandler:
-    """Base command handler class
+import abc
 
-    Used by resolver for detecting command handlers.
-    Inherit your command handler class from this class.
-    Also be sure handler has `{CommandClassName}Handler` name format
 
-    The only way to obtain bus in handler - get it from attr `bus`
-
-    """
-
-    def __init__(self):
-        from commandbus.bus import Bus
-        # Import is here because of solving cyclic imports.
-        # Command handlers may need bus instance but it can't be retrieved
-        # in module-level due to resolving command handlers while instantiating package
-        self.bus = Bus.from_default()
+class CommandHandler(abc.ABC):
+    """Abstract class for command handlers"""
+    @abc.abstractmethod
+    def handle(self, command):
+        ...

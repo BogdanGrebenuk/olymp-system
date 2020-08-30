@@ -8,7 +8,6 @@ from core.validators.team import (
     get_team
 )
 from core.validators.user import (
-    create_user,
     get_sent_invites_for_team
 )
 from core.validators.solution import (

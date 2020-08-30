@@ -9,13 +9,12 @@ from db import (
     user_mapper
 )
 from commandbus.commands.team_member import CreateTeamMember
-from core.user_role import UserRole
 from core.team_member import MemberStatus
 from exceptions.entity import EntityNotFound
 from exceptions.role import PermissionException
 from transformers import transform_member
 from utils.injector import inject
-from utils.injector.entity import Team, Member, Contest, Invite
+from utils.injector.entity import Team, Contest, Invite
 
 
 @inject(Team)

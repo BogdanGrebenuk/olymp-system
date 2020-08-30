@@ -1,5 +1,6 @@
 from setuptools import setup
 
+
 setup(
     name="olymp-system",
     version="0.1",
@@ -15,6 +16,7 @@ setup(
         'pyjwt',
         'bcrypt',
         'sqlalchemy',
-        'python-dateutil'
+        'python-dateutil',
+        'dependency-injector'
     ]
 )

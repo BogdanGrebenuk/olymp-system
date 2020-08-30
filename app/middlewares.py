@@ -1,18 +1,20 @@
 import logging
 from asyncio import gather
-from functools import partial
 
 from aiohttp import web
+from aiopg.sa import Engine
+from dependency_injector import containers
+from dependency_injector.ext import aiohttp as ext_aiohttp
 from jwt.exceptions import ExpiredSignatureError
 from marshmallow import ValidationError
 
-import utils.executor as executor
-from db import user_mapper
+from containers import application_container
+from db import mappers_container
 from exceptions import OlympException
-from exceptions.token import InvalidTokenContent
-from exceptions.role import PermissionException
 from resources import resources_map
-from utils.token import decode_token, get_token
+from utils.token import token_services_container
+from utils.token import TokenDecoder
+from utils.token import InvalidTokenContent
 
 
 logger = logging.getLogger(__name__)
@@ -55,7 +57,14 @@ async def request_logger(request, handler):
 
 
 @web.middleware
-async def user_injector(request, handler):
+async def user_injector(
+        request,
+        handler,
+        token_extractor,
+        token_decoder: TokenDecoder,
+        user_mapper,
+        engine: Engine
+        ):
     rel_url = str(request.rel_url)
     if not rel_url.startswith('/api'):
         return await handler(request)
@@ -63,23 +72,12 @@ async def user_injector(request, handler):
     if request.method == 'OPTIONS':
         return await handler(request)
 
-    token = get_token(request)
-
-    pool = request.app['process_pool']
-    engine = request.app['db']
-    token_config = request.app['config']['token']
-
-    task = partial(
-        decode_token,
-
-        token,
-        token_config
-    )
+    token = token_extractor.extractor(request)
     try:
-        payload = await executor.run(task, pool)
+        payload = await token_decoder.decode(token)
     except ExpiredSignatureError:
         return web.json_response({
-            'error': 'token signature has expired! log in again',
+            'error': 'Token signature has expired! Log in again',
             'payload': {}
         }, status=400)
 
@@ -93,36 +91,14 @@ async def user_injector(request, handler):
 
 
 @web.middleware
-async def permission_checker(request, handler):
+async def request_validator(
+        request,
+        handler,
+        resources_map
+        ):
     if request.method == 'OPTIONS':
         return await handler(request)
 
-    # TODO: make a function for getting resource
-    resource = resources_map.get(
-        (
-            request.method,
-            request.match_info.route.resource.canonical
-        )
-    )
-    if resource is None:
-        return await handler(request)  # pass request ro resolver for 404
-    if (
-            resource.allowed_roles is not None
-            and
-            request['user'].get_user_role() not in resource.allowed_roles
-            ):
-        raise PermissionException(
-            "you don't have permissions for this resource!"
-        )
-    return await handler(request)
-
-
-@web.middleware
-async def request_validator(request, handler):
-    if request.method == 'OPTIONS':
-        return await handler(request)
-
-    # TODO: make a function for getting resource
     resource = resources_map.get(
         (
             request.method,
@@ -137,3 +113,23 @@ async def request_validator(request, handler):
             for validator in resource.validators
         ])
     return await handler(request)
+
+
+middlewares_container = containers.DynamicContainer()
+middlewares_container.error_handler = ext_aiohttp.Middleware(
+    error_handler
+)
+middlewares_container.request_logger = ext_aiohttp.Middleware(
+    request_logger
+)
+middlewares_container.user_injector = ext_aiohttp.Middleware(
+    user_injector,
+    token_extractor=token_services_container.token_extractor,
+    token_decoder=token_services_container.token_decoder,
+    user_mapper=mappers_container.user_mapper,
+    engine=application_container.engine
+)
+middlewares_container.request_validator = ext_aiohttp.Middleware(
+    request_validator,
+    resources_map=resources_map
+)

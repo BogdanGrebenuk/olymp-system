@@ -1,0 +1,1 @@
+from containers.application import application_container

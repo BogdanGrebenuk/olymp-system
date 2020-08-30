@@ -1,18 +1,7 @@
-from db import user_mapper
-from db.entities import User, Contest, Team
-from exceptions.domain import DomainException
+from core.user.domain.entity import User
+from db.entities import Contest, Team
 from exceptions.entity import EntityNotFound
 from exceptions.role import PermissionException
-
-
-# actually this is not the domain..
-async def create_user(engine, email):
-    user = await user_mapper.get_user_by_email(engine, email)
-    if user is not None:
-        raise DomainException(
-            'there is already a user with such email!',
-            {'email': email}
-        )
 
 
 async def get_sent_invites_for_team(user: User, contest: Contest, team: Team):

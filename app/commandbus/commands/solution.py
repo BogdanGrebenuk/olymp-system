@@ -5,11 +5,11 @@ from pathlib import Path
 from aiopg.sa import Engine
 
 from commandbus.commands.base_command import Command
+from core.user.domain.entity import User
 from db.entities import (
     Contest,
     Solution,
     Task,
-    User,
     Team
 )
 

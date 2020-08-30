@@ -1,13 +1,8 @@
-from dataclasses import dataclass
-from typing import Callable, List, Union, Awaitable
-
-from aiohttp.web import BaseRequest
-
 import validators.schemas as schemas
-from core.user_role import UserRole
-from utils.resource import SingleParamChooser
-from validators import Validator
-from validators.request import (
+from core.user.resources import resources as user_resources
+from core.user.domain.role import UserRole
+from utils.resource import SingleParamChooser, combine_resources, Resource
+from utils.request import (
     RequestValidator,
     DataFormManager,
     ParamsManager,
@@ -44,39 +39,11 @@ from views.team_member import (
     delete_member
 )
 from views.user import (
-    authenticate_user,
-    register_user,
     get_sent_invites_for_team,
-    get_received_invites_for_contest,
-    get_users,
-    get_user
+    get_received_invites_for_contest
 )
 
-
-@dataclass
-class Resource:
-    method: str
-    url: str
-    allowed_roles: Union[List[UserRole], None]  # if None, there is no restrictions
-    validators: List[Validator]
-    handler: Callable[[BaseRequest], Awaitable]
-
-
 resources = [
-    Resource(
-        method='POST',
-        url='/users',
-        allowed_roles=None,
-        validators=[RequestValidator(schemas.RegisterUserBody)],
-        handler=register_user
-    ),
-    Resource(
-        method='POST',
-        url='/login',
-        allowed_roles=None,
-        validators=[RequestValidator(schemas.AuthenticateUserBody)],
-        handler=authenticate_user
-    ),
     Resource(
         method='GET',
         url='/api/contests',
@@ -301,25 +268,6 @@ resources = [
         ],
         handler=get_received_invites_for_contest
     ),
-    Resource(
-        method='GET',
-        url='/api/users/{user_id}',
-        allowed_roles=None,
-        validators=[
-            RequestValidator(
-                schemas.GetUserUrlVars,
-                data_manager=UrlVariableManager
-            )
-        ],
-        handler=get_user
-    ),
-    Resource(
-        method='GET',
-        url='/api/users',
-        allowed_roles=None,
-        validators=[],
-        handler=get_users
-    ),
     # TODO: reinvestigate this resource
     Resource(
         method='GET',
@@ -334,6 +282,11 @@ resources = [
         handler=get_leader_board
     )
 ]
+
+resources = combine_resources(
+    resources,
+    user_resources
+)
 
 
 resources_map = {

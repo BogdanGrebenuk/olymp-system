@@ -1,6 +1,7 @@
+from core.user.domain.entity import User
 from core.validators.contest_resource import get_contest_resources
 from core.validators.team_resource import get_team_resources
-from db.entities import User, Contest, Team, Task, Solution
+from db.entities import Contest, Team, Task, Solution
 from exceptions.entity import EntityNotFound
 from exceptions.role import PermissionException
 

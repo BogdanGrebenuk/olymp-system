@@ -4,11 +4,9 @@ from db.entities import (
     Contest,
     Task,
     TeamMember,
-    User,
     Team,
     Solution
 )
-from services.codesaver import get_code
 
 
 def transform_datetime(dt: datetime):
@@ -55,17 +53,6 @@ def transform_member(member: TeamMember):
         'userId': member.user_id,
         'teamId': member.team_id,
         'status': member.status
-    }
-
-
-def transform_user(user: User):
-    return {
-        'id': user.id,
-        'email': user.email,
-        'firstName': user.first_name,
-        'lastName': user.last_name,
-        'role': user.role,
-        'patronymic': user.patronymic
     }
 
 

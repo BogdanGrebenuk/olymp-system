@@ -1,4 +1,11 @@
-from commandbus.middlewares import Resolver
+class Bus:
+
+    def __init__(self, middlewares):
+        self._middlewares = middlewares
+        self._chain = _build_chain(middlewares)
+
+    async def execute(self, command):
+        return await self._chain(command)
 
 
 def _create_closure(middleware, execution_chain):
@@ -14,18 +21,3 @@ def _build_chain(middlewares):
         execution_chain = _create_closure(middleware, execution_chain)
 
     return execution_chain
-
-
-class Bus:
-
-    def __init__(self, middlewares):
-        self._middlewares = middlewares
-        self._chain = _build_chain(middlewares)
-
-    async def execute(self, command):
-        return await self._chain(command)
-
-    @classmethod
-    def from_default(cls):
-        return Bus([Resolver()])
-

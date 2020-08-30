@@ -1,16 +1,27 @@
-from commandbus.command_handlers.base_command_handler import CommandHandler
+import abc
+
 from commandbus.exceptions import HandlerNotFoundException
 
 
-class Resolver:
+class Middleware(abc.ABC):
 
-    def __init__(self, command_handler_base=CommandHandler):
-        self.command_handler_base = command_handler_base
-
+    @abc.abstractmethod
     async def __call__(self, command, next_):
+        ...
+
+
+class Resolver(Middleware):
+
+    def __init__(self, command_handler_containers=None):
+        if command_handler_containers is None:
+            command_handler_containers = []
+        self.command_handler_containers = command_handler_containers
+
+    async def __call__(self, command, next):
         command_cls = type(command).__name__
         handler_name = f"{command_cls}Handler"
-        for cls in self.command_handler_base.__subclasses__():
-            if cls.__name__ == handler_name:
-                return await cls().handle(command)
+        for container in self.command_handler_containers:
+            for _, provider in container.providers.items():
+                if provider.cls.__name__ == handler_name:
+                    return await provider().handle(command)
         raise HandlerNotFoundException(f'there is no handler for {command_cls}!')

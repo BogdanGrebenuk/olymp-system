@@ -3,6 +3,7 @@ from typing import Union
 
 from sqlalchemy.sql.expression import select
 
+from core.user.domain.entity import User as UserEntity
 from db import team_mapper
 from db.common import (
     create as _create,
@@ -14,7 +15,6 @@ from db.entities import (
     Contest as ContestEntity,
     Team as TeamEntity,
     TeamMember as TeamMemberEntity,
-    User as UserEntity
 )
 from db.models import (
     Contest as ContestModel,

@@ -1,7 +1,8 @@
+from core.user.domain.entity import User
 from db import (
     user_mapper
 )
-from db.entities import User, Team, Contest
+from db.entities import Team, Contest
 from exceptions.role import PermissionException
 
 

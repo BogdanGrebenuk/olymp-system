@@ -4,7 +4,7 @@ from aiopg.sa import Engine
 
 from commandbus.commands.base_command import Command
 from db.entities.team import Team
-from db.entities.user import User
+from core.user.domain.entity import User
 from core.team_member import MemberStatus
 
 

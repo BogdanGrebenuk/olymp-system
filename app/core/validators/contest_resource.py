@@ -1,5 +1,6 @@
+from core.user.domain.entity import User
 from db import user_mapper
-from db.entities import Contest, User
+from db.entities import Contest
 from exceptions.role import PermissionException
 
 

@@ -4,16 +4,15 @@ from typing import Union, List
 from sqlalchemy.sql import select, exists
 
 from core.team_member import MemberStatus
+from core.user.domain.entity import User as UserEntity
 from db.common import create as _create, get as _get
 from db.entities import (
-    User as UserEntity,
     Contest as ContestEntity,
     Team as TeamEntity,
     TeamMember as TeamMemberEntity
 )
 from db.models import (
     User as UserModel,
-    Contest as ContestModel,
     Team as TeamModel,
     TeamMember as TeamMemberModel
 )
