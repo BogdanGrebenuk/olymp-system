@@ -9,7 +9,7 @@ String.prototype.format = function () {
 };
 
 
-const BASE_URL = 'http://47d2e7c54767.ngrok.io/';
+const BASE_URL = 'http://localhost:8000/';
 const API_URL = BASE_URL.concat('api/');
 
 const GET_CONTESTS_URL = API_URL.concat('contests');
