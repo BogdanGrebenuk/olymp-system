@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 
-from settings import config
+from app.settings import config
+
 
 database_info = config['database']
 DSN = "postgresql://{user}:{password}@{host}:{port}/{database}"

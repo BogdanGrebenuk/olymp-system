@@ -5,39 +5,28 @@
 - python3.7
 - postgres10
 
-Make sure there is UTC timezone in your db.
 
-Edit  `/etc/postgresql/10/main/postgresql.conf` file and place `timezone='UTC'`, then restart postgresql service
+- Make sure there is UTC timezone in your db.
 
-`sudo service postgresql restart` 
+    - edit  `/etc/postgresql/10/main/postgresql.conf` file and place `timezone='UTC'`
+    - restart postgresql service: `sudo service postgresql restart` 
 
-In the project root create venv and activate it:
+- In the project's root (olymp-system) create venv and activate it:
 
-`python3.7 -m venv venv`
+    `python3.7 -m venv venv`
 
-`source venv/bin/activate`
+    `source venv/bin/activate`
 
-Create folders:
+- Create folders:
 
-`public` in `olymp-system`
+    - `olymp-system/public`
 
-`var/logs/dev.log` in `olymp-system/app`
+    - `olymp-system/var/logs`
 
-Install packages:
+- Install packages (in `olymp-system`): `pip install .`
 
-`pip install .`
+- Init db (in `olymp-system`): `PYTHONPATH='.' python app/console/init_db.py`
 
-Init db:
+- Run migrations (in `olymp-system/app`): `PYTHONPATH='..' alembic upgrade head`
 
-`python app/init_db.py`
-
-
-Run migrations (set `PYTHONPATH='.'` before ):
-
-`alembic upgrade head`
-
-Run server:
-
-`cd app`
-
-`python main.py`
+- Run server (in `olymp-system`): `python -m app`
