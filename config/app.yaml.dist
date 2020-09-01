@@ -41,7 +41,7 @@ loggers:
             formatter: simple
             filename: var/logs/dev.log
     loggers:
-        middlewares:
+        app.middlewares:
             level: INFO
             handlers: [console]
             propagate: no

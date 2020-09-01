@@ -72,7 +72,7 @@ async def user_injector(
     if request.method == 'OPTIONS':
         return await handler(request)
 
-    token = token_extractor.extractor(request)
+    token = token_extractor(request)
     try:
         payload = await token_decoder.decode(token)
     except ExpiredSignatureError:
