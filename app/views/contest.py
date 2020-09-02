@@ -8,8 +8,7 @@ from app.core.score import get_total_score
 from app.db import contest_mapper, solution_mapper
 from app.transformers import (
     transform_contest,
-    transform_team,
-    transform_solution
+    transform_team
 )
 from app.utils.injector import inject
 from app.utils.injector.entity import Contest

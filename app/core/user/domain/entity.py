@@ -1,10 +1,11 @@
 import dataclasses
 
 from app.core.user.domain.role import UserRole
+from app.db.common import Entity
 
 
 @dataclasses.dataclass
-class User:
+class User(Entity):
     id: str
     first_name: str
     last_name: str

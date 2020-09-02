@@ -2,14 +2,14 @@ from aiohttp import web
 
 import app.core.validators as domain_validator
 from app.commandbus.commands.team import CreateTeam
-from app.db import user_mapper
+from app.db import mappers_container
 from app.exceptions.entity import EntityNotFound
 from app.transformers import transform_team
 from app.utils.injector import inject
 from app.utils.injector.entity import (
     Contest,
     Team,
-    Creator
+    # Creator
 )
 
 
@@ -37,6 +37,9 @@ async def create_team(request):
 
 @inject(Contest)
 async def get_teams_for_contest(request):
+    # TODO: temporary solution, inject user_mapper after refactoring domain-related code
+    user_mapper = mappers_container.user_mapper()
+
     engine = request.app['db']
 
     contest = request['contest']
@@ -50,12 +53,18 @@ async def get_teams_for_contest(request):
     })
 
 
-@inject(Contest, Creator)
+@inject(Contest)
 async def get_teams_for_contest_and_creator(request):
     engine = request.app['db']
 
+    # TODO: temporary solution, inject user_mapper after refactoring domain-related code
+    user_mapper = mappers_container.user_mapper()
+
     contest = request['contest']
-    creator = request['creator']
+    creator_id = request['params']['creator_id']
+    creator = await user_mapper.get(
+        engine, creator_id
+    )
 
     teams = await user_mapper.get_created_teams_by_contest(
         engine, contest, creator

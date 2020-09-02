@@ -2,7 +2,7 @@ from aiohttp import web
 
 import app.core.validators as domain_validator
 from app.core.team_member import MemberStatus
-from app.db import user_mapper, team_mapper
+from app.db import team_mapper, mappers_container
 from app.transformers import transform_invite
 from app.utils.injector import inject
 from app.utils.injector.entity import Contest, Team
@@ -28,6 +28,9 @@ async def get_sent_invites_for_team(request):
 
 @inject(Contest)
 async def get_received_invites_for_contest(request):
+    # TODO: temporary solution, inject user_mapper after refactoring domain-related code
+    user_mapper = mappers_container.user_mapper()
+
     engine = request.app['db']
 
     contest = request['contest']

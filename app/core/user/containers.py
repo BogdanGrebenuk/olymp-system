@@ -46,7 +46,6 @@ controllers.authenticate_user = ext_aiohttp.View(
 controllers.register_user = ext_aiohttp.View(
     register_user,
     bus=application_container.bus,
-    engine=application_container.engine,
     user_mapper=mapper_container.user_mapper,
     transformer=transformers.user_transformer
 )
@@ -67,5 +66,5 @@ command_handlers = containers.DynamicContainer()
 command_handlers.create_user = providers.Singleton(
     CreateUserHandler,
     hash_client=services.password_generator,
-    bus=application_container.bus
+    user_mapper=mapper_container.user_mapper
 )

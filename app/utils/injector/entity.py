@@ -2,14 +2,16 @@ from app.db import (
     contest_mapper,
     task_mapper,
     team_mapper,
-    user_mapper,
+    # user_mapper,
     team_member_mapper,
     solution_mapper
 )
+# from app.db import mappers_container
 from app.exceptions.entity import EntityNotFound
 from app.utils.injector import default_extractor
 
 
+# TODO: remove as soon all injects will be removed
 class Entity:
 
     def __init__(
@@ -36,10 +38,9 @@ class Entity:
 
 
 Contest = Entity('contest', 'contest_id', contest_mapper)
-RequestedUser = Entity('requested_user', 'user_id', user_mapper)
 Task = Entity('task', 'task_id', task_mapper)
 Team = Entity('team', 'team_id', team_mapper)
 Member = Entity('member', 'member_id', team_member_mapper)
 Invite = Entity('member', 'invite_id', team_member_mapper)
 Solution = Entity('solution', 'solution_id', solution_mapper)
-Creator = Entity('creator', 'creator_id', user_mapper)
+# Creator = Entity('creator', 'creator_id', mappers_container.user_mapper())

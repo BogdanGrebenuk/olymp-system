@@ -9,10 +9,7 @@ from app.commandbus.commands.solution import (
     CreateSolution,
     VerifySolution
 )
-from app.db import (
-    solution_mapper,
-    user_mapper
-)
+from app.db import solution_mapper, mappers_container
 from app.exceptions.role import PermissionException
 from app.services.codesaver import DefaultCodeManager
 from app.transformers import transform_solution
@@ -34,6 +31,9 @@ async def create_solution(request):
     user = request['user']
     task = request['task']
     contest = request['contest']
+
+    # TODO: temporary solution, inject user_mapper after refactoring domain-related code
+    user_mapper = mappers_container.user_mapper()
 
     team = await user_mapper.get_accepted_team_for_contest(
         engine, user, contest

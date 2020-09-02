@@ -1,17 +1,15 @@
 from aiohttp import web
 
-from aiopg.sa import Engine
-
 from app.commandbus import Bus
 from app.core.user.commands import CreateUser
 from app.core.user.transformers import UserTransformer
+from app.db import UserMapper
 
 
 async def register_user(
         request: web.Request,
         bus: Bus,
-        engine: Engine,
-        user_mapper,
+        user_mapper: UserMapper,
         transformer: UserTransformer
         ):
     body = request['body']
@@ -27,6 +25,6 @@ async def register_user(
         )
     )
 
-    await user_mapper.create(engine, user)
+    await user_mapper.create(user)
 
     return web.json_response(await transformer.transform(user))

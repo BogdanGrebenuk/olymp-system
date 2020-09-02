@@ -1,5 +1,5 @@
 from app.core.user.domain.entity import User
-from app.db import user_mapper
+from app.db import mappers_container
 from app.db.entities import Contest
 from app.exceptions.role import PermissionException
 
@@ -7,6 +7,8 @@ from app.exceptions.role import PermissionException
 async def get_contest_resources(engine, user: User, contest: Contest):
     """Contest resources - tasks, solutions"""
 
+    # TODO: temporary solution, inject user_mapper after refactoring domain-related code
+    user_mapper = mappers_container.user_mapper()
     if user.is_organizer():
         if user.is_creator(contest):
             return

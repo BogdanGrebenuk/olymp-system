@@ -6,7 +6,7 @@ from app.db import (
     contest_mapper,
     team_mapper,
     team_member_mapper,
-    user_mapper
+    mappers_container
 )
 from app.commandbus.commands.team_member import CreateTeamMember
 from app.core.team_member import MemberStatus
@@ -24,6 +24,9 @@ async def create_member(request):
 
     user_email = request['body']['email']
     team = request['team']
+
+    # TODO: temporary solution, inject user_mapper after refactoring domain-related code
+    user_mapper = mappers_container.user_mapper()
 
     requested_user = await user_mapper.get_user_by_email(engine, user_email)
     if requested_user is None:
@@ -131,6 +134,9 @@ async def delete_member(request):
 
 @inject(Invite)
 async def accept_invite(request):
+    # TODO: temporary solution, inject user_mapper after refactoring domain-related code
+    user_mapper = mappers_container.user_mapper()
+
     engine = request.app['db']
 
     member = request['member']

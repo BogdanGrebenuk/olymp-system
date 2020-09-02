@@ -3,7 +3,10 @@ from typing import List
 
 from sqlalchemy.sql import select
 
-from app.db.common import create as _create, get as _get
+from app.db.common import (
+    create as _create,
+    get as _get
+)
 from app.db.entities import (
     Contest as ContestEntity,
     Task as TaskEntity,
