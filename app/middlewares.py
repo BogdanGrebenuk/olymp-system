@@ -44,7 +44,7 @@ async def error_handler(request, handler):
     except Exception as e:
         logger.exception(f"Unexpected exception")
         return web.json_response(
-            {'error': 'Something went wrong..'},
+            {'error': str(e)},
             status=500
         )
 
@@ -99,10 +99,15 @@ async def request_validator(
     if request.method == 'OPTIONS':
         return await handler(request)
 
+    aiohttp_resource = request.match_info.route.resource
+
+    if aiohttp_resource is None:
+        return await handler(request)  # pass request ro resolver for 404
+
     resource = resources_map.get(
         (
             request.method,
-            request.match_info.route.resource.canonical
+            aiohttp_resource.canonical
         )
     )
     if resource is None:

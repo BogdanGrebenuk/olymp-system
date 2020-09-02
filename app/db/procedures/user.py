@@ -5,7 +5,11 @@ from sqlalchemy.sql import select, exists
 
 from app.core.team_member import MemberStatus
 from app.core.user.domain.entity import User as UserEntity
-from app.db.common import create as _create, get as _get
+from app.db.common import (
+    create as _create,
+    get as _get,
+    delete as _delete
+)
 from app.db.entities import (
     Contest as ContestEntity,
     Team as TeamEntity,
@@ -22,6 +26,9 @@ create = partial(_create, model=UserModel)
 
 
 get = partial(_get, model=UserModel, entity=UserEntity)
+
+
+delete = partial(_delete, model=UserModel)
 
 
 async def get_all(engine) -> List[UserEntity]:
