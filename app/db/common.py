@@ -39,7 +39,7 @@ class Mapper:
             ).fetchone()
             if result is None:
                 return None
-            # TODO: it would be better if 'get' method raises an exception
+            # TODO: raises an exception as soon as usages of old get-methods will be refactorf
             return self.entity_cls(**result)
 
     async def find(self, id):
@@ -55,12 +55,12 @@ class Mapper:
                 return None
             return self.entity_cls(**result)
 
-    async def get_all(self):
+    async def find_all(self):
         async with self.engine.acquire() as conn:
             result = await conn.execute(self.model.select())
             return [self.entity_cls(**i) for i in await result.fetchall()]
 
-    async def get_by(self, **kwargs):
+    async def find_by(self, **kwargs):
         query = self.model.select()
         for column, value in kwargs.items():
             query = query.where(self.model.c.get(column) == value)
@@ -70,7 +70,7 @@ class Mapper:
             return [self.entity_cls(**i) for i in data]
 
     async def get_one_by(self, **kwargs):
-        result = await self.get_by(**kwargs)
+        result = await self.find_by(**kwargs)
         if len(result) == 0:
             raise EntityNotFound('There is no any entity that matches condition')
         if len(result) > 1:
@@ -78,7 +78,7 @@ class Mapper:
         return result[0]
 
     async def find_one_by(self, **kwargs):
-        result = await self.get_by(**kwargs)
+        result = await self.find_by(**kwargs)
         if len(result) == 0:
             return None
         if len(result) > 1:
