@@ -18,18 +18,6 @@ from app.db.models import (
 
 class UserMapper(Mapper):
 
-    async def get_user_by_email(self, email: str) -> Union[UserEntity, None]:
-        async with self.engine.acquire() as conn:
-            result = await conn.execute(
-                self.model
-                    .select()
-                    .where(self.model.c.email == email)
-            )
-            entity = await result.fetchone()
-            if entity is None:
-                return None
-            return self.entity_cls(**entity)
-
     # TODO: remove to team_mapper?
     async def get_accepted_team_for_contest(
             self,

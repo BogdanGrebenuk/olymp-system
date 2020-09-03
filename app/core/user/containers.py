@@ -40,7 +40,6 @@ controllers.authenticate_user = ext_aiohttp.View(
     authenticate_user,
     password_checker=services.password_checker,
     user_mapper=mapper_container.user_mapper,
-    engine=application_container.engine,
     token_generator=token_services_container.token_generator
 )
 controllers.register_user = ext_aiohttp.View(
@@ -56,7 +55,6 @@ controllers.get_user = ext_aiohttp.View(
 )
 controllers.get_users = ext_aiohttp.View(
     get_users,
-    engine=application_container.engine,
     user_mapper=mapper_container.user_mapper,
     user_transformer=transformers.user_transformer
 )

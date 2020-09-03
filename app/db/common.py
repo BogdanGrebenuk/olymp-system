@@ -2,6 +2,9 @@ from dataclasses import dataclass, asdict
 
 import sqlalchemy as sa
 
+from app.db.exceptions import NotSingleResult
+from app.exceptions.entity import EntityNotFound
+
 
 @dataclass
 class Entity:
@@ -44,6 +47,31 @@ class Mapper:
             result = await conn.execute(self.model.select())
             return [self.entity_cls(**i) for i in await result.fetchall()]
 
+    async def get_by(self, **kwargs):
+        query = self.model.select()
+        for column, value in kwargs.items():
+            query = query.where(self.model.c.get(column) == value)
+        async with self.engine.acquire() as conn:
+            result = await conn.execute(query)
+            data = await result.fetchall()
+            return [self.entity_cls(**i) for i in data]
+
+    async def get_one_by(self, **kwargs):
+        result = await self.get_by(**kwargs)
+        if len(result) == 0:
+            raise EntityNotFound('There is no any entity that matches condition')
+        if len(result) > 1:
+            raise NotSingleResult('Fetch contains more than one row')
+        return result[0]
+
+    async def find_one_by(self, **kwargs):
+        result = await self.get_by(**kwargs)
+        if len(result) == 0:
+            return None
+        if len(result) > 1:
+            raise NotSingleResult('Fetch contains more than one row')
+        return result[0]
+
     async def update(self, entity):
         async with self.engine.acquire() as conn:
             return await conn.execute(
@@ -62,6 +90,7 @@ class Mapper:
             )
 
 
+# TODO: remove as soon implement class-like mapper
 async def create(engine, entity, model):
     async with engine.acquire() as conn:
         await conn.execute(

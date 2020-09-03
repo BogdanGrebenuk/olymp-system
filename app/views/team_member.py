@@ -28,7 +28,7 @@ async def create_member(request):
     # TODO: temporary solution, inject user_mapper after refactoring domain-related code
     user_mapper = mappers_container.user_mapper()
 
-    requested_user = await user_mapper.get_user_by_email(engine, user_email)
+    requested_user = await user_mapper.find_one_by(email=user_email)
     if requested_user is None:
         raise EntityNotFound(
             f'there is no user with email {user_email}',

@@ -1,7 +1,8 @@
 from app.core.user.domain.entity import User
+from app.utils.transformer import Transformer
 
 
-class UserTransformer:
+class UserTransformer(Transformer):
 
     async def transform(self, user: User):
         return {

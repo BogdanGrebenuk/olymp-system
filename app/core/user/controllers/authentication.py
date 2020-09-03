@@ -1,7 +1,8 @@
 from aiohttp import web
-from aiopg.sa import Engine
 
 from app.core.user.services import PasswordChecker
+from app.db import UserMapper
+from app.exceptions.entity import EntityNotFound, EntityException
 from app.utils.token import TokenGenerator
 
 
@@ -9,37 +10,23 @@ async def authenticate_user(
         request,
         password_checker: PasswordChecker,
         token_generator: TokenGenerator,
-        user_mapper,
-        engine: Engine
+        user_mapper: UserMapper
         ):
     body = request['body']
 
     email = body['email']
     password = body['password']
 
-    user = await user_mapper.get_user_by_email(engine, email)
+    user = await user_mapper.find_one_by(email=email)
     if user is None:
-        return web.json_response(
-            {
-                'error': f'there is no user with email "{email}"',
-                'payload': {
-                    'email': email
-                }
-            },
-            status=400
+        raise EntityNotFound(
+            f'There is no user with email {email}',
+            {'email': email}
         )
 
     if not password_checker.check(password, user.password):
-        return web.json_response(
-            {
-                'error': f'incorrect password!',
-                'payload': {}
-            },
-            status=400
-        )
+        raise EntityException('Incorrect password')
 
     token = await token_generator.generate({'user_id': user.id})
 
-    return web.json_response(
-        {'token': token}
-    )
+    return web.json_response({'token': token})

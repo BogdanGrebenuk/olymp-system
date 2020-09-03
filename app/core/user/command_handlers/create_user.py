@@ -21,7 +21,7 @@ class CreateUserHandler(CommandHandler):
     async def handle(self, command: CreateUser):
         email = command.email
 
-        user = await self.user_mapper.get_user_by_email(email)
+        user = await self.user_mapper.find_one_by(email=email)
         if user is not None:
             raise DomainException(
                 f'User with email {email} already exists!',
