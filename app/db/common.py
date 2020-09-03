@@ -42,6 +42,19 @@ class Mapper:
             # TODO: it would be better if 'get' method raises an exception
             return self.entity_cls(**result)
 
+    async def find(self, id):
+        async with self.engine.acquire() as conn:
+            result = await (
+                await conn.execute(
+                    self.model
+                        .select()
+                        .where(self.model.c.id == id)
+                )
+            ).fetchone()
+            if result is None:
+                return None
+            return self.entity_cls(**result)
+
     async def get_all(self):
         async with self.engine.acquire() as conn:
             result = await conn.execute(self.model.select())
