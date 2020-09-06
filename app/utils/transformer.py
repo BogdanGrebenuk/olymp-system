@@ -1,5 +1,9 @@
 import abc
 from asyncio import gather
+from datetime import datetime
+
+import dependency_injector.containers as containers
+import dependency_injector.providers as providers
 
 
 class Transformer(abc.ABC):
@@ -13,3 +17,12 @@ class Transformer(abc.ABC):
             self.transform(entity)
             for entity in entities
         ])
+
+
+class DatetimeTransformer(Transformer):
+    async def transform(self, dt: datetime):
+        return dt.strftime('%Y-%m-%dT%H:%M:%S.000Z')
+
+
+transformer_container = containers.DynamicContainer()
+transformer_container.datetime_transformer = providers.Singleton(DatetimeTransformer)

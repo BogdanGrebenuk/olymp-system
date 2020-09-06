@@ -4,7 +4,7 @@ from typing import List, Tuple
 from aiopg.sa import Engine
 
 from app.commandbus.commands.base_command import Command
-from app.db.entities.contest import Contest
+from app.core.contest.domain.entity import Contest
 
 
 @dataclass

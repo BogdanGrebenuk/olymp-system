@@ -7,8 +7,8 @@ from app.db.common import create as _create, get as _get
 from app.db.entities import (
     Team as TeamEntity,
     TeamMember as TeamMemberEntity,
-    Contest as ContestEntity
 )
+from app.core.contest.domain.entity import Contest as ContestEntity
 from app.db.models import (
     Team as TeamModel,
     TeamMember as TeamMemberModel,

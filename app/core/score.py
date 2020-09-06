@@ -2,7 +2,8 @@ from collections import defaultdict
 
 from typing import List
 
-from app.db.entities import Solution, Contest
+from app.db.entities import Solution
+from app.core.contest.domain.entity import Contest
 
 
 # todo: refactor..

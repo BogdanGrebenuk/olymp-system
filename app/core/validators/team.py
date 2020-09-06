@@ -1,4 +1,5 @@
-from app.db.entities import Contest, Team
+from app.core.contest.domain.entity import Contest
+from app.db.entities import Team
 from app.exceptions.domain import DomainException
 from app.exceptions.entity import EntityNotFound
 

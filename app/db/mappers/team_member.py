@@ -12,10 +12,10 @@ from app.db.common import (
     delete as _delete
 )
 from app.db.entities import (
-    Contest as ContestEntity,
     Team as TeamEntity,
     TeamMember as TeamMemberEntity,
 )
+from app.core.contest.domain.entity import Contest as ContestEntity
 from app.db.models import (
     Contest as ContestModel,
     TeamMember as TeamMemberModel,

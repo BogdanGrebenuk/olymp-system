@@ -6,10 +6,10 @@ from app.core.team_member import MemberStatus
 from app.core.user.domain.entity import User as UserEntity
 from app.db.common import Mapper
 from app.db.entities import (
-    Contest as ContestEntity,
     Team as TeamEntity,
     TeamMember as TeamMemberEntity
 )
+from app.core.contest.domain.entity import Contest as ContestEntity
 from app.db.models import (
     Team as TeamModel,
     TeamMember as TeamMemberModel
