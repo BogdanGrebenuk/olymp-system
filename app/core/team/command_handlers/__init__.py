@@ -1,0 +1,1 @@
+from app.core.team.command_handlers.create_team import CreateTeamHandler

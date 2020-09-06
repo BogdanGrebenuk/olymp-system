@@ -4,8 +4,6 @@ from aiohttp import web
 
 from app.db import (
     contest_mapper,
-    team_mapper,
-    team_member_mapper,
     mappers_container
 )
 from app.commandbus.commands.team_member import CreateTeamMember
@@ -14,10 +12,10 @@ from app.exceptions.entity import EntityNotFound
 from app.exceptions.role import PermissionException
 from app.transformers import transform_member
 from app.utils.injector import inject
-from app.utils.injector.entity import Team, Contest, Invite
+from app.utils.injector.entity import Contest
 
 
-@inject(Team)
+@inject('Team')
 async def create_member(request):
     bus = request.app['bus']
     engine = request.app['db']
@@ -42,7 +40,7 @@ async def create_member(request):
         )
 
     team_members, contest = await gather(
-        team_mapper.get_members(engine, team),
+        mappers_container.team_mapper.get_members(engine, team),
         contest_mapper.get(engine, team.contest_id)
     )
 
@@ -82,7 +80,7 @@ async def create_member(request):
     return web.json_response({'member_id': member.id}, status=201)
 
 
-@inject(Team, Contest)
+@inject('Team', Contest)
 async def get_accepted_members(request):
     engine = request.app['db']
 
@@ -95,7 +93,7 @@ async def get_accepted_members(request):
             {'team_id': team.id, 'contest_id': contest.id}
         )
 
-    team_members = await team_mapper.get_members(engine, team)
+    team_members = await mappers_container.team_mapper.get_members(engine, team)
 
     # TODO: rewrite it to sql query. maybe change team_mapper.get_members function
     team_accepted_members = [
@@ -108,14 +106,14 @@ async def get_accepted_members(request):
     })
 
 
-@inject(Invite)
+@inject('Invite')
 async def delete_member(request):
     engine = request.app['db']
 
     user = request['user']
     member = request['member']  # this is injected invite
-    contest = await team_member_mapper.get_contest(engine, member)
-    team = await team_member_mapper.get_team(engine, member)
+    contest = await mappers_container.team_member_mapper.get_contest(engine, member)
+    team = await mappers_container.team_member_mapper.get_team(engine, member)
 
     if not team.is_trainer(user):
         raise PermissionException('you are not allowed to delete this participant!')
@@ -126,13 +124,13 @@ async def delete_member(request):
             'payload': {}
         }, status=400)
 
-    await team_member_mapper.delete(engine, member)
+    await mappers_container.team_member_mapper.delete(engine, member)
     return web.json_response({
         'message': 'successfully deleted'
     })
 
 
-@inject(Invite)
+@inject('Invite')
 async def accept_invite(request):
     # TODO: temporary solution, inject user_mapper after refactoring domain-related code
     user_mapper = mappers_container.user_mapper()
@@ -154,7 +152,7 @@ async def accept_invite(request):
             'payload': {'status': member.status}
         }, status=400)
 
-    contest = await team_member_mapper.get_contest(engine, member)
+    contest = await mappers_container.team_member_mapper.get_contest(engine, member)
 
     accepted_team = await user_mapper.get_accepted_team_for_contest(
         engine, request['user'], contest
@@ -174,14 +172,14 @@ async def accept_invite(request):
         }, status=400)
 
     member.set_status(MemberStatus.ACCEPTED)
-    await team_member_mapper.update(engine, member)
+    await mappers_container.team_member_mapper.update(engine, member)
     # TODO: investigate if 'put' response has body
     return web.json_response({
         'status': 'changes applied successfully',
     }, status=200)
 
 
-@inject(Invite)
+@inject('Invite')
 async def decline_accept(request):
     engine = request.app['db']
     member = request['member']
@@ -202,7 +200,7 @@ async def decline_accept(request):
     # TODO: should i return this line back? should i remove DECLINED status?
     # TODO: REFACTOR THIS
     # member.set_status(MemberStatus.DECLINED)
-    await team_member_mapper.delete(engine, member)
+    await mappers_container.team_member_mapper.delete(engine, member)
     return web.json_response({
         'status': 'changes applied successfully',
     }, status=200)
