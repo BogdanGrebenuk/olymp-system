@@ -6,8 +6,8 @@ from aiopg.sa import Engine
 
 from app.commandbus.commands.base_command import Command
 from app.core.user.domain.entity import User
+from app.core.contest.domain.entity import Contest
 from app.db.entities import (
-    Contest,
     Solution,
     Task,
     Team

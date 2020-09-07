@@ -2,19 +2,14 @@ import app.validators.schemas as schemas
 from app.core.team.resources import resources as team_resources
 from app.core.user.resources import resources as user_resources
 from app.core.user.domain.role import UserRole
+from app.core.contest.resources import resources as contest_resources
 from app.utils.resource import SingleParamChooser, combine_resources, Resource
 from app.utils.request import (
     RequestValidator,
-    DataFormManager,
     ParamsManager,
     UrlVariableManager
 )
-from app.views.contest import (
-    create_contest,
-    get_contests,
-    get_contest,
-    get_leader_board
-)
+
 from app.views.solution import (
     create_solution,
     get_solutions_for_contest,
@@ -45,37 +40,6 @@ from app.views.user import (
 )
 
 resources = [
-    Resource(
-        method='GET',
-        url='/api/contests',
-        allowed_roles=None,
-        validators=[],
-        handler=get_contests
-    ),
-    Resource(
-        method='GET',
-        url='/api/contests/{contest_id}',
-        allowed_roles=None,
-        validators=[
-            RequestValidator(
-                schemas.GetContestUrlVars,
-                data_manager=UrlVariableManager
-            )
-        ],
-        handler=get_contest
-    ),
-    Resource(
-        method='POST',
-        url='/api/contests',
-        allowed_roles=[UserRole.ORGANIZER],
-        validators=[
-            RequestValidator(
-                schemas.CreateContestBody,
-                data_manager=DataFormManager
-            )
-        ],
-        handler=create_contest
-    ),
     Resource(
         method='GET',
         url='/api/contests/{contest_id}/tasks',
@@ -230,24 +194,13 @@ resources = [
         ],
         handler=get_received_invites_for_contest
     ),
-    # TODO: reinvestigate this resource
-    Resource(
-        method='GET',
-        url='/api/contests/{contest_id}/leader-board',
-        allowed_roles=None,
-        validators=[
-            RequestValidator(
-                schemas.GetContestLeaderBoardUrlVars,
-                data_manager=UrlVariableManager  # TODO: make it enum-like field?
-            )
-        ],
-        handler=get_leader_board
-    )
 ]
 
 resources = combine_resources(
     resources,
-    user_resources, team_resources
+    user_resources,
+    contest_resources,
+    team_resources
 )
 
 

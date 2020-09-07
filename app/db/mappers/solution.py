@@ -11,10 +11,9 @@ from app.db.common import (
 )
 from app.db.entities import (
     Solution as SolutionEntity,
-    Contest as ContestEntity,
     Team as TeamEntity
 )
-
+from app.core.contest.domain.entity import Contest as ContestEntity
 from app.db.models import (
     Solution as SolutionModel,
     Task as TaskModel,

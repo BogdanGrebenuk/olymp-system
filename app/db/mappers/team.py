@@ -5,9 +5,12 @@ from app.db.common import Mapper
 from app.db.entities import (
     Team as TeamEntity,
     TeamMember as TeamMemberEntity,
-    Contest as ContestEntity
 )
-from app.db.models import TeamMember as TeamMemberModel
+from app.core.contest.domain.entity import Contest as ContestEntity
+from app.db.models import (
+    Team as TeamModel,
+    TeamMember as TeamMemberModel,
+)
 
 
 class TeamMapper(Mapper):

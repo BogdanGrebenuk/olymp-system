@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from app.db.entities import (
-    Contest,
     Task,
     TeamMember,
     Team,
@@ -21,20 +20,6 @@ def transform_task(task: Task):
         'maxCpuTime': task.max_cpu_time,
         'maxMemory': task.max_memory,
         'name': task.name
-    }
-
-
-def transform_contest(contest: Contest):
-    return {
-        'id': contest.id,
-        'name': contest.name,
-        'description': contest.description,
-        'imagePath': contest.image_path,
-        'endDate': transform_datetime(contest.end_date),
-        'startDate': transform_datetime(contest.start_date),
-        'creatorId': contest.creator_id,
-        'maxParticipantsInTeam': contest.max_participants_in_team,
-        'maxTeams': contest.max_teams
     }
 
 

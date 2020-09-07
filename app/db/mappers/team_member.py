@@ -3,11 +3,15 @@ from typing import Union
 from app.core.user.domain.entity import User as UserEntity
 from app.db.common import Mapper
 from app.db.entities import (
-    Contest as ContestEntity,
     Team as TeamEntity,
     TeamMember as TeamMemberEntity,
 )
-from app.db.models import TeamMember as TeamMemberModel
+from app.core.contest.domain.entity import Contest as ContestEntity
+from app.db.models import (
+    Contest as ContestModel,
+    TeamMember as TeamMemberModel,
+    Team as TeamModel,
+)
 
 
 class TeamMemberMapper(Mapper):

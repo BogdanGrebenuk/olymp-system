@@ -1,0 +1,1 @@
+from app.core.contest.command_handlers.create_contest import CreateContestHandler
