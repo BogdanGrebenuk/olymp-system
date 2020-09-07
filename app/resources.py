@@ -1,4 +1,5 @@
 import app.validators.schemas as schemas
+from app.core.team.resources import resources as team_resources
 from app.core.user.resources import resources as user_resources
 from app.core.user.domain.role import UserRole
 from app.core.contest.resources import resources as contest_resources
@@ -20,12 +21,12 @@ from app.views.task import (
     get_tasks,
     get_task
 )
-from app.views.team import (
-    create_team,
-    get_teams_for_contest,
-    get_teams_for_contest_and_creator,
-    get_team
-)
+# from app.views.team import (
+#     create_team,
+#     get_teams_for_contest,
+#     get_teams_for_contest_and_creator,
+#     get_team
+# )
 from app.views.team_member import (
     create_member,
     get_accepted_members,
@@ -115,45 +116,6 @@ resources = [
         handler=get_solution_code
     ),
     Resource(
-        method='POST',  # TODO make this route restful
-        url='/api/teams',
-        allowed_roles=[UserRole.TRAINER],
-        validators=[RequestValidator(schemas.CreateTeamBody)],
-        handler=create_team
-    ),
-    Resource(
-        method='GET',
-        url='/api/contests/{contest_id}/teams',
-        allowed_roles=None,
-        validators=[
-            RequestValidator(
-                schemas.GetTeamsForContestUrlVars,
-                data_manager=UrlVariableManager
-            ),
-            RequestValidator(
-                schemas.GetTeamsForContestParams,
-                data_manager=ParamsManager
-            )
-        ],
-        handler=SingleParamChooser(
-            'creator_id',
-            get_teams_for_contest_and_creator,
-            get_teams_for_contest
-        ).handle
-    ),
-    Resource(
-        method='GET',
-        url='/api/contests/{contest_id}/teams/{team_id}',
-        allowed_roles=None,
-        validators=[
-            RequestValidator(
-                schemas.GetTeamUrlVars,
-                data_manager=UrlVariableManager
-            )
-        ],
-        handler=get_team
-    ),
-    Resource(
         method='GET',
         url='/api/contests/{contest_id}/teams/{team_id}/members',
         allowed_roles=None,
@@ -237,7 +199,8 @@ resources = [
 resources = combine_resources(
     resources,
     user_resources,
-    contest_resources
+    contest_resources,
+    team_resources
 )
 
 
