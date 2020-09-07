@@ -14,7 +14,7 @@ from app.exceptions.role import PermissionException
 from app.services.codesaver import DefaultCodeManager
 from app.transformers import transform_solution
 from app.utils.injector import inject
-from app.utils.injector.entity import Task, Contest, Team, Solution
+from app.utils.injector.entity import Task, Contest, Solution
 
 
 @inject(Contest, Task)
@@ -88,7 +88,7 @@ async def get_solutions_for_contest(request):
     })
 
 
-@inject(Contest, Team)
+@inject(Contest)
 async def get_solutions_for_team(request):
     engine = request.app['db']
 

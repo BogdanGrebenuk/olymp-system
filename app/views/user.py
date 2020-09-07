@@ -2,13 +2,13 @@ from aiohttp import web
 
 import app.core.validators as domain_validator
 from app.core.team_member import MemberStatus
-from app.db import team_mapper, mappers_container
+from app.db import mappers_container
 from app.transformers import transform_invite
 from app.utils.injector import inject
-from app.utils.injector.entity import Contest, Team
+from app.utils.injector.entity import Contest
 
 
-@inject(Contest, Team)
+@inject(Contest, 'Team')
 async def get_sent_invites_for_team(request):
     engine = request.app['db']
 
@@ -18,7 +18,7 @@ async def get_sent_invites_for_team(request):
 
     await domain_validator.get_sent_invites_for_team(user, contest, team)
 
-    invites = await team_mapper.get_members(
+    invites = await mappers_container.team_mapper.get_members(
         engine, team, MemberStatus.PENDING
     )
     return web.json_response({
