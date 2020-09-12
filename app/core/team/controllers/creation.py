@@ -1,19 +1,20 @@
 from aiohttp import web
 
-from aiopg.sa import Engine
-
 from app.commandbus import Bus
 
 import app.core.validators as domain_validator
 from app.core.team.commands import CreateTeam
+from app.core.team.transformers import TeamTransformer
+from app.db import TeamMapper
 from app.utils.resolver import Resolver
 
 
 async def create_team(
         request: web.Request,
         bus: Bus,
-        engine: Engine,
-        contest_resolver: Resolver
+        contest_resolver: Resolver,
+        team_mapper: TeamMapper,
+        team_transformer: TeamTransformer
         ):
 
     body = request['body']
@@ -25,9 +26,10 @@ async def create_team(
         CreateTeam(
             name=body['name'],
             contest_id=contest.id,
-            trainer_id=request['user'].id,
-            engine=engine
+            trainer_id=request['user'].id
         )
     )
 
-    return web.json_response({'team_id': team.id}, status=201)
+    await team_mapper.create(team)
+
+    return web.json_response(await team_transformer.transform(team))
