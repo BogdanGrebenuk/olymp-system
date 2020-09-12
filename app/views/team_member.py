@@ -2,30 +2,29 @@ from asyncio import gather
 
 from aiohttp import web
 
-from app.db import (
-    contest_mapper,
-    mappers_container
-)
+from app.db import mappers_container
 from app.commandbus.commands.team_member import CreateTeamMember
+from app.core.contest.domain.entity import Contest
 from app.core.team_member import MemberStatus
 from app.exceptions.entity import EntityNotFound
 from app.exceptions.role import PermissionException
 from app.transformers import transform_member
 from app.utils.injector import inject
-from app.utils.injector.entity import Contest
+from app.utils.resolver import resolvers_container
 
 
-@inject('Team')
+
 async def create_member(request):
     bus = request.app['bus']
     engine = request.app['db']
-
+    team_resolver = resolvers_container.team_resolver()
     user_email = request['body']['email']
-    team = request['team']
+    team = await team_resolver.resolve(request)
 
     # TODO: temporary solution, inject user_mapper after refactoring domain-related code
     user_mapper = mappers_container.user_mapper()
-
+    team_mapper = mappers_container.team_mapper()
+    contest_mapper = mappers_container.contest_mapper()
     requested_user = await user_mapper.find_one_by(email=user_email)
     if requested_user is None:
         raise EntityNotFound(
@@ -40,8 +39,8 @@ async def create_member(request):
         )
 
     team_members, contest = await gather(
-        mappers_container.team_mapper.get_members(engine, team),
-        contest_mapper.get(engine, team.contest_id)
+        team_mapper.get_members(team),
+        contest_mapper.get(team.contest_id)
     )
 
     if contest.is_running():
@@ -80,12 +79,13 @@ async def create_member(request):
     return web.json_response({'member_id': member.id}, status=201)
 
 
-@inject('Team', Contest)
 async def get_accepted_members(request):
     engine = request.app['db']
-
-    team = request['team']
-    contest = request['contest']
+    contest_resolver = resolvers_container.contest_resolver()
+    team_resolver = resolvers_container.team_resolver()
+    team_mapper = mappers_container.team_mapper()
+    team = await team_resolver.resolve(request)
+    contest = await contest_resolver.resolve(request)
 
     if not team.from_contest(contest):
         raise EntityNotFound(
@@ -93,7 +93,7 @@ async def get_accepted_members(request):
             {'team_id': team.id, 'contest_id': contest.id}
         )
 
-    team_members = await mappers_container.team_mapper.get_members(engine, team)
+    team_members = await team_mapper.get_members(team)
 
     # TODO: rewrite it to sql query. maybe change team_mapper.get_members function
     team_accepted_members = [
@@ -109,11 +109,11 @@ async def get_accepted_members(request):
 @inject('Invite')
 async def delete_member(request):
     engine = request.app['db']
-
+    team_member_mapper = mappers_container.team_member_mapper()
     user = request['user']
     member = request['member']  # this is injected invite
-    contest = await mappers_container.team_member_mapper.get_contest(engine, member)
-    team = await mappers_container.team_member_mapper.get_team(engine, member)
+    contest = await team_member_mapper.get_contest(engine, member)
+    team = await team_member_mapper.get_team(engine, member)
 
     if not team.is_trainer(user):
         raise PermissionException('you are not allowed to delete this participant!')
@@ -124,7 +124,7 @@ async def delete_member(request):
             'payload': {}
         }, status=400)
 
-    await mappers_container.team_member_mapper.delete(engine, member)
+    await team_member_mapper.delete(engine, member)
     return web.json_response({
         'message': 'successfully deleted'
     })
@@ -134,7 +134,7 @@ async def delete_member(request):
 async def accept_invite(request):
     # TODO: temporary solution, inject user_mapper after refactoring domain-related code
     user_mapper = mappers_container.user_mapper()
-
+    team_member_mapper = mappers_container.team_member_mapper()
     engine = request.app['db']
 
     member = request['member']
@@ -152,7 +152,7 @@ async def accept_invite(request):
             'payload': {'status': member.status}
         }, status=400)
 
-    contest = await mappers_container.team_member_mapper.get_contest(engine, member)
+    contest = await team_member_mapper.get_contest(engine, member)
 
     accepted_team = await user_mapper.get_accepted_team_for_contest(
         engine, request['user'], contest
@@ -172,7 +172,7 @@ async def accept_invite(request):
         }, status=400)
 
     member.set_status(MemberStatus.ACCEPTED)
-    await mappers_container.team_member_mapper.update(engine, member)
+    await team_member_mapper.update(engine, member)
     # TODO: investigate if 'put' response has body
     return web.json_response({
         'status': 'changes applied successfully',
@@ -181,6 +181,7 @@ async def accept_invite(request):
 
 @inject('Invite')
 async def decline_accept(request):
+    team_member_mapper = mappers_container.team_member_mapper()
     engine = request.app['db']
     member = request['member']
     user_id = request['user'].id
@@ -200,7 +201,7 @@ async def decline_accept(request):
     # TODO: should i return this line back? should i remove DECLINED status?
     # TODO: REFACTOR THIS
     # member.set_status(MemberStatus.DECLINED)
-    await mappers_container.team_member_mapper.delete(engine, member)
+    await team_member_mapper.delete(engine, member)
     return web.json_response({
         'status': 'changes applied successfully',
     }, status=200)

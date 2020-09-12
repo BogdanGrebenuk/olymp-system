@@ -25,8 +25,8 @@ controllers = containers.DynamicContainer()
 controllers.create_team = ext_aiohttp.View(
     create_team,
     bus=application_container.bus,
-    engine=application_container.engine,
-    contest_resolver=resolvers_container.contest_resolver
+    contest_resolver=resolvers_container.contest_resolver,
+    team_mapper=mappers_container.team_mapper
 )
 controllers.get_team = ext_aiohttp.View(
     get_team,
@@ -36,13 +36,12 @@ controllers.get_team = ext_aiohttp.View(
 )
 controllers.get_teams_for_contest = ext_aiohttp.View(
     get_teams_for_contest,
-    engine=application_container.engine,
     contest_resolver=resolvers_container.contest_resolver,
+    user_mapper=mappers_container.user_mapper,
     team_transformer=transformers.team_transformer
 )
 controllers.get_teams_for_contest_and_creator = ext_aiohttp.View(
     get_teams_for_contest_and_creator,
-    engine=application_container.engine,
     contest_resolver=resolvers_container.contest_resolver,
     user_mapper=mappers_container.user_mapper,
     team_transformer=transformers.team_transformer

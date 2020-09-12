@@ -2,21 +2,22 @@ from aiohttp import web
 
 import app.core.validators as domain_validator
 from app.commandbus.commands.task import CreateTask
-from app.db import contest_mapper
+from app.core.contest.domain.entity import Contest
+from app.db import mappers_container
 from app.transformers import transform_task
 from app.utils.injector import inject
-from app.utils.injector.entity import Contest, Task
+from app.utils.injector.entity import Task
+from app.utils.resolver import resolvers_container
 
 
-@inject(Contest)
 async def create_task(request):
     bus = request.app['bus']
     engine = request.app['db']
-
+    contest_resolver = resolvers_container.contest_resolver()
     body = request['body']
 
     user = request['user']
-    contest = request['contest']
+    contest = await contest_resolver.resolve(request)
 
     input_output = [tuple(i) for i in body['input_output']]
 
@@ -37,11 +38,11 @@ async def create_task(request):
     return web.json_response({'task_id': task.id})
 
 
-@inject(Contest)
 async def get_tasks(request):
     engine = request.app['db']
-
-    contest = request['contest']
+    contest_resolver = resolvers_container.contest_resolver()
+    contest_mapper = mappers_container.contest_mapper()
+    contest = await contest_resolver.resolve(request)
     user = request['user']
 
     await domain_validator.get_tasks(engine, user, contest)
@@ -52,10 +53,11 @@ async def get_tasks(request):
     })  # TODO: create middleware that will return web.json_response
 
 
-@inject(Contest, Task)
+@inject(Task)
 async def get_task(request):
     engine = request.app['db']
-    contest = request['contest']
+    contest_resolver = resolvers_container.contest_resolver()
+    contest = await contest_resolver.resolve(request)
     user = request['user']
     task = request['task']
 

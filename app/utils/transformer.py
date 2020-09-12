@@ -20,7 +20,7 @@ class Transformer(abc.ABC):
 
 
 class DatetimeTransformer(Transformer):
-    async def transform(self, dt: datetime):
+    def transform(self, dt: datetime):
         return dt.strftime('%Y-%m-%dT%H:%M:%S.000Z')
 
 

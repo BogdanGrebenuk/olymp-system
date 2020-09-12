@@ -1,4 +1,5 @@
 from app.core.contest.commands.create_contest import CreateContest
+from app.db.mappers.contest import ContestMapper
 from app.commandbus import Bus
 
 from aiohttp import web
@@ -9,8 +10,7 @@ from concurrent.futures import ThreadPoolExecutor
 async def create_contest(
         request,
         bus: Bus,
-        engine: Engine,
-        thread_pool: ThreadPoolExecutor
+        contest_mapper: ContestMapper
         ):
 
     body = request['body']
@@ -27,8 +27,7 @@ async def create_contest(
             start_date=body['start_date'],
             end_date=body['end_date'],
             creator_id=creator_id,
-            engine=engine,
-            pool=thread_pool
         )
     )
+    await contest_mapper.create(contest)
     return web.json_response({'contest_id': contest.id})

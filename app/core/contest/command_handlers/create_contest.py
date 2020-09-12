@@ -23,14 +23,12 @@ class CreateContestHandler(CommandHandler):
             executor: Executor,
             thread_pool: ThreadPoolExecutor,
             bus: Bus,
-            contest_mapper: ContestMapper,
             image_path_generator: ImagePathGenerator
     ):
         self.engine = engine
         self.executor = executor
         self.thread_pool = thread_pool
         self.bus = bus
-        self.contest_mapper = contest_mapper
         self.image_path_generator = image_path_generator
 
     async def handle(self, command: CreateContest):
@@ -55,5 +53,5 @@ class CreateContestHandler(CommandHandler):
             end_date=command.end_date,
             creator_id=command.creator_id
         )
-        await self.contest_mapper.create(contest)
+
         return contest

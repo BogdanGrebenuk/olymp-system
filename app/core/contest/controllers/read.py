@@ -5,10 +5,7 @@ from aiohttp import web
 
 from app.core.score import get_total_score
 from app.db import ContestMapper, solution_mapper
-from app.transformers import (
-
-    transform_team,
-)
+from app.transformers import transform_team
 
 from app.core.contest.transformers import ContestTransformer
 
@@ -18,12 +15,13 @@ from aiopg.sa import Engine
 
 
 async def get_contests(
+        request,
         contest_mapper: ContestMapper,
         contest_transformer: ContestTransformer
 ):
     contests = await contest_mapper.find_all()
     return web.json_response({
-        'contests': [contest_transformer.transform(i) for i in contests]
+        'contests': await contest_transformer.transform_many(contests)
     })
 
 
@@ -34,12 +32,11 @@ async def get_contest(
 ):
     contest = await contest_resolver.resolve(request)
     return web.json_response({
-        'contest': contest_transformer.transform(contest)
+        'contest': await contest_transformer.transform(contest)
     })
 
 
 # todo: rewrite all this stuff
-
 async def get_leader_board(
         request,
         contest_resolver: Resolver,

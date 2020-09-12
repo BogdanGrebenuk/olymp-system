@@ -31,8 +31,7 @@ controllers = containers.DynamicContainer()
 controllers.create_contest = ext_aiohttp.View(
     create_contest,
     bus=application_container.bus,
-    engine=application_container.engine,
-    thread_pool=application_container.thread_pool,
+    contest_mapper=mapper_container.contest_mapper
 )
 controllers.get_contest = ext_aiohttp.View(
     get_contest,
@@ -58,6 +57,5 @@ command_handlers.create_contest = providers.Singleton(
     executor=application_container.process_executor,
     thread_pool=application_container.thread_pool,
     bus=application_container.bus,
-    contest_mapper=mapper_container.contest_mapper,
     image_path_generator=services.image_path_generator
 )

@@ -1,8 +1,10 @@
 import dataclasses
 
+from app.db.common import Entity
+
 
 @dataclasses.dataclass
-class Team:
+class Team(Entity):
     id: str
     name: str
     contest_id: str

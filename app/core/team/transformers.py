@@ -1,7 +1,8 @@
 from app.core.team.domain.entity import Team
+from app.utils.transformer import Transformer
 
 
-class TeamTransformer:
+class TeamTransformer(Transformer):
 
     async def transform(self, team: Team):
         return {

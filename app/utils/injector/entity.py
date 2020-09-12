@@ -1,5 +1,5 @@
 from app.db import (
-    contest_mapper,
+    # contest_mapper,
     task_mapper,
     # team_mapper,
     # user_mapper,
@@ -37,7 +37,7 @@ class Entity:
         request[self.entity_description] = entity
 
 
-Contest = Entity('contest', 'contest_id', contest_mapper)
+#Contest = Entity('contest', 'contest_id', contest_mapper)
 Task = Entity('task', 'task_id', task_mapper)
 # Team = Entity('team', 'team_id', team_mapper)
 # Member = Entity('member', 'member_id', team_member_mapper)

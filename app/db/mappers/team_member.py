@@ -7,11 +7,7 @@ from app.db.entities import (
     TeamMember as TeamMemberEntity,
 )
 from app.core.contest.domain.entity import Contest as ContestEntity
-from app.db.models import (
-    Contest as ContestModel,
-    TeamMember as TeamMemberModel,
-    Team as TeamModel,
-)
+from app.db.models import TeamMember as TeamMemberModel
 
 
 class TeamMemberMapper(Mapper):
