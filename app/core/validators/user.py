@@ -1,5 +1,6 @@
 from app.core.user.domain.entity import User
-from app.db.entities import Contest, Team
+from app.core.contest.domain.entity import Contest
+from app.db.entities import Team
 from app.exceptions.entity import EntityNotFound
 from app.exceptions.role import PermissionException
 

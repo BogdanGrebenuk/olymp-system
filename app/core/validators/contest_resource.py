@@ -1,6 +1,6 @@
 from app.core.user.domain.entity import User
+from app.core.contest.domain.entity import Contest
 from app.db import mappers_container
-from app.db.entities import Contest
 from app.exceptions.role import PermissionException
 
 

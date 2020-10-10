@@ -9,20 +9,22 @@ from app.commandbus.commands.solution import (
     CreateSolution,
     VerifySolution
 )
+from app.utils.resolver import resolvers_container
+from app.core.contest.domain.entity import Contest
 from app.db import solution_mapper, mappers_container
 from app.exceptions.role import PermissionException
 from app.services.codesaver import DefaultCodeManager
 from app.transformers import transform_solution
 from app.utils.injector import inject
-from app.utils.injector.entity import Task, Contest, Team, Solution
+from app.utils.injector.entity import Task, Solution
 
 
-@inject(Contest, Task)
+@inject(Task)
 async def create_solution(request):
     bus = request.app['bus']
     engine = request.app['db']
     pool = request.app['process_pool']
-
+    contest_resolver = resolvers_container.contest_resolver()
     body = request['body']
 
     language = body['language']
@@ -30,7 +32,7 @@ async def create_solution(request):
 
     user = request['user']
     task = request['task']
-    contest = request['contest']
+    contest = await contest_resolver.resolve(request)
 
     # TODO: temporary solution, inject user_mapper after refactoring domain-related code
     user_mapper = mappers_container.user_mapper()
@@ -73,12 +75,11 @@ async def create_solution(request):
     })
 
 
-@inject(Contest)
 async def get_solutions_for_contest(request):
     engine = request.app['db']
-
+    contest_resolver = resolvers_container.contest_resolver()
     user = request['user']
-    contest = request['contest']
+    contest = await contest_resolver.resolve(request)
 
     await domain_validator.get_solutions_for_contest(engine, user, contest)
     solutions = await solution_mapper.get_all_from_contest(engine, contest)
@@ -88,13 +89,13 @@ async def get_solutions_for_contest(request):
     })
 
 
-@inject(Contest, Team)
 async def get_solutions_for_team(request):
     engine = request.app['db']
-
+    contest_resolver = resolvers_container.contest_resolver()
+    team_resolver = resolvers_container.team_resolver()
     user = request['user']
-    contest = request['contest']
-    team = request['team']
+    contest = await contest_resolver.resolve(request)
+    team = await team_resolver.resolve(request)
 
     await domain_validator.get_solutions_for_team(
         engine, user, contest, team
@@ -106,13 +107,13 @@ async def get_solutions_for_team(request):
     })
 
 
-@inject(Contest, Solution)
+@inject(Solution)
 async def get_solution_code(request):
     engine = request.app['db']
     process_pool = request.app['db']
-
+    contest_resolver = resolvers_container.contest_resolver()
     user = request['user']
-    contest = request['contest']
+    contest = await contest_resolver.resolve(request)
     solution = request['solution']
     team = await solution_mapper.get_team(engine, solution)
 

@@ -8,7 +8,9 @@ from app.db.utils import init_pg, close_pg
 from app.commandbus import Bus
 from app.commandbus.middlewares import Resolver
 from app.containers import application_container
-from app.core.user.containers import command_handlers
+from app.core.contest.containers import command_handlers as contest_command_handlers
+from app.core.team.containers import command_handlers as team_command_handlers
+from app.core.user.containers import command_handlers as user_command_handlers
 from app.middlewares import middlewares_container
 from app.resources import setup_routes, resources
 from app.settings import config
@@ -25,7 +27,11 @@ def create_app():
     application_container.resolver.provided_by(
         providers.Singleton(
             Resolver,
-            [command_handlers]
+            [
+                user_command_handlers,
+                team_command_handlers,
+                contest_command_handlers
+            ]
         )
     )
     application_container.bus.provided_by(

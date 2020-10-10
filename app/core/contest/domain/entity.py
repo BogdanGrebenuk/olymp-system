@@ -3,9 +3,11 @@ import typing
 from datetime import datetime
 from dateutil.tz import tzutc
 
+from app.db.common import Entity
+
 
 @dataclasses.dataclass
-class Contest:
+class Contest(Entity):
     id: str
     name: str
     description: str
@@ -14,7 +16,7 @@ class Contest:
     image_path: str
     start_date: datetime  # TODO: there is a 'UTC' locale in postgresql.conf,
     # how to specify timezone only for connection?
-    end_date: datetime  
+    end_date: datetime
     creator_id: str
 
     def is_running(self, t: datetime = None) -> bool:

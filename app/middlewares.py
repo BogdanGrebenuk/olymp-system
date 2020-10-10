@@ -82,7 +82,7 @@ async def user_injector(
         }, status=400)
 
     user_id = payload.get('user_id')
-    user = await user_mapper.get(engine, user_id)
+    user = await user_mapper.get(user_id)
     if user is None:
         raise InvalidTokenContent('token contains invalid information')
 
