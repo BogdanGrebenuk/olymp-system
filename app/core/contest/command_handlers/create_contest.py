@@ -11,7 +11,6 @@ from app.commandbus.bus import Bus
 from app.core.contest.commands.create_contest import CreateContest
 from app.core.contest.services import ImagePathGenerator
 from app.core.contest.domain.entity import Contest
-from app.db.mappers.contest import ContestMapper
 from app.common import ROOT_DIR
 from app.utils.filesystem import save_file_field_image
 
@@ -24,7 +23,7 @@ class CreateContestHandler(CommandHandler):
             thread_pool: ThreadPoolExecutor,
             bus: Bus,
             image_path_generator: ImagePathGenerator
-    ):
+            ):
         self.engine = engine
         self.executor = executor
         self.thread_pool = thread_pool

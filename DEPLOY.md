@@ -29,4 +29,6 @@
 
 - Run migrations (in `olymp-system/app`): `PYTHONPATH='..' alembic upgrade head`
 
+- Run tests (in `olymp-system/tests`): `PYTHONPATH='..' python -m unittest`
+
 - Run server (in `olymp-system`): `python -m app`

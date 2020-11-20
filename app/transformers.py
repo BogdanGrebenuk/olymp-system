@@ -3,8 +3,7 @@ from datetime import datetime
 from app.db.entities import (
     Task,
     TeamMember,
-    Team,
-    Solution
+    Team
 )
 
 
@@ -47,15 +46,4 @@ def transform_team(team: Team):
         'name': team.name,
         'contestId': team.contest_id,
         'trainerId': team.trainer_id
-    }
-
-
-def transform_solution(solution: Solution):
-    return {
-        'id': solution.id,
-        'taskId': solution.task_id,
-        'language': solution.language,
-        'isPassed': solution.is_passed,
-        'teamId': solution.team_id,
-        'userId': solution.user_id
     }

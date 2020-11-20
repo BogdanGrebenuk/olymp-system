@@ -2,23 +2,20 @@ from asyncio import gather
 from collections import defaultdict
 
 from aiohttp import web
-
-from app.core.score import get_total_score
-from app.db import ContestMapper, solution_mapper
-from app.transformers import transform_team
+from aiopg.sa import Engine
 
 from app.core.contest.transformers import ContestTransformer
-
+from app.core.score import get_total_score
+from app.db import ContestMapper, SolutionMapper
+from app.transformers import transform_team
 from app.utils.resolver import Resolver
-
-from aiopg.sa import Engine
 
 
 async def get_contests(
         request,
         contest_mapper: ContestMapper,
         contest_transformer: ContestTransformer
-):
+        ):
     contests = await contest_mapper.find_all()
     return web.json_response({
         'contests': await contest_transformer.transform_many(contests)
@@ -42,7 +39,7 @@ async def get_leader_board(
         contest_resolver: Resolver,
         contest_mapper: ContestMapper,
         engine: Engine
-):
+        ):
 
     contest = await contest_resolver.resolve(request)
     # todo: check if user has permission

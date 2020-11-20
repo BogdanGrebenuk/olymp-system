@@ -39,7 +39,7 @@ class Mapper:
             ).fetchone()
             if result is None:
                 return None
-            # TODO: raises an exception as soon as usages of old get-methods will be refactorf
+            # TODO: raise an exception as soon as usages of old get-methods will be refactored
             return self.entity_cls(**result)
 
     async def find(self, id):

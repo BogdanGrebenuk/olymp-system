@@ -154,7 +154,7 @@ async def accept_invite(request):
 
     contest = await team_member_mapper.get_contest(engine, member)
 
-    accepted_team = await user_mapper.get_accepted_team_for_contest(
+    accepted_team = await user_mapper.find_accepted_team_for_contest(
         engine, request['user'], contest
     )
 

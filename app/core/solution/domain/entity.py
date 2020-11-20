@@ -2,10 +2,11 @@ import dataclasses
 from datetime import datetime
 
 from app.common import ROOT_DIR
+from app.db.common import Entity
 
 
 @dataclasses.dataclass
-class Solution:
+class Solution(Entity):
     id: str
     path: str
     language: str

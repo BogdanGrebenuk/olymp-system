@@ -24,6 +24,9 @@ docker_meta:
         runner_dockerfile: ...
         runner_command: ...
 
+code:
+    ...
+
 loggers:
     version: 1
     formatters:

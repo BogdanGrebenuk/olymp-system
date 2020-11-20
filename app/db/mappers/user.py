@@ -18,8 +18,7 @@ from app.db.models import (
 
 class UserMapper(Mapper):
 
-    # TODO: remove to team_mapper?
-    async def get_accepted_team_for_contest(
+    async def find_accepted_team_for_contest(
             self,
             user: UserEntity,
             contest: ContestEntity

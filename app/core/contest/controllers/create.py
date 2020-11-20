@@ -3,8 +3,6 @@ from app.db.mappers.contest import ContestMapper
 from app.commandbus import Bus
 
 from aiohttp import web
-from aiopg.sa import Engine
-from concurrent.futures import ThreadPoolExecutor
 
 
 async def create_contest(

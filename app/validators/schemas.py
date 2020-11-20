@@ -12,7 +12,6 @@ from app.common import (
     MAX_NUMBER_OF_PARTICIPANTS,
     DEFAULT_NUMBER_OF_PARTICIPANTS
 )
-from app.core.language import get_supported_languages
 
 
 class MaxParticipantsField(fields.Field):
@@ -45,17 +44,29 @@ class ImageField(fields.Field):
         return value
 
 
-class CreateSolutionUrlVars(Schema):
-    contest_id = fields.String(required=True)
-
-
-class CreateSolutionBody(Schema):
-    task_id = fields.String(required=True)
-    language = fields.String(
+class CreateContestBody(Schema):
+    name = fields.String(required=True, validate=validate.Length(min=1))
+    description = fields.String(required=True, validate=validate.Length(min=1))
+    max_participants_in_team = MaxParticipantsField(
         required=True,
-        validate=validate.OneOf(get_supported_languages())
+        validate=validate.Range(1, MAX_NUMBER_OF_PARTICIPANTS)
     )
-    code = fields.String(required=True)
+    max_teams = MaxTeamsField(
+        required=True,
+        validate=validate.Range(1),
+        allow_none=True
+    )
+    image = ImageField(required=True)
+    start_date = fields.DateTime(required=True)
+    end_date = fields.DateTime(required=True)
+
+    @validates_schema
+    def validate_date(self, data, **kwargs):
+        errors = {}
+        if data['start_date'] >= data['end_date']:
+            errors['start_date'] = ['start_date is greater then end_date!']
+        if errors:
+            raise ValidationError(errors)
 
 
 class CreateTaskBody(Schema):
@@ -117,6 +128,9 @@ class GetTaskUrlVars(Schema):
     task_id = fields.String(required=True)
 
 
+class GetContestUrlVars(Schema):
+    contest_id = fields.String(required=True)
+
 
 class GetTeamsForContestUrlVars(Schema):
     contest_id = fields.String(required=True)
@@ -141,15 +155,5 @@ class GetInvitesForTeamUrlVars(Schema):
     team_id = fields.String(required=True)
 
 
-class GetSolutionsUrlVars(Schema):
+class GetContestLeaderBoardUrlVars(Schema):
     contest_id = fields.String(required=True)
-
-
-class GetSolutionParams(Schema):
-    team_id = fields.String(required=False)
-
-
-class GetSolutionCodeUrlVars(Schema):
-    contest_id = fields.String(required=True)
-    solution_id = fields.String(required=True)
-
